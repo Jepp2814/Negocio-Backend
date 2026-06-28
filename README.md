@@ -32,7 +32,7 @@ pip install -r requirements.txt
 
 ### 3. Configurar variables de entorno
 
-Crea un archivo `.env` en la raiz del proyecto con este contenido:
+Crea un archivo .env en la raiz del proyecto:
 
 ```env
 DEBUG=True
@@ -82,7 +82,7 @@ Acceso:
 
 Credenciales Admin:
 - Usuario: Jepp
-- Contraseña: la definida en ADMIN_PASSWORD del archivo .env
+- Contraseña: Jepp1995
 
 ## Acceso Remoto con ngrok
 
@@ -94,10 +94,10 @@ Inicia Django y ngrok en un solo comando:
 python run_ngrok.py
 ```
 
-Veras una URL publica como:
-URL PUBLICA: https://xxxx.ngrok-free.app
-Admin: https://xxxx.ngrok-free.app/admin/
-API: https://xxxx.ngrok-free.app/api/productos/
+Veras en la terminal:
+URL PUBLICA : https://xxxx.ngrok-free.app
+Admin : https://xxxx.ngrok-free.app/admin/
+API : https://xxxx.ngrok-free.app/api/productos/
 
 text
 
@@ -125,7 +125,7 @@ ngrok http 8000
 NGROK_AUTHTOKEN=tu_token_aqui
 ```
 
-## Cambios realizados en este proyecto
+## Cambios realizados
 
 ### requirements.txt
 - Corregida version de Django de 6.0.4 a 5.2
@@ -134,7 +134,7 @@ NGROK_AUTHTOKEN=tu_token_aqui
 ### core/settings.py
 - Eliminada contraseña hardcodeada en DB_PASSWORD
 - Corregido validador CommonCommonPasswordValidator a CommonPasswordValidator
-- Cambiado idioma a es-ec (español Ecuador)
+- Cambiado idioma a es-ec
 - Cambiada zona horaria a America/Guayaquil
 - Agregado DEFAULT_AUTO_FIELD = BigAutoField
 
@@ -145,7 +145,7 @@ NGROK_AUTHTOKEN=tu_token_aqui
 - Usuario administrador configurado como Jepp
 
 ### run_ngrok.py
-- Ahora inicia Django automaticamente antes de conectar ngrok
+- Inicia Django automaticamente antes de conectar ngrok
 - Guarda la URL publica en el archivo .env automaticamente
 - Lee NGROK_AUTHTOKEN desde el .env
 - Maneja correctamente Ctrl+C para detener todos los servicios
@@ -154,7 +154,7 @@ NGROK_AUTHTOKEN=tu_token_aqui
 - Corregida indentacion incorrecta en class Meta
 
 ### inventario/admin.py
-- Eliminado list_filter por stock (no generaba filtros utiles)
+- Eliminado list_filter por stock
 - Agregado campo created_at en list_display
 - Agregado ordering por fecha de creacion
 - Agregado readonly_fields para fechas
@@ -211,7 +211,7 @@ negocio-backend/
 │ ├── serializers.py
 │ ├── urls.py
 │ └── admin.py
-├── .env (NO subir a git)
+├── .env
 ├── .gitignore
 ├── manage.py
 ├── requirements.txt
@@ -241,7 +241,7 @@ python manage.py test
 
 ## Solucionar problemas
 
-### Error: "No such table"
+### Error: No such table
 ```bash
 python manage.py migrate
 ```
@@ -250,11 +250,11 @@ python manage.py migrate
 ```bash
 # Windows
 .venv\Scripts\activate
-# Mac/Linux
+# Linux/Mac
 source .venv/bin/activate
 ```
 
-### Error con ngrok: "Connection refused"
+### Error con ngrok: Connection refused
 ```bash
 python manage.py runserver 0.0.0.0:8000
 ngrok http 8000
@@ -264,7 +264,6 @@ ngrok http 8000
 ```bash
 # Windows: Services -> PostgreSQL -> Iniciar
 # Linux: sudo systemctl start postgresql
-# Verificar credenciales en .env
 ```
 
 ### Puerto ocupado
