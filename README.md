@@ -1,6 +1,6 @@
 # negocio-backend
 
-Proyecto Django para gestión de inventario con API REST.
+Proyecto Django para gestion de inventario con API REST.
 
 ## Requisitos
 
@@ -8,7 +8,7 @@ Proyecto Django para gestión de inventario con API REST.
 - PostgreSQL 12+
 - pip
 
-## Instalación
+## Instalacion
 
 ### 1. Clonar y preparar entorno
 
@@ -32,7 +32,7 @@ pip install -r requirements.txt
 
 ### 3. Configurar variables de entorno
 
-Crea un archivo `.env` en la raíz del proyecto con este contenido:
+Crea un archivo `.env` en la raiz del proyecto con este contenido:
 
 ```env
 DEBUG=True
@@ -64,9 +64,9 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 python setup.py
 ```
 
-Esto hace automáticamente:
+Esto hace automaticamente:
 - Ejecutar migraciones
-- Crear superusuario con la contraseña definida en ADMIN_PASSWORD
+- Crear superusuario Jepp con la contraseña definida en ADMIN_PASSWORD
 - Crear productos de ejemplo
 
 ## Ejecucion Local
@@ -82,7 +82,7 @@ Acceso:
 
 Credenciales Admin:
 - Usuario: Jepp
-- Contraseña: (la definida en ADMIN_PASSWORD del .env)
+- Contraseña: la definida en ADMIN_PASSWORD del archivo .env
 
 ## Acceso Remoto con ngrok
 
@@ -120,9 +120,44 @@ ngrok http 8000
 1. Crear cuenta gratuita en https://ngrok.com/
 2. Obtener el token en https://dashboard.ngrok.com
 3. Agregarlo en el archivo .env:
+
 ```env
 NGROK_AUTHTOKEN=tu_token_aqui
 ```
+
+## Cambios realizados en este proyecto
+
+### requirements.txt
+- Corregida version de Django de 6.0.4 a 5.2
+- Corregido nombre de djangorestframework (mayusculas incorrectas)
+
+### core/settings.py
+- Eliminada contraseña hardcodeada en DB_PASSWORD
+- Corregido validador CommonCommonPasswordValidator a CommonPasswordValidator
+- Cambiado idioma a es-ec (español Ecuador)
+- Cambiada zona horaria a America/Guayaquil
+- Agregado DEFAULT_AUTO_FIELD = BigAutoField
+
+### setup.py
+- Carga correcta del archivo .env antes de iniciar Django
+- Eliminada contraseña admin123 hardcodeada
+- Contraseña leida desde variable ADMIN_PASSWORD del .env
+- Usuario administrador configurado como Jepp
+
+### run_ngrok.py
+- Ahora inicia Django automaticamente antes de conectar ngrok
+- Guarda la URL publica en el archivo .env automaticamente
+- Lee NGROK_AUTHTOKEN desde el .env
+- Maneja correctamente Ctrl+C para detener todos los servicios
+
+### inventario/serializers.py
+- Corregida indentacion incorrecta en class Meta
+
+### inventario/admin.py
+- Eliminado list_filter por stock (no generaba filtros utiles)
+- Agregado campo created_at en list_display
+- Agregado ordering por fecha de creacion
+- Agregado readonly_fields para fechas
 
 ## API REST Endpoints
 
@@ -177,7 +212,6 @@ negocio-backend/
 │ ├── urls.py
 │ └── admin.py
 ├── .env (NO subir a git)
-├── .env.example
 ├── .gitignore
 ├── manage.py
 ├── requirements.txt
@@ -222,9 +256,7 @@ source .venv/bin/activate
 
 ### Error con ngrok: "Connection refused"
 ```bash
-# Verificar que Django este corriendo
 python manage.py runserver 0.0.0.0:8000
-# En otra terminal
 ngrok http 8000
 ```
 
