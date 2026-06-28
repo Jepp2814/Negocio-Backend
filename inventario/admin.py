@@ -3,6 +3,7 @@ from .models import Producto
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ['codigo', 'nombre', 'stock', 'costo', 'precio_venta']
-    list_filter = ['stock']
+    list_display = ['codigo', 'nombre', 'stock', 'precio_venta', 'created_at']
     search_fields = ['codigo', 'nombre']
+    ordering = ['-created_at']
+    readonly_fields = ['created_at', 'updated_at']
