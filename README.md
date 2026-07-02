@@ -1,5 +1,5 @@
 # negocio-backend
-
+#hola
 Proyecto Django para gestion de inventario con API REST.
 
 ## Requisitos
