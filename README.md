@@ -28,6 +28,16 @@ source .venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+### 3. Actualizar en github.
+```bash
+cd C:\Users\maxxi\negocio-backend
+.venv\Scripts\activate
+git status
+git add .
+git commit -m "Actualizado."
+git push origin main
+```
+
 ## Ejecucion Local
 
 ```bash
