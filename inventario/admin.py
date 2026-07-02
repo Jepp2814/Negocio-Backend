@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Producto, Proveedor, Categoria
+from .models import Producto
 
 # 1. PRODUCTO
 @admin.register(Producto)
