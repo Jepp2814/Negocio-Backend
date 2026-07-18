@@ -51,6 +51,7 @@ class ProveedorAdmin(admin.ModelAdmin):
         "nombre",
     )
 
+# 2. CATEGORIA
 @admin.register(Categoria)
 class CategoriaAdmin(admin.ModelAdmin):
 
@@ -66,6 +67,7 @@ class CategoriaAdmin(admin.ModelAdmin):
     ordering = (
         "nombre",
     )
+# 2. CLIENTE
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
 
@@ -97,3 +99,4 @@ class ClienteAdmin(admin.ModelAdmin):
         "primer_apellido",
         "primer_nombre",
     )
+
