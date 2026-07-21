@@ -1,5 +1,5 @@
 from django.db import models
-
+from decimal import Decimal
 # 1. PRODUCTO
 
 class Producto(models.Model):
@@ -274,3 +274,137 @@ class Cliente(models.Model):
             apellido += f" {self.segundo_apellido}"
 
         return f"{self.cedula} - {apellido}, {nombre}"
+
+class Venta(models.Model):
+    cliente = models.ForeignKey(
+        'Cliente',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='ventas',
+        verbose_name="Cliente"
+    )
+
+    fecha = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Fecha de venta"
+    )
+
+    subtotal = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name="Subtotal"
+    )
+
+    iva = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name="IVA"
+    )
+
+    total = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name="Total"
+    )
+
+    valor_invertido = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name="Valor Invertido"
+    )
+
+    valor_ganado = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name = "Valor Ganado"
+    )
+
+    confirmada = models.BooleanField(
+        default=False,
+        verbose_name="Confirmada"
+    )
+
+    observacion = models.TextField(
+        blank=True,
+        verbose_name="Observación"
+    )
+
+    class Meta:
+        verbose_name = "Venta"
+        verbose_name_plural = "Ventas"
+        ordering = ["-fecha"]
+
+    def __str__(self):
+        return f"Venta #{self.id} - {self.fecha.strftime('%Y-%m-%d %H:%M:%S')}"
+    
+class DetalleVenta(models.Model):
+    venta = models.ForeignKey(
+        'Venta',
+        on_delete=models.CASCADE,
+        related_name='detalles',
+        verbose_name="Venta"
+    )
+
+    producto = models.ForeignKey(
+        'Producto',
+        on_delete=models.PROTECT,
+        related_name='detalles_venta',
+        verbose_name="Producto"
+    )
+
+    cantidad = models.PositiveIntegerField(
+        verbose_name="Cantidad"
+    )
+
+    precio_unitario = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="Precio unitario"
+    )
+
+    costo_unitario = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        verbose_name="Costo unitario"
+    )
+
+    subtotal = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name="Subtotal"
+    )
+
+    valor_invertido = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name="Valor Invertido"
+    )
+
+    valor_ganado = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        verbose_name="Valor ganado"
+    )
+
+    class Meta:
+        verbose_name = "Detalle de venta"
+        verbose_name_plural = "Detalles de venta"
+
+    def save(self, *args, **kwargs):
+        self.subtotal = Decimal(self.cantidad) * self.precio_unitario
+        self.valor_invertido = Decimal(self.cantidad) * self.costo_unitario
+        self.valor_ganado = self.subtotal - self.valor_invertido
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Venta #{self.venta.id} - {self.producto.nombre} x {self.cantidad}"

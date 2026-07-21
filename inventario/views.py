@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import JsonResponse
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,7 +8,15 @@ from .serializers import ProductoSerializer
 
 # Vista home simple
 def home(request):
-    return HttpResponse("<h1>Sitio funcionando ✅</h1><p>API disponible en /api/productos/</p>")
+    return JsonResponse({
+        "message": "Sitio funcionando ✅",
+        "api": "/api/productos/",
+        "health": "/health/"
+    })
+
+
+def health_check(request):
+    return JsonResponse({"status": "ok", "app": "negocio-backend"})
 
 # ViewSet REST API para Productos
 class ProductoViewSet(viewsets.ModelViewSet):
