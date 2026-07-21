@@ -33,12 +33,6 @@ pip install -r requirements.txt
 #1ero trae el original con:
 git pull --rebase origin main
 #2do actualiza el codigo:
-git push original main
-cd C:\Users\maxxi\negocio-backend
-.venv\Scripts\activate
-git status
-git add .
-git commit -m "Actualizado."
 git push origin main
 ```
 
