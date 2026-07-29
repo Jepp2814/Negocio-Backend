@@ -1,5 +1,17 @@
 from django.contrib import admin
+from django.contrib.admin.sites import NotRegistered
+from django.contrib.auth.models import Group, User
 from .models import Producto, Proveedor, Categoria, Cliente
+
+try:
+    admin.site.unregister(User)
+except NotRegistered:
+    pass
+
+try:
+    admin.site.unregister(Group)
+except NotRegistered:
+    pass
 
 # 1. PRODUCTO
 @admin.register(Producto)
