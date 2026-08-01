@@ -13,7 +13,7 @@ class Producto(models.Model):
     )
 
     nombre = models.CharField(
-        max_length=5200,
+        max_length=200,
         verbose_name="Nombre"
         
     )
