@@ -142,17 +142,83 @@ body{
     margin-bottom:30px;
 }
 
-.logo{
-    width:110px;
-    height:110px;
-    object-fit:contain;
-    margin-bottom:15px;
+.logo{70px;
+    height:170px;
+    object-fit: contain;
+
+    margin-bottom:20px;
+
+    animation:
+        flotar 4s ease-in-out infinite,
+        brilloLogo 3s ease-in-out infinite;
+
+
 }
 
 .subtitle{
     color:#64748B;
     font-size:14px;
     margin-top:8px;
+}
+
+/* ===========================
+   ANIMACIÓN DEL LOGO
+=========================== */
+
+@keyframes flotar {
+
+    0%{
+        transform: translateY(0px);
+    }
+
+    50%{
+        transform: translateY(-8px);
+    }
+
+    100%{
+        transform: translateY(0px);
+    }
+
+}
+
+@keyframes brilloLogo {
+
+    0%{
+        filter: drop-shadow(0 0 8px rgba(37,99,235,.25));
+    }
+
+    50%{
+        filter: drop-shadow(0 0 24px rgba(37,99,235,.80));
+    }
+
+    100%{
+        filter: drop-shadow(0 0 8px rgba(37,99,235,.25));
+    }
+
+}
+
+/* ===========================
+   BOTÓN VERIFICANDO
+=========================== */
+
+.submit-btn{
+
+    transition:0.3s;
+
+}
+
+.submit-btn:disabled{
+
+    background:#1e3a5f;
+    cursor:not-allowed;
+    opacity:.95;
+
+}
+
+.fa-spin{
+
+    margin-right:8px;
+
 }
     </style>
 
@@ -222,9 +288,11 @@ body{
                 </div>
             </div>
 
-            <button type="submit" class="submit-btn">
-                <i class="fa-solid fa-right-to-bracket"></i>
-                Iniciar sesión
+            <button type="submit" class="submit-btn" id="loginButton">
+                <span id="buttonContent">
+                     <i class="fa-solid fa-right-to-bracket"></i>
+                     Iniciar sesión
+                </span>
             </button>
 
             <div class="links">
@@ -238,7 +306,8 @@ body{
         </form>
     </div>
 
-    <script>
+        <script>
+
         const passwordInput = document.getElementById('current-password');
         const togglePassword = document.getElementById('togglePassword');
 
@@ -255,6 +324,28 @@ body{
         togglePassword.addEventListener('mouseleave', hidePassword);
         togglePassword.addEventListener('touchstart', showPassword);
         togglePassword.addEventListener('touchend', hidePassword);
-    </script>
+
+
+        // ----------------------
+        // BOTÓN VERIFICANDO
+        // ----------------------
+
+        const form = document.querySelector("form");
+
+        form.addEventListener("submit", function(){
+
+            const boton = document.getElementById("loginButton");
+            const contenido = document.getElementById("buttonContent");
+
+            boton.disabled = true;
+
+            contenido.innerHTML = `
+                <i class="fa-solid fa-gear fa-spin"></i>
+                Verificando...
+            `;
+
+        });
+
+        </script>
 </body>
 </html>
