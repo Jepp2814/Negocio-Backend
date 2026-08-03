@@ -228,25 +228,20 @@ body{
 
 <body>
     <div class="login-card">
-        
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="{% static 'img/logo.png' %}"
+                 alt="Logo AppMecánica Emilio"
+                 class="logo">
 
-    <!-- Logo -->
-    <div class="logo-container">
+            <h1>AppMecánica Emilio</h1>
 
-        <img src="{% static 'img/logo.png' %}"
-             alt="Logo AppMecánica Emilio"
-             class="logo">
+            <p class="subtitle">
+                Sistema de Gestión para Talleres Mecánicos
+            </p>
+        </div>
 
-        <h1>AppMecánica Emilio</h1>
-
-        <p class="subtitle">
-            Sistema de Gestión para Talleres Mecánicos
-        </p>
-
-    </div>
-
-     <!-- Autocompletar -->
-        <form method="post" autocomplete="on">
+        <form method="post" action="{% url 'login' %}" autocomplete="on">
             {% csrf_token %}
 
             {% if form.non_field_errors %}
@@ -288,21 +283,25 @@ body{
                 </div>
             </div>
 
+<<<<<<< HEAD
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
+            <button type="submit" class="submit-btn">Iniciar sesión</button>
+=======
             <button type="submit" class="submit-btn" id="loginButton">
                 <span id="buttonContent">
                      <i class="fa-solid fa-right-to-bracket"></i>
                      Iniciar sesión
                 </span>
             </button>
+>>>>>>> db9821292e12206a5a5daaf176f09d44df1e1c4b
 
             <div class="links">
                 <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
-                <a href="/registro/">Crear o registrar nuevo usuario</a>
+                <a href="{% url 'registro' %}">Crear o registrar nuevo usuario</a>
             </div>
-
-            {% if next %}
-                <input type="hidden" name="next" value="{{ next }}">
-            {% endif %}
         </form>
     </div>
 
