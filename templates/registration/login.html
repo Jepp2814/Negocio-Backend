@@ -1,138 +1,247 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión</title>
+
+    <title>AppMecánica Emilio | Iniciar sesión</title>
+
+    
+
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Iconos -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- CSS -->
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f4f7fb, #e9eef7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#0F172A,#1E3A8A,#334155);
+}
 
-        .login-card {
-            width: 100%;
-            max-width: 420px;
-            background: #ffffff;
-            border-radius: 18px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.10);
-            padding: 32px 28px;
-        }
+.login-card{
+    width:420px;
+    background:#FFFFFF;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 20px 40px rgba(0,0,0,.30);
+}
 
-        .login-card h1 {
-            margin: 0 0 24px;
-            text-align: center;
-            color: #1f2937;
-            font-size: 28px;
-        }
+.login-card h1{
+    text-align:center;
+    color:#1E3A8A;
+    margin-bottom:25px;
+    font-size:30px;
+    font-weight:700;
+}
 
-        .field {
-            margin-bottom: 18px;
-        }
+.field{
+    margin-bottom:18px;
+}
 
-        .field label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #374151;
-        }
+.field label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#334155;
+}
 
-        .field input {
-            width: 100%;
-            height: 48px;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
-            padding: 0 14px;
-            font-size: 15px;
-            outline: none;
-            transition: 0.2s ease;
-        }
+.field input{
+    width:100%;
+    height:48px;
+    border:2px solid #CBD5E1;
+    border-radius:12px;
+    padding:0 15px;
+    font-size:15px;
+    transition:.3s;
+}
 
-        .field input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
+.field input:focus{
+    outline:none;
+    border-color:#2563EB;
+    box-shadow:0 0 10px rgba(37,99,235,.20);
+}
 
-        .password-wrapper {
-            position: relative;
-        }
+.password-wrapper{
+    position:relative;
+}
 
-        .password-wrapper input {
-            padding-right: 48px;
-        }
+.password-wrapper input{
+    padding-right:45px;
+}
 
-        .toggle-password {
-            position: absolute;
-            top: 50%;
-            right: 12px;
-            transform: translateY(-50%);
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-size: 20px;
-            color: #64748b;
-        }
+.toggle-password{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    border:none;
+    background:none;
+    cursor:pointer;
+    font-size:18px;
+}
 
-        .submit-btn {
-            width: 100%;
-            height: 48px;
-            border: none;
-            border-radius: 12px;
-            background: #2563eb;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 6px;
-            transition: 0.2s ease;
-        }
+.submit-btn{
+    width:100%;
+    height:50px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(90deg,#2563EB,#1D4ED8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
 
-        .submit-btn:hover {
-            background: #1d4ed8;
-        }
+.submit-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(37,99,235,.30);
+}
 
-        .links {
-            margin-top: 18px;
-            text-align: center;
-        }
+.links{
+    margin-top:20px;
+    text-align:center;
+}
 
-        .links a {
-            display: block;
-            margin-top: 12px;
-            text-decoration: none;
-            color: #2563eb;
-            font-size: 15px;
-        }
+.links a{
+    display:block;
+    margin-top:10px;
+    color:#2563EB;
+    text-decoration:none;
+    font-size:14px;
+}
 
-        .links a:hover {
-            text-decoration: underline;
-        }
+.links a:hover{
+    text-decoration:underline;
+}
 
-        .form-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin-bottom: 16px;
-            font-size: 14px;
-        }
+.form-error{
+    background:#FEE2E2;
+    color:#991B1B;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+.logo-container{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.logo{70px;
+    height:170px;
+    object-fit: contain;
+
+    margin-bottom:20px;
+
+    animation:
+        flotar 4s ease-in-out infinite,
+        brilloLogo 3s ease-in-out infinite;
+
+
+}
+
+.subtitle{
+    color:#64748B;
+    font-size:14px;
+    margin-top:8px;
+}
+
+/* ===========================
+   ANIMACIÓN DEL LOGO
+=========================== */
+
+@keyframes flotar {
+
+    0%{
+        transform: translateY(0px);
+    }
+
+    50%{
+        transform: translateY(-8px);
+    }
+
+    100%{
+        transform: translateY(0px);
+    }
+
+}
+
+@keyframes brilloLogo {
+
+    0%{
+        filter: drop-shadow(0 0 8px rgba(37,99,235,.25));
+    }
+
+    50%{
+        filter: drop-shadow(0 0 24px rgba(37,99,235,.80));
+    }
+
+    100%{
+        filter: drop-shadow(0 0 8px rgba(37,99,235,.25));
+    }
+
+}
+
+/* ===========================
+   BOTÓN VERIFICANDO
+=========================== */
+
+.submit-btn{
+
+    transition:0.3s;
+
+}
+
+.submit-btn:disabled{
+
+    background:#1e3a5f;
+    cursor:not-allowed;
+    opacity:.95;
+
+}
+
+.fa-spin{
+
+    margin-right:8px;
+
+}
     </style>
+
 </head>
+
+
+
 <body>
     <div class="login-card">
-        <h1>Iniciar sesión</h1>
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="{% static 'img/logo.png' %}"
+                 alt="Logo AppMecánica Emilio"
+                 class="logo">
 
-        <form method="post" action="{% url 'login' %}">
+            <h1>AppMecánica Emilio</h1>
+
+            <p class="subtitle">
+                Sistema de Gestión para Talleres Mecánicos
+            </p>
+        </div>
+
+        <form method="post" action="{% url 'login' %}" autocomplete="on">
             {% csrf_token %}
 
             {% if form.non_field_errors %}
@@ -164,20 +273,30 @@
                         autocomplete="current-password"
                         required
                     >
+                     <!-- Botón para mostrar/ocultar contraseña -->
                     <button
                         type="button"
                         class="toggle-password"
                         id="togglePassword"
                         aria-label="Mostrar contraseña mientras se mantenga presionado"
-                    >👁</button>
+                    ><i class="fa-solid fa-eye"></i></button>
                 </div>
             </div>
 
+<<<<<<< HEAD
             {% if next %}
                 <input type="hidden" name="next" value="{{ next }}">
             {% endif %}
 
             <button type="submit" class="submit-btn">Iniciar sesión</button>
+=======
+            <button type="submit" class="submit-btn" id="loginButton">
+                <span id="buttonContent">
+                     <i class="fa-solid fa-right-to-bracket"></i>
+                     Iniciar sesión
+                </span>
+            </button>
+>>>>>>> db9821292e12206a5a5daaf176f09d44df1e1c4b
 
             <div class="links">
                 <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
@@ -186,7 +305,8 @@
         </form>
     </div>
 
-    <script>
+        <script>
+
         const passwordInput = document.getElementById('current-password');
         const togglePassword = document.getElementById('togglePassword');
 
@@ -203,6 +323,28 @@
         togglePassword.addEventListener('mouseleave', hidePassword);
         togglePassword.addEventListener('touchstart', showPassword);
         togglePassword.addEventListener('touchend', hidePassword);
-    </script>
+
+
+        // ----------------------
+        // BOTÓN VERIFICANDO
+        // ----------------------
+
+        const form = document.querySelector("form");
+
+        form.addEventListener("submit", function(){
+
+            const boton = document.getElementById("loginButton");
+            const contenido = document.getElementById("buttonContent");
+
+            boton.disabled = true;
+
+            contenido.innerHTML = `
+                <i class="fa-solid fa-gear fa-spin"></i>
+                Verificando...
+            `;
+
+        });
+
+        </script>
 </body>
 </html>

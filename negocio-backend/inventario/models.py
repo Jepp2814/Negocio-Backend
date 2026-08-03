@@ -1,5 +1,5 @@
 from django.db import models
-from decimal import Decimal
+
 # 1. PRODUCTO
 
 class Producto(models.Model):
@@ -15,7 +15,6 @@ class Producto(models.Model):
     nombre = models.CharField(
         max_length=200,
         verbose_name="Nombre"
-        
     )
 
     
@@ -276,136 +275,230 @@ class Cliente(models.Model):
 
         return f"{self.cedula} - {apellido}, {nombre}"
 
-class Venta(models.Model):
-    cliente = models.ForeignKey(
-        'Cliente',
-        on_delete=models.SET_NULL,
+
+ # 5. VEHICULO
+
+class Vehiculo(models.Model):
+
+    placa = models.CharField(
+        max_length=10,
+        unique=True,
+        verbose_name="Placa"
+    )
+
+    marca = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Marca"
+    )
+
+    modelo = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Modelo"
+    )
+
+    anio = models.PositiveIntegerField(
         null=True,
         blank=True,
-        related_name='ventas',
-        verbose_name="Cliente"
+        verbose_name="Año"
     )
 
-    fecha = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Fecha de venta"
-    )
-
-    subtotal = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=0,
-        verbose_name="Subtotal"
-    )
-
-    iva = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=0,
-        verbose_name="IVA"
-    )
-
-    total = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=0,
-        verbose_name="Total"
-    )
-
-    valor_invertido = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=0,
-        verbose_name="Valor Invertido"
-    )
-
-    valor_ganado = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=0,
-        verbose_name = "Valor Ganado"
-    )
-
-    confirmada = models.BooleanField(
-        default=False,
-        verbose_name="Confirmada"
-    )
-
-    observacion = models.TextField(
+    pais = models.CharField(
+        max_length=100,
         blank=True,
-        verbose_name="Observación"
+        verbose_name="País"
     )
 
-    class Meta:
-        verbose_name = "Venta"
-        verbose_name_plural = "Ventas"
-        ordering = ["-fecha"]
-
-    def __str__(self):
-        return f"Venta #{self.id} - {self.fecha.strftime('%Y-%m-%d %H:%M:%S')}"
-    
-class DetalleVenta(models.Model):
-    venta = models.ForeignKey(
-        'Venta',
-        on_delete=models.CASCADE,
-        related_name='detalles',
-        verbose_name="Venta"
+    color = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name="Color"
     )
 
-    producto = models.ForeignKey(
-        'Producto',
+    cliente = models.ForeignKey(
+        Cliente,
         on_delete=models.PROTECT,
-        related_name='detalles_venta',
-        verbose_name="Producto"
+        related_name="vehiculos"
     )
 
-    cantidad = models.PositiveIntegerField(
-        verbose_name="Cantidad"
-    )
-
-    precio_unitario = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name="Precio unitario"
-    )
-
-    costo_unitario = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=0,
-        verbose_name="Costo unitario"
-    )
-
-    subtotal = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=0,
-        verbose_name="Subtotal"
-    )
-
-    valor_invertido = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=0,
-        verbose_name="Valor Invertido"
-    )
-
-    valor_ganado = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=0,
-        verbose_name="Valor ganado"
+    fecha_registro = models.DateTimeField(
+        auto_now_add=True
     )
 
     class Meta:
-        verbose_name = "Detalle de venta"
-        verbose_name_plural = "Detalles de venta"
-
-    def save(self, *args, **kwargs):
-        self.subtotal = Decimal(self.cantidad) * self.precio_unitario
-        self.valor_invertido = Decimal(self.cantidad) * self.costo_unitario
-        self.valor_ganado = self.subtotal - self.valor_invertido
-        super().save(*args, **kwargs)
+        verbose_name = "Vehículo"
+        verbose_name_plural = "Vehículos"
+        ordering = ["placa"]
 
     def __str__(self):
-        return f"Venta #{self.venta.id} - {self.producto.nombre} x {self.cantidad}"
+        return f"{self.placa} - {self.marca} {self.modelo}"
+
+# 6. SERVICIO
+
+class Servicio(models.Model):
+
+    ESTADOS = [
+        ("RECIBIDO", "Recibido"),
+        ("EN PROCESO", "En proceso"),
+        ("FINALIZADO", "Finalizado"),
+        ("ENTREGADO", "Entregado"),
+    ]
+
+    vehiculo = models.ForeignKey(
+        Vehiculo,
+        on_delete=models.PROTECT,
+        related_name="servicios",
+        verbose_name="Vehículo"
+    )
+
+    fecha_ingreso = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Fecha de ingreso"
+    )
+
+    kilometraje = models.PositiveIntegerField(
+        verbose_name="Kilometraje"
+    )
+
+    combustible = models.CharField(
+        max_length=30,
+        blank=True,
+        verbose_name="Nivel de combustible"
+    )
+
+    motivo = models.TextField(
+        verbose_name="Motivo del ingreso"
+    )
+
+    observaciones = models.TextField(
+        blank=True,
+        verbose_name="Observaciones"
+    )
+
+    estado = models.CharField(
+        max_length=20,
+        choices=ESTADOS,
+        default="RECIBIDO",
+        verbose_name="Estado"
+    )
+
+    fecha_entrega = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name="Fecha de entrega"
+    )
+
+    class Meta:
+        verbose_name = "Servicio"
+        verbose_name_plural = "Servicios"
+        ordering = ["-fecha_ingreso"]
+
+    def __str__(self):
+        return f"{self.vehiculo.placa} - {self.fecha_ingreso:%d/%m/%Y}"
+
+# 7. ORDEN DE TRABAJO
+
+class OrdenTrabajo(models.Model):
+
+    PRIORIDADES = [
+        ("BAJA", "Baja"),
+        ("MEDIA", "Media"),
+        ("ALTA", "Alta"),
+        ("URGENTE", "Urgente"),
+    ]
+
+    ESTADOS = [
+        ("RECIBIDA", "Recibida"),
+        ("EN PROCESO", "En Proceso"),
+        ("ESPERA", "Esperando Repuestos"),
+        ("FINALIZADA", "Finalizada"),
+        ("ENTREGADA", "Entregada"),
+    ]
+
+    numero = models.CharField(
+        max_length=20,
+        unique=True,
+        editable=False,
+        verbose_name="Número OT"
+    )
+
+    servicio = models.OneToOneField(
+        Servicio,
+        on_delete=models.PROTECT,
+        related_name="orden_trabajo",
+        verbose_name="Servicio"
+    )
+
+    prioridad = models.CharField(
+        max_length=10,
+        choices=PRIORIDADES,
+        default="MEDIA",
+        verbose_name="Prioridad"
+    )
+
+    mecanico = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name="Mecánico Responsable"
+    )
+
+    diagnostico = models.TextField(
+        blank=True,
+        verbose_name="Diagnóstico"
+    )
+
+    trabajo_realizado = models.TextField(
+        blank=True,
+        verbose_name="Trabajo Realizado"
+    )
+
+    estado = models.CharField(
+        max_length=20,
+        choices=ESTADOS,
+        default="RECIBIDA",
+        verbose_name="Estado"
+    )
+
+    fecha_creacion = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    fecha_actualizacion = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        verbose_name = "Orden de Trabajo"
+        verbose_name_plural = "Órdenes de Trabajo"
+        ordering = ["-fecha_creacion"]
+    def generar_numero(self):
+
+        anio = self.fecha_creacion.year if self.fecha_creacion else 2026
+
+        ultima = OrdenTrabajo.objects.filter(
+            numero__startswith=f"OT-{anio}"
+        ).order_by("-numero").first()
+
+        if ultima:
+
+            consecutivo = int(
+                ultima.numero.split("-")[-1]
+            ) + 1
+
+        else:
+
+            consecutivo = 1
+
+        return f"OT-{anio}-{consecutivo:06d}"
+    def save(self, *args, **kwargs):
+
+        if not self.numero:
+            self.numero = self.generar_numero()
+
+        super().save(*args, **kwargs)
+    def __str__(self):
+        return f"{self.numero} - {self.servicio.vehiculo.placa}"
+    
+
+    
