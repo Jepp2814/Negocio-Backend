@@ -120,3 +120,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/admin'
 LOGOUT_REDIRECT_URL = '/login/'
+
+# ==========================
+# CONFIGURACIÓN DE CORREO
+# ==========================
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'tu_correo@gmail.com'
+
+EMAIL_HOST_PASSWORD = 'TU_CONTRASEÑA_DE_APLICACION'
+
+DEFAULT_FROM_EMAIL = f'AppMecaniza <{EMAIL_HOST_USER}>'
+

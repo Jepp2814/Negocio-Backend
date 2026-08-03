@@ -83,3 +83,9 @@ class ProductoViewSet(viewsets.ModelViewSet):
                 {'error': 'Cantidad inválida'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+# Vista Temporal del Dashboard
+from django.shortcuts import render
+
+def dashboard(request):
+    return render(request, "dashboard/dashboard.html")

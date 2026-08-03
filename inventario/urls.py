@@ -11,3 +11,13 @@ urlpatterns = [
     path('health/', views.health_check, name='health_check'),
     path('api/', include(router.urls)),
 ]
+
+# Dashboard temporal
+from django.urls import path
+from . import views
+
+urlpatterns = [
+
+    path("dashboard/", views.dashboard, name="dashboard"),
+
+]

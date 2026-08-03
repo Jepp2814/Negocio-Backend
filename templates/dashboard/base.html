@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AppMecánica</title>
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <img src="{% static 'img/logo.png' %}" alt="Logo">
+
+        <h2>AppMecánica</h2>
+
+    </div>
+
+    <ul>
+
+        <li><a href="#"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+
+        <li><a href="#"><i class="fa-solid fa-users"></i> Clientes</a></li>
+
+        <li><a href="#"><i class="fa-solid fa-car"></i> Vehículos</a></li>
+
+        <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> Servicios</a></li>
+
+        <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventario</a></li>
+
+        <li><a href="#"><i class="fa-solid fa-money-bill-wave"></i> Finanzas</a></li>
+
+        <li><a href="#"><i class="fa-solid fa-gear"></i> Configuración</a></li>
+
+    </ul>
+
+</div>
+
+
+<div class="main">
+
+    <header>
+
+        <div class="menu-btn">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </div>
+
+        <div class="search">
+
+            <input type="text" placeholder="Buscar...">
+
+        </div>
+
+        <div class="user">
+
+            <i class="fa-solid fa-bell"></i>
+
+            <span>Jepp</span>
+
+        </div>
+
+    </header>
+
+
+    {% block content %}
+
+    {% endblock %}
+
+</div>
+
+<script src="{% static 'js/dashboard.js' %}"></script>
+
+</body>
+
+</html>
