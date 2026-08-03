@@ -6,6 +6,7 @@ from inventario import views
 
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='login', permanent=False)),
+
     path('admin/', admin.site.urls),
 
     path(
@@ -17,10 +18,13 @@ urlpatterns = [
         name='login'
     ),
 
-    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+    path(
+        'logout/',
+        LogoutView.as_view(next_page='login'),
+        name='logout'
+    ),
 
     path('logout-beacon/', views.logout_beacon, name='logout_beacon'),
-
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('inventario.urls')),
     path('api/finance/', include('finance.urls')),
