@@ -132,7 +132,7 @@
     <div class="login-card">
         <h1>Iniciar sesión</h1>
 
-        <form method="post">
+        <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
 
             {% if form.non_field_errors %}
@@ -173,16 +173,16 @@
                 </div>
             </div>
 
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
             <button type="submit" class="submit-btn">Iniciar sesión</button>
 
             <div class="links">
                 <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
-                <a href="/registro/">Crear o registrar nuevo usuario</a>
+                <a href="{% url 'registro' %}">Crear o registrar nuevo usuario</a>
             </div>
-
-            {% if next %}
-                <input type="hidden" name="next" value="{{ next }}">
-            {% endif %}
         </form>
     </div>
 

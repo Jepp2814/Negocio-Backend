@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar nuevo usuario</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef4ff, #dfeafc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            width: 100%;
+            max-width: 560px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.10);
+            padding: 30px;
+        }
+        h1 {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        .field { margin-bottom: 16px; }
+        .field label {
+            display: block;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        .field input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+        .field input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .errorlist {
+            color: #b91c1c;
+            margin: 6px 0 0;
+            padding-left: 18px;
+        }
+        .helptext {
+            display: block;
+            margin-top: 6px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #111827;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sugerencias {
+            margin-top: 8px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 14px;
+        }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 8px solid #dbeafe;
+            border-top: 8px solid #2563eb;
+            border-radius: 50%;
+            animation: girar 1s linear infinite;
+            margin-bottom: 16px;
+        }
+        .loading-text {
+            font-size: 18px;
+            color: #1f2937;
+            font-weight: bold;
+        }
+        @keyframes girar {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Crear nuevo usuario</h1>
+        <p class="subtitle">Complete toda la información solicitada</p>
+
+        <form method="post" id="registroForm">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="errorlist nonfield">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="field">
+                {{ form.first_name.label_tag }}
+                {{ form.first_name }}
+                {{ form.first_name.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.last_name.label_tag }}
+                {{ form.last_name }}
+                {{ form.last_name.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.fecha_nacimiento.label_tag }}
+                {{ form.fecha_nacimiento }}
+                {{ form.fecha_nacimiento.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.pais.label_tag }}
+                {{ form.pais }}
+                {{ form.pais.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.ciudad.label_tag }}
+                {{ form.ciudad }}
+                {{ form.ciudad.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.celular.label_tag }}
+                {{ form.celular }}
+                {{ form.celular.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {{ form.username.errors }}
+
+                {% if form.username.help_text %}
+                    <small class="helptext">{{ form.username.help_text }}</small>
+                {% endif %}
+
+                {% if form.sugerencias_username %}
+                    <div class="sugerencias">
+                        <strong>Opciones sugeridas:</strong>
+                        {{ form.sugerencias_username|join:", " }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="field">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+
+            <div class="actions">
+                <a href="{% url 'login' %}" class="btn btn-secondary">Volver</a>
+                <button type="submit" class="btn btn-primary">Confirmar creación</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Creando usuario...</div>
+    </div>
+
+    <script>
+        const form = document.getElementById('registroForm');
+        const overlay = document.getElementById('loadingOverlay');
+
+        form.addEventListener('submit', function () {
+            overlay.style.display = 'flex';
+        });
+    </script>
+</body>
+</html>
