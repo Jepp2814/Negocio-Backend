@@ -16,14 +16,5 @@ urlpatterns = [
     path('usuarios/eliminar/<int:user_id>/', views.eliminar_usuario, name='eliminar_usuario'),
     path('api/', include(router.urls)),
     path('logout-beacon/', views.logout_beacon, name='logout_beacon'),
-]
-
-# Dashboard temporal
-from django.urls import path
-from . import views
-
-urlpatterns = [
-
-    path("dashboard/", views.dashboard, name="dashboard"),
-
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]
