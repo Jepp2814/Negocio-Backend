@@ -1,12 +1,6 @@
 # negocio-backend
 Proyecto Django para gestion de inventario con API REST.
 
-## Requisitos
-
-- Python 3.10+
-- PostgreSQL 12+
-- pip
-
 ## Instalacion
 
 ### 1. Clonar y preparar entorno
