@@ -35,7 +35,23 @@ def main():
         if auth_token:
             ngrok.set_auth_token(auth_token)
 
-        tunnel = ngrok.connect(django_port)
+        # Cerrar túneles existentes que apunten al mismo puerto para evitar duplicados
+        try:
+            existing = ngrok.get_tunnels()
+            for t in existing:
+                addr = str(getattr(t, 'addr', ''))
+                if addr.endswith(f":{django_port}") or addr in (f"127.0.0.1:{django_port}", f"localhost:{django_port}"):
+                    try:
+                        ngrok.disconnect(t.public_url)
+                    except Exception:
+                        # Si no se puede desconectar uno, continuar
+                        pass
+        except Exception:
+            # Si no se pueden listar túneles, continuar de todas formas
+            pass
+
+        # Crear un único túnel HTTP explícito al puerto de Django
+        tunnel = ngrok.connect(django_port, "http")
         public_url = tunnel.public_url
 
         env_path = Path('.env')

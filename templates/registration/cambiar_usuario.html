@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar usuario</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+            padding: 32px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 16px;
+            color: #1e293b;
+        }
+        p {
+            color: #475569;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+            background: #2563eb;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+        }
+        .secondary {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Cambiar usuario</h1>
+        <p>Para iniciar sesión con otro usuario, primero cierre su sesión actual y luego vuelva a iniciar sesión con las nuevas credenciales.</p>
+        <div class="actions">
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn">Cerrar sesión</button>
+            </form>
+            <a href="{% url 'login' %}" class="btn secondary">Ir a iniciar sesión</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -11,8 +11,10 @@
 
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    >
 
 </head>
 
@@ -48,7 +50,6 @@
 
 </div>
 
-
 <div class="main">
 
     <header>
@@ -65,19 +66,87 @@
 
         </div>
 
-        <div class="user">
+        {% if user.is_authenticated %}
+            <div class="user">
 
-            <i class="fa-solid fa-bell"></i>
+                <button
+                    class="notification-btn"
+                    type="button"
+                    aria-label="Notificaciones"
+                >
+                    <i class="fa-solid fa-bell"></i>
+                </button>
 
-            <span>Jepp</span>
+                <div class="user-dropdown-container">
 
-        </div>
+                    <button
+                        class="user-dropdown-btn"
+                        type="button"
+                        id="userMenuButton"
+                        aria-expanded="false"
+                    >
+                        <i class="fa-solid fa-circle-user"></i>
+
+                        <span>
+                            {{ user.get_full_name|default:user.username }}
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down user-arrow"></i>
+                    </button>
+
+                    <div
+                        class="user-dropdown-menu"
+                        id="userDropdownMenu"
+                    >
+                        <a href="#">
+                            <i class="fa-solid fa-gear"></i>
+                            Configuraciones
+                        </a>
+
+                        <a href="#">
+                            <i class="fa-solid fa-user-pen"></i>
+                            Editar cuenta
+                        </a>
+
+                        <form
+                            method="post"
+                            action="{% url 'cambiar_usuario' %}"
+                        >
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="change-user-button"
+                            >
+                                <i class="fa-solid fa-right-left"></i>
+                                Cambiar usuario
+                            </button>
+                        </form>
+
+                        <div class="dropdown-divider"></div>
+
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="logout-button"
+                            >
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                Cerrar sesión
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+        {% endif %}
 
     </header>
 
-
     {% block content %}
-
     {% endblock %}
 
 </div>
@@ -85,5 +154,4 @@
 <script src="{% static 'js/dashboard.js' %}"></script>
 
 </body>
-
 </html>
