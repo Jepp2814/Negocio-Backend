@@ -1,0 +1,581 @@
+/* ===========================================================
+   APPMECÁNICA EMILIO
+   LOGIN.CSS
+=========================================================== */
+
+
+/* ===========================================================
+   RESET
+=========================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+
+    width:100%;
+    height:100%;
+
+}
+
+
+/* ===========================================================
+   BODY
+=========================================================== */
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:#0F172A;
+
+    overflow:hidden;
+
+}
+
+
+/* ===========================================================
+   CONTENEDOR PRINCIPAL
+=========================================================== */
+
+.login-page{
+
+    width:100vw;
+    height:100vh;
+
+    display:grid;
+
+    grid-template-columns:58% 42%;
+
+}
+/* ===========================================================
+   PANEL IZQUIERDO
+=========================================================== */
+
+.left-panel{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background-image:url("../img/login-bg.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+}
+
+
+/* Capa azul sobre la imagen */
+
+.overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:linear-gradient(
+        rgba(15,23,42,.55),
+        rgba(30,58,138,.65)
+    );
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:flex-start;
+
+    padding:4rem;
+
+}
+/* ===========================================================
+   INFORMACIÓN IZQUIERDA
+=========================================================== */
+
+.time-box{
+
+    color:white;
+
+    max-width:520px;
+
+}
+
+.time-box h2{
+
+    font-size:clamp(2rem,3vw,3rem);
+
+    font-weight:600;
+
+    margin-bottom:15px;
+
+}
+
+#clock{
+
+    font-size:clamp(3rem,6vw,5rem);
+
+    font-weight:700;
+
+    line-height:1;
+
+    margin-bottom:10px;
+    
+    white-space:nowrap;
+
+}
+
+#date{
+
+    font-size:clamp(1rem,1.4vw,1.4rem);
+
+    opacity:.95;
+
+}
+/* ===========================================================
+   ANIMACIÓN IMAGEN
+=========================================================== */
+
+@keyframes fondoZoom{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    100%{
+
+        transform:scale(1.08);
+
+    }
+
+}
+
+.left-panel::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:url("../img/login-bg.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+    animation:fondoZoom 18s ease-in-out infinite alternate;
+
+    z-index:-1;
+
+}
+/* ===========================================================
+   PANEL DERECHO
+=========================================================== */
+
+.right-panel{
+
+   
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:25px;
+
+    overflow-y:auto;
+
+}
+
+/* ===========================================================
+   TARJETA LOGIN
+=========================================================== */
+
+.login-card{
+
+    width:100%; 
+    height: 100vh; 
+    max-width:430px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;  
+    padding: 20px 40px;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    /* padding: 28px;
+
+    box-shadow:0 18px 45px rgba(0,0,0,.18); */
+}
+
+   
+
+    
+/* ===========================================================
+   LOGO
+=========================================================== */
+
+.logo-container{
+
+    text-align:center;
+
+    margin-bottom:2px;
+
+}
+
+.logo{
+
+    width:170px;
+
+    height:auto;
+
+    margin-bottom:2px;
+
+}
+
+.login-card h1{
+
+    color:#21408F;
+
+    font-size:1.65rem;
+
+    font-weight:700;
+
+    margin-bottom:2px;
+    line-height: 1.1;  
+
+}
+
+.subtitle{
+
+    color:#64748B;
+
+    font-size:.85rem;
+
+    margin-bottom:2px;
+    line-height: 1.2;
+
+}
+/* ===========================================================
+   FORMULARIO
+=========================================================== */
+
+form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+}
+
+.field{
+
+    margin-bottom:8px;
+
+}
+
+.field label{
+
+    display:block;
+
+    font-weight:600;
+
+    color:#334155;
+    font-size: 14px;          
+    margin-bottom: 2px; 
+   
+
+}
+
+.field input{
+
+    width:100%;
+
+    height: 48px;
+
+    border:2px solid #CBD5E1;
+
+    border-radius:10px;
+
+    padding:0 12px;
+
+    font-size:14px;
+
+    transition:.30s;
+
+}
+
+.field input:focus{
+
+    outline:none;
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 12px rgba(37,99,235,.15);
+
+}
+/* ===========================================================
+   PASSWORD
+=========================================================== */
+
+.password-wrapper{
+
+    position:relative;
+
+}
+
+.password-wrapper input{
+
+    padding-right:55px;
+
+}
+
+.toggle-password{
+
+    position:absolute;
+
+    right:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    color:#64748B;
+
+    font-size:18px;
+
+}
+/* ===========================================================
+   BOTÓN
+=========================================================== */
+
+.submit-btn{
+
+    width:100%;
+
+    height: 48px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:linear-gradient(90deg,#2563EB,#1D4ED8);
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.30s;
+
+}
+
+.submit-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 15px 30px rgba(37,99,235,.25);
+
+}
+
+.submit-btn:disabled{
+
+    opacity:.9;
+
+    cursor:not-allowed;
+
+}
+/* ===========================================================
+   LINKS
+=========================================================== */
+
+.links{
+
+    margin: top 18px;
+
+    text-align:center;
+
+}
+
+.links a{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:#2563EB;
+
+    text-decoration:none;
+
+    font-size:.92rem;
+
+    transition:.25s;
+
+}
+
+.links a:hover{
+
+    text-decoration:underline;
+
+}
+/* ===========================================================
+   ERRORES
+=========================================================== */
+
+.form-error{
+
+    background:#FEE2E2;
+
+    color:#991B1B;
+
+    border-radius:12px;
+
+    padding:14px;
+
+    margin-bottom:20px;
+
+}
+/* ===========================================================
+   TABLET
+=========================================================== */
+
+@media(max-width:1100px){
+
+.login-page{
+
+    grid-template-columns:50% 50%;
+
+}
+
+.overlay{
+
+    padding:2rem;
+
+}
+
+}
+/* ===========================================================
+   CELULAR
+=========================================================== */
+
+@media(max-width:850px){
+
+.login-page{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.left-panel{
+
+    height:35vh;
+
+}
+
+.right-panel{
+
+    height:65vh;
+
+    padding:20px;
+
+}
+
+.overlay{
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    padding:25px;
+
+}
+
+.login-card{
+
+    width:100%;
+    max-width:470px;
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:35px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.18);
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+
+    max-height:92vh;
+
+}
+
+.logo{
+
+    width:150px;
+    max-width:100%;
+    height:auto;
+
+    margin:auto;
+    display:block;
+}
+
+.login-card h1{
+
+    font-size:34px;
+
+    margin-top:18px;
+
+    margin-bottom:8px;
+
+}
+
+}
+/* ===========================================================
+   PANTALLAS GRANDES
+=========================================================== */
+
+@media(min-width:1800px){
+
+.login-card{
+
+    max-width:480px;
+
+}
+
+.left-panel{
+
+    background-position:center;
+
+}
+
+}

@@ -9,16 +9,16 @@
 
     <title>AppMecánica Emilio | Iniciar sesión</title>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
+    
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-    >
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Iconos -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- CSS -->
     <style>
 
         * {
@@ -227,118 +227,120 @@
 </head>
 
 <body>
-
-    <main class="login-layout">
-
-        <aside class="profiles-panel">
-
-            <div class="profile-title-card">
-                <h2>Seleccione un perfil</h2>
-                <p>Selecciona tu usuario e ingresa la contraseña para iniciar sesión desde aquí.</p>
-            </div>
-
-            <div class="profiles-list">
-
-                {% for usuario in usuarios %}
-
-                <div class="profile-wrapper">
-                    <div class="profile-btn" data-username="{{ usuario.username }}" tabindex="0">
-                        <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
-                        <div>
-                            <strong>{{ usuario.get_full_name|default:usuario.username }}</strong>
-                            <div style="font-size:12px;color:#64748B">@{{ usuario.username }} {% if usuario.is_staff %}• Administrador{% endif %}</div>
-                        </div>
-                    </div>
-
-                    <form method="post" action="{% url 'login' %}" class="profile-inline">
-                        {% csrf_token %}
-                        <input type="hidden" name="username" value="{{ usuario.username }}">
-                        <div class="field" style="margin-bottom:10px;">
-                            <label for="password-{{ usuario.username }}" style="font-size:13px;color:#334155;margin-bottom:6px;display:block">Contraseña</label>
-                            <input type="password" id="password-{{ usuario.username }}" name="password" placeholder="Ingresa tu contraseña" required>
-                        </div>
-                        <button type="submit" class="submit-btn">Iniciar sesión</button>
-                    </form>
-                </div>
-
-                {% empty %}
-                <div>No hay perfiles disponibles.</div>
-                {% endfor %}
-
-            </div>
-
-        </aside>
-
-        <section class="login-card">
-
-            <div class="logo-container">
-
-                <img src="{% static 'img/logo.png' %}" alt="Logo AppMecánica Emilio" class="logo" style="width:120px;height:120px;object-fit:contain;margin:0 auto 12px;display:block">
+    <div class="login-card">
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="{% static 'img/logo.png' %}"
+                 alt="Logo AppMecánica Emilio"
+                 class="logo">
 
                 <h1>AppMecánica Emilio</h1>
 
+            <p class="subtitle">
+                Sistema de Gestión para Talleres Mecánicos
+            </p>
+        </div>
+
+        <form method="post" action="{% url 'login' %}" autocomplete="on">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="field">
+                <label for="id_username">Correo o usuario</label>
+                <input
+                    type="text"
+                    name="username"
+                    id="id_username"
+                    placeholder="Ingresar correo o usuario"
+                    autocomplete="username"
+                    required
+                >
             </div>
 
-            <form method="post" action="{% url 'login' %}" autocomplete="on">
-
-                {% csrf_token %}
-
-                {% if form.non_field_errors %}
-                    <div class="form-error">{{ form.non_field_errors }}</div>
-                {% endif %}
-
-                <div class="field">
-                    <label for="id_username">Correo o usuario</label>
-                    <input type="text" name="username" id="id_username" value="{{ form.username.value|default_if_none:'' }}" placeholder="Ingresar correo o usuario" autocomplete="username" required>
-                    {% for error in form.username.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+            <div class="field">
+                <label for="current-password">Contraseña</label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        name="password"
+                        id="current-password"
+                        placeholder="Ingresar contraseña"
+                        autocomplete="current-password"
+                        required
+                    >
+                     <!-- Botón para mostrar/ocultar contraseña -->
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        id="togglePassword"
+                        aria-label="Mostrar contraseña mientras se mantenga presionado"
+                    ><i class="fa-solid fa-eye"></i></button>
                 </div>
+            </div>
 
-                <div class="field">
-                    <label for="current-password">Contraseña</label>
-                    <div class="password-wrapper">
-                        <input type="password" name="password" id="current-password" placeholder="Ingresar contraseña" autocomplete="current-password" required>
-                        <button type="button" id="togglePassword" class="toggle-password" aria-label="Mostrar contraseña"><i class="fa-solid fa-eye"></i></button>
-                    </div>
-                    {% for error in form.password.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
-                </div>
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
 
-                {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <button type="submit" class="submit-btn" id="loginButton">
+                <span id="buttonContent">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Iniciar sesión
+                </span>
+            </button>
 
-                <button type="submit" class="submit-btn">Iniciar sesión</button>
+            <div class="links">
+                <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
+                <a href="{% url 'registro' %}">Crear o registrar nuevo usuario</a>
+            </div>
+        </form>
+    </div>
 
-                <div style="margin-top:12px">
-                    <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a> • <a href="{% url 'registro' %}">Crear usuario</a>
-                </div>
+        <script>
 
-            </form>
+        const passwordInput = document.getElementById('current-password');
+        const togglePassword = document.getElementById('togglePassword');
 
-        </section>
+        function showPassword() {
+            passwordInput.type = 'text';
+        }
 
-    </main>
+        function hidePassword() {
+            passwordInput.type = 'password';
+        }
 
-    <script>
-        // Profile buttons: toggle inline password form
-        document.querySelectorAll('.profile-btn').forEach(btn => {
-            btn.addEventListener('click', function (){
-                const wrapper = btn.closest('.profile-wrapper');
-                const active = wrapper.classList.contains('active');
-                document.querySelectorAll('.profile-wrapper').forEach(w => w.classList.remove('active'));
-                if (!active) wrapper.classList.add('active');
-                const pwd = wrapper.querySelector('input[type="password"]'); if (pwd) pwd.focus();
-            });
-            btn.addEventListener('keydown', function(e){ if (e.key==='Enter' || e.key===' ') { e.preventDefault(); btn.click(); } });
+        togglePassword.addEventListener('mousedown', showPassword);
+        togglePassword.addEventListener('mouseup', hidePassword);
+        togglePassword.addEventListener('mouseleave', hidePassword);
+        togglePassword.addEventListener('touchstart', showPassword);
+        togglePassword.addEventListener('touchend', hidePassword);
+
+
+        // ----------------------
+        // BOTÓN VERIFICANDO
+        // ----------------------
+
+        const form = document.querySelector("form");
+
+        form.addEventListener("submit", function(){
+
+            const boton = document.getElementById("loginButton");
+            const contenido = document.getElementById("buttonContent");
+
+            boton.disabled = true;
+
+            contenido.innerHTML = `
+                <i class="fa-solid fa-gear fa-spin"></i>
+                Verificando...
+            `;
+
         });
 
-        // Toggle password for main form
-        const pwdToggle = document.getElementById('togglePassword');
-        const mainPwd = document.getElementById('current-password');
-        if (pwdToggle && mainPwd){
-            pwdToggle.addEventListener('mousedown',()=>mainPwd.type='text');
-            pwdToggle.addEventListener('mouseup',()=>mainPwd.type='password');
-            pwdToggle.addEventListener('mouseleave',()=>mainPwd.type='password');
-        }
-    </script>
-
+        </script>
 </body>
-
 </html>

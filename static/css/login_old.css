@@ -1,0 +1,331 @@
+/* ===========================
+   RESET
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    body{
+
+    margin:0;
+    padding:0;
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:stretch;
+
+    font-family:'Poppins',sans-serif;
+
+    background:linear-gradient(
+        135deg,
+        #0F172A 0%,
+        #1E3A8A 55%,
+        #3B82F6 100%
+    );
+
+}
+}
+
+/* ===========================
+   CONTENEDOR PRINCIPAL
+=========================== */
+
+.login-page{
+
+    width:100%;
+    min-height:100vh;
+
+    display:grid;
+
+    grid-template-columns:55% 45%;
+
+}
+
+/* ===========================
+   PANEL IZQUIERDO
+=========================== */
+
+.left-panel{
+
+    position:relative;
+
+    background-image:url("../img/login-bg.jpg");
+    background-size:cover;
+    background-position:center;
+
+}
+
+/* Capa oscura sobre la imagen */
+
+.overlay{
+
+    width:100%;
+    height:100%;
+
+    background:linear-gradient(
+        rgba(15,23,42,.55),
+        rgba(30,58,138,.55)
+    );
+
+    display:flex;
+
+    align-items:flex-end;
+
+    padding:60px;
+
+}
+
+/* ===========================
+   HORA
+=========================== */
+
+.time-box{
+
+    color:white;
+
+}
+
+.time-box h2{
+
+    font-size:clamp(22px,3vw,38px);
+
+    margin-bottom:12px;
+
+    font-weight:600;
+
+}
+
+#clock{
+
+    font-size:clamp(38px,5vw,60px);
+
+    font-weight:700;
+
+    letter-spacing:2px;
+
+    line-height:1.1;
+}
+
+#date{
+
+    margin-top:12px;
+
+    font-size:clamp(14px,1.5vw,22px);
+
+}
+
+/* ===========================
+   PANEL DERECHO
+=========================== */
+
+.right-panel{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:white;
+
+}
+/* ===========================
+   TARJETA LOGIN
+=========================== */
+
+.login-card{
+
+    width:100%;
+    max-width:520px;
+
+    padding:30px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+   
+    max-height:100vh;
+
+    overflow:auto;
+
+
+}
+
+.logo-container{
+
+    text-align:center;
+    margin-bottom:35px;
+
+}
+
+.logo{
+
+    width:220px;
+    max-width:100%;
+    height:auto;
+
+    margin-bottom:25px;
+
+}
+
+.login-card h1{
+
+    color:#21408f;
+
+    font-size:46px;
+
+    font-weight:700;
+
+    margin-bottom:12px;
+
+}
+
+.subtitle{
+
+    color:#64748B;
+
+    font-size:18px;
+
+    margin-bottom:30px;
+
+}
+
+.field{
+
+    margin-bottom:22px;
+
+}
+
+.field label{
+
+    display:block;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+    color:#334155;
+
+}
+
+.field input{
+
+    width:100%;
+
+    height:56px;
+
+    border:2px solid #CBD5E1;
+
+    border-radius:14px;
+
+    padding:0 18px;
+
+    font-size:16px;
+
+    transition:.3s;
+
+}
+
+.field input:focus{
+
+    outline:none;
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 12px rgba(37,99,235,.20);
+
+}
+
+.password-wrapper{
+
+    position:relative;
+
+}
+
+.password-wrapper input{
+
+    padding-right:50px;
+
+}
+
+.toggle-password{
+
+    position:absolute;
+
+    right:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+}
+
+.submit-btn{
+
+    width:100%;
+
+    height:58px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:linear-gradient(90deg,#2563EB,#1D4ED8);
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.30s;
+
+}
+
+.submit-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 15px 30px rgba(37,99,235,.30);
+
+}
+
+.links{
+
+    margin-top:25px;
+
+    text-align:center;
+
+}
+
+.links a{
+
+    display:block;
+
+    margin-top:10px;
+
+    text-decoration:none;
+
+    color:#2563EB;
+
+}
+*{
+    outline:1px solid red;
+}
