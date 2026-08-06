@@ -22,12 +22,8 @@ source .venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-### 3. Actualizar en github.
-```bash
-#1ero trae el original con:
-git pull --rebase origin main
-#2do actualiza el codigo:
-git push origin main
+### 3. Actualizar Vsc desde github.
+```
 ```
 
 ## Ejecucion Local
