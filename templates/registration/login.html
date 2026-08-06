@@ -10,11 +10,16 @@
     <title>AppMecánica Emilio | Iniciar sesión</title>
 
     <!-- Fuente -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <!-- Iconos -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    >
 
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
@@ -22,12 +27,12 @@
 </head>
 
 <body>
-    <div class="login-page">
+
+<div class="login-page">
 
     <!-- ==========================================
          PANEL IZQUIERDO
     =========================================== -->
-
     <div class="left-panel">
 
         <div class="overlay">
@@ -42,6 +47,76 @@
                     00:00 PM
                 </div>
 
+                {% if usuario %}
+                    <div class="profile-wrapper">
+
+                        <div
+                            class="profile-btn"
+                            data-username="{{ usuario.username }}"
+                            tabindex="0"
+                        >
+                            <div class="profile-avatar">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+
+                            <div>
+                                <strong>
+                                    {{ usuario.get_full_name|default:usuario.username }}
+                                </strong>
+
+                                <div style="font-size: 12px; color: #64748B;">
+                                    @{{ usuario.username }}
+                                    {% if usuario.is_staff %}
+                                        • Administrador
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <form
+                            method="post"
+                            action="{% url 'login' %}"
+                            class="profile-inline"
+                        >
+                            {% csrf_token %}
+
+                            <input
+                                type="hidden"
+                                name="username"
+                                value="{{ usuario.username }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="next"
+                                value="{% url 'dashboard' %}"
+                            >
+
+                            <div class="field" style="margin-bottom: 10px;">
+                                <label
+                                    for="password-{{ usuario.username }}"
+                                    style="font-size: 13px; color: #334155; margin-bottom: 6px; display: block;"
+                                >
+                                    Contraseña
+                                </label>
+
+                                <input
+                                    type="password"
+                                    id="password-{{ usuario.username }}"
+                                    name="password"
+                                    placeholder="Ingresa tu contraseña"
+                                    required
+                                >
+                            </div>
+
+                            <button type="submit" class="submit-btn">
+                                Iniciar sesión
+                            </button>
+                        </form>
+
+                    </div>
+                {% endif %}
+
                 <div id="date">
                     Cargando fecha...
                 </div>
@@ -52,134 +127,128 @@
 
     </div>
 
-
     <!-- ==========================================
          PANEL DERECHO
     =========================================== -->
-
     <div class="right-panel">
 
         <div class="login-card">
-            <div class="login-card">
-                <!-- Logo -->
-<div class="logo-container">
 
-    <img
-        src="{% static 'img/logo.png' %}"
-        alt="Logo AppMecánica Emilio"
-        class="logo"
-    >
+            <!-- Logo -->
+            <div class="logo-container">
 
-    <h1>AppMecánica Emilio</h1>
+                <img
+                    src="{% static 'img/logo.png' %}"
+                    alt="Logo AppMecánica Emilio"
+                    class="logo"
+                >
 
-    <p class="subtitle">
-        Sistema de Gestión para Talleres Mecánicos
-    </p>
+                <h1>AppMecánica Emilio</h1>
 
-</div>
+                <p class="subtitle">
+                    Sistema de Gestión para Talleres Mecánicos
+                </p>
 
-<form method="post"
-      action="{% url 'login' %}"
-      autocomplete="on">
+            </div>
 
-    {% csrf_token %}
-
-    {% if form.non_field_errors %}
-        <div class="form-error">
-            {{ form.non_field_errors }}
-        </div>
-    {% endif %}
-
-    <!-- Usuario -->
-
-    <div class="field">
-
-        <label for="id_username">
-            Correo o usuario
-        </label>
-
-        <input
-            type="text"
-            name="username"
-            id="id_username"
-            placeholder="Ingrese su usuario"
-            autocomplete="username"
-            required
-        >
-
-    </div>
-
-    <!-- Contraseña -->
-
-    <div class="field">
-
-        <label for="current-password">
-            Contraseña
-        </label>
-
-        <div class="password-wrapper">
-
-            <input
-                type="password"
-                name="password"
-                id="current-password"
-                placeholder="Ingrese su contraseña"
-                autocomplete="current-password"
-                required
+            <form
+                method="post"
+                action="{% url 'login' %}"
+                autocomplete="on"
             >
 
-            <button
-                type="button"
-                class="toggle-password"
-                id="togglePassword"
-            >
-                <i class="fa-solid fa-eye"></i>
-            </button>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-error">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <!-- Usuario -->
+                <div class="field">
+
+                    <label for="id_username">
+                        Correo o usuario
+                    </label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        id="id_username"
+                        placeholder="Ingrese su usuario"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+                <!-- Contraseña -->
+                <div class="field">
+
+                    <label for="current-password">
+                        Contraseña
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="current-password"
+                            placeholder="Ingrese su contraseña"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            id="togglePassword"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {% if next %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                {% endif %}
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    id="loginButton"
+                >
+                    <span id="buttonContent">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        Iniciar sesión
+                    </span>
+                </button>
+
+                <div class="links">
+
+                    <a href="{% url 'password_reset' %}">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+
+                    <a href="{% url 'registro' %}">
+                        Crear o registrar nuevo usuario
+                    </a>
+
+                </div>
+
+            </form>
 
         </div>
 
     </div>
-    {% if next %}
-    <input type="hidden" name="next" value="{{ next }}">
-{% endif %}
-
-<button
-    type="submit"
-    class="submit-btn"
-    id="loginButton">
-
-    <span id="buttonContent">
-
-        <i class="fa-solid fa-right-to-bracket"></i>
-
-        Iniciar sesión
-
-    </span>
-
-</button>
-
-<div class="links">
-
-    <a href="{% url 'password_reset' %}">
-        ¿Olvidaste tu contraseña?
-    </a>
-
-    <a href="{% url 'registro' %}">
-        Crear o registrar nuevo usuario
-    </a>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
 
 </div>
 
 <script src="{% static 'js/login.js' %}"></script>
 
 </body>
-
 </html>

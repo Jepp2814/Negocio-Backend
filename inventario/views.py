@@ -19,6 +19,16 @@ from .forms import RegistroUsuarioForm
 
 User = get_user_model()
 
+
+def get_perfiles_disponibles():
+    return User.objects.filter(is_active=True).order_by(
+        "first_name",
+        "last_name",
+        "username",
+        "id",
+    )
+
+
 def home(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
@@ -31,8 +41,7 @@ class LoginConPerfilesView(LoginView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Añadir perfiles de usuario activos para mostrar en la plantilla
-        context.setdefault("usuarios", User.objects.filter(is_active=True).order_by("first_name", "last_name", "username"))
+        context.setdefault("usuarios", get_perfiles_disponibles())
         return context
 
 class LoginPerfilView(LoginConPerfilesView):
@@ -70,10 +79,10 @@ def registro(request):
 
             messages.success(
                 request,
-                "Su usuario fue creado correctamente."
+                "Su usuario fue creado correctamente. Ahora puede elegir su perfil para iniciar sesión."
             )
 
-            return redirect("registro_exitoso")
+            return redirect("login")
     else:
         form = RegistroUsuarioForm()
 
