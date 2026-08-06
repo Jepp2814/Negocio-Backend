@@ -24,6 +24,11 @@ pip install -r requirements.txt
 ```
 ### 3. Actualizar Vsc desde github.
 ```
+1. - git status --short --branch -> revisa estado actual.
+2. - git add . -> agregamos y guardamos cambios locales.
+3. - git commit -> agregamos y guardamos cambios locales.
+4. - git pull origin main -> actualizamos desde el repositorio en github.
+5. - git status --short --branch -> confirmamos que todo este actualizado.
 ```
 
 ## Ejecucion Local
