@@ -7,8 +7,6 @@ from inventario import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.LoginConPerfilesView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('logout-beacon/', views.logout_beacon, name='logout_beacon'),
 
     # Evitar login duplicado: redirigir las rutas por defecto de 'accounts/'
@@ -16,6 +14,10 @@ urlpatterns = [
     path('accounts/logout/', RedirectView.as_view(pattern_name='logout', permanent=False)),
 
     path('accounts/', include('django.contrib.auth.urls')),
+
+    path('login/', views.LoginConPerfilesView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+
     path('', include('inventario.urls')),
     path('api/finance/', include('finance.urls')),
 ]

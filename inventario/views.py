@@ -23,15 +23,7 @@ def home(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
 
-    usuarios = User.objects.filter(
-        is_active=True
-    ).order_by("first_name", "last_name", "username")
-
-    return render(
-        request,
-        "registration/seleccionar_usuario.html",
-        {"usuarios": usuarios},
-    )
+    return redirect("login")
 
 class LoginConPerfilesView(LoginView):
     template_name = "registration/login.html"
