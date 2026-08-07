@@ -231,9 +231,16 @@ body{
 
 .logo-container{
 
-    text-align:center;
+    /*text-align:left;*/
 
     margin-bottom:2px;
+    
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    
 
 }
 
@@ -243,20 +250,33 @@ body{
 
     height:auto;
 
-    margin-bottom:2px;
+    margin-bottom:10px;
+   
+    margin:0 auto 18px;
+
+    display:block;
+    object-fit:contain;
+
+    animation:
+        flotar 4s ease-in-out infinite,
+        brilloLogo 3s ease-in-out infinite;
+
 
 }
 
 .login-card h1{
 
-    color:#21408F;
+ color:#21408F;
 
-    font-size:1.65rem;
+    font-size:2rem;
 
     font-weight:700;
 
-    margin-bottom:2px;
-    line-height: 1.1;  
+    text-align:center;
+
+    line-height:1.1;
+
+    margin-bottom:10px;  
 
 }
 
@@ -264,10 +284,13 @@ body{
 
     color:#64748B;
 
-    font-size:.85rem;
+    font-size:15px;
 
-    margin-bottom:2px;
-    line-height: 1.2;
+    text-align:center;
+
+    line-height:1.5;
+
+    margin-bottom:12px;
 
 }
 /* ===========================================================
@@ -404,9 +427,15 @@ form{
 
 .submit-btn:disabled{
 
-    opacity:.9;
+    background:#1E3A5F;
+
+    opacity:1;
 
     cursor:not-allowed;
+
+    transform:none;
+
+    box-shadow:none;
 
 }
 /* ===========================================================
@@ -459,6 +488,42 @@ form{
     margin-bottom:20px;
 
 }
+/* ==========================================
+   ANIMACIONES DEL LOGO
+========================================== */
+
+@keyframes flotar{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+
+}
+
+@keyframes brilloLogo{
+
+    0%{
+        filter:drop-shadow(0 0 8px rgba(37,99,235,.25));
+    }
+
+    50%{
+        filter:drop-shadow(0 0 22px rgba(37,99,235,.75));
+    }
+
+    100%{
+        filter:drop-shadow(0 0 8px rgba(37,99,235,.25));
+    }
+
+}
+
 /* ===========================================================
    TABLET
 =========================================================== */
