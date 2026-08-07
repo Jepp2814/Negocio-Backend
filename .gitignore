@@ -31,3 +31,4 @@ staticfiles/
 Thumbs.db
 
 # Local project info
+project_info.md

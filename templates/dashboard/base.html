@@ -3,7 +3,6 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -15,7 +14,6 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     >
-
 </head>
 
 <body>
@@ -23,29 +21,18 @@
 <div class="sidebar">
 
     <div class="logo">
-
         <img src="{% static 'img/logo.png' %}" alt="Logo">
-
         <h2>AppMecánica</h2>
-
     </div>
 
     <ul>
-
         <li><a href="#"><i class="fa-solid fa-house"></i> Dashboard</a></li>
-
         <li><a href="#"><i class="fa-solid fa-users"></i> Clientes</a></li>
-
         <li><a href="#"><i class="fa-solid fa-car"></i> Vehículos</a></li>
-
         <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> Servicios</a></li>
-
         <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventario</a></li>
-
         <li><a href="#"><i class="fa-solid fa-money-bill-wave"></i> Finanzas</a></li>
-
         <li><a href="#"><i class="fa-solid fa-gear"></i> Configuración</a></li>
-
     </ul>
 
 </div>
@@ -54,16 +41,8 @@
 
     <header>
 
-        <div class="menu-btn">
-
-            <i class="fa-solid fa-bars"></i>
-
-        </div>
-
         <div class="search">
-
             <input type="text" placeholder="Buscar...">
-
         </div>
 
         {% if user.is_authenticated %}
@@ -80,24 +59,33 @@
                 <div class="user-dropdown-container">
 
                     <button
-                        class="user-dropdown-btn"
+                        class="menu-btn"
                         type="button"
                         id="userMenuButton"
+                        aria-label="Abrir menú de usuario"
                         aria-expanded="false"
                     >
-                        <i class="fa-solid fa-circle-user"></i>
-
-                        <span>
-                            {{ user.get_full_name|default:user.username }}
-                        </span>
-
-                        <i class="fa-solid fa-chevron-down user-arrow"></i>
+                        <i class="fa-solid fa-bars"></i>
                     </button>
 
                     <div
                         class="user-dropdown-menu"
                         id="userDropdownMenu"
                     >
+                        <div class="user-profile-info">
+                            <i class="fa-solid fa-circle-user"></i>
+
+                            <div>
+                                <strong>
+                                    {{ user.get_full_name|default:user.username }}
+                                </strong>
+
+                                <span>Usuario activo</span>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
                         <a href="#">
                             <i class="fa-solid fa-gear"></i>
                             Configuraciones
