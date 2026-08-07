@@ -31,7 +31,7 @@ pip install -r requirements.txt
 5. - git status --short --branch -> confirmamos que todo este actualizado.
 ```
 ### 4. Actualizamos Github desde VSC.
-1. - git status --short -branch -> verificamos los cambios realizados.
+1. - git status --short --branch -> verificamos los cambios realizados.
 2. - git add . -> preparamos los archivos para el commit.
 3. - git commit -> creamos y guardamos los cambios locales.
 4. - git push origin main -> enviamos los cambios realizados al Github.
