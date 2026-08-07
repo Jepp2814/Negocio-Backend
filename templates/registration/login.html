@@ -9,338 +9,177 @@
 
     <title>AppMecánica Emilio | Iniciar sesión</title>
 
-    
-
     <!-- Fuente -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Iconos -->
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
     <!-- CSS -->
-    <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px 20px;
-            font-family: "Poppins", sans-serif;
-            background: linear-gradient(135deg, #0F172A, #1E3A8A, #334155);
-        }
-
-        .login-layout {
-            width: 100%;
-            max-width: 1080px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: start;
-            gap: 46px;
-            padding: 24px;
-            background: transparent;
-            box-shadow: none;
-        }
-
-        .login-card {
-            padding: 35px;
-            background: #ffffff;
-            border-radius: 24px;
-            position: relative;
-            z-index: 1;
-            min-height: 520px;
-            box-shadow: 0 18px 40px rgba(15,23,42,.12);
-        }
-
-        .login-card h1 {
-            margin-bottom: 25px;
-            color: #1E3A8A;
-            text-align: center;
-            font-size: 30px;
-            font-weight: 700;
-        }
-
-        .field { margin-bottom: 18px; }
-        .field label { display:block; margin-bottom:8px; color:#334155; font-weight:600 }
-        .field input { width:100%; height:48px; padding:0 15px; border:2px solid #CBD5E1; border-radius:12px }
-        .password-wrapper { position:relative }
-        .toggle-password { position:absolute; top:50%; right:12px; transform:translateY(-50%); border:none; background:none; cursor:pointer }
-
-        .submit-btn { width:100%; height:50px; border:none; border-radius:12px; background:linear-gradient(90deg,#2563EB,#1D4ED8); color:#fff }
-
-        .profiles-panel {
-            width: 100%;
-            padding: 28px 24px;
-            background: #f8fafc;
-            border-radius: 28px;
-            border: 1px solid rgba(148,163,184,.25);
-            position: relative;
-            box-shadow: 0 18px 40px rgba(15,23,42,.08);
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            align-items: center;
-            text-align: center;
-            justify-content: center;
-            min-height: 520px;
-        }
-        .profile-title-card {
-            width: 100%;
-            max-width: 280px;
-            padding: 18px 20px;
-            border-radius: 22px;
-            background: #ffffff;
-            border: 1px solid rgba(148,163,184,.18);
-            box-shadow: 0 8px 18px rgba(15,23,42,.06);
-            align-self: center;
-            margin-bottom: 28px;
-        }
-        .profile-title-card h2 {
-            margin: 0 0 6px;
-            font-size: 26px;
-            color: #1e3a8a;
-        }
-        .profile-title-card p {
-            margin: 0;
-            font-size: 14px;
-            color: #475569;
-            line-height: 1.45;
-        }
-        .profiles-list {
-            display:flex;
-            flex-direction:row;
-            flex-wrap: nowrap;
-            gap:18px;
-            max-height:520px;
-            overflow-y:auto;
-            padding-top:4px;
-            margin-top: 16px;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .profile-wrapper {
-            background:#ffffff;
-            border-radius:18px;
-            border:1px solid rgba(148,163,184,.18);
-            padding:14px;
-            box-shadow:0 8px 20px rgba(15,23,42,.05);
-            transition:transform .16s, box-shadow .16s, border-color .16s;
-            width: calc(50% - 9px);
-            max-width: 320px;
-            min-width: 260px;
-            margin: 0;
-        }
-        .profile-wrapper.active {
-            border-color:rgba(37,99,235,.45);
-            box-shadow:0 16px 32px rgba(37,99,235,.12);
-            transform:translateY(-2px);
-        }
-
-        .profile-btn {
-            display:flex;
-            align-items:center;
-            gap:14px;
-            width:100%;
-            padding:14px 16px;
-            border-radius:18px;
-            border:1px solid rgba(148,163,184,.14);
-            background:#f8fafc;
-            color:#0f172a;
-            text-align:left;
-            cursor:pointer;
-            transition:background .16s, transform .12s, box-shadow .12s, border-color .12s;
-        }
-        .profile-btn:hover {
-            background:#eff6ff;
-            transform:translateY(-1px);
-            border-color:rgba(59,130,246,.35);
-        }
-
-        .profile-avatar {
-            width:42px;
-            height:42px;
-            border-radius:50%;
-            display:grid;
-            place-items:center;
-            background:#e0e7ff;
-            color:#2563eb;
-            font-size:20px;
-        }
-
-        .profile-inline {
-            display:none;
-            margin-top:12px;
-            background:#f8fafc;
-            border-radius:16px;
-            padding:12px;
-            border:1px solid rgba(148,163,184,.18);
-        }
-        .profile-wrapper.active .profile-inline { display:block }
-
-        .profile-inline input[type="password"] {
-            width:100%;
-            height:44px;
-            padding:0 14px;
-            border:1px solid #cbd5e1;
-            border-radius:12px;
-            background:#fff;
-        }
-        .profile-inline .submit-btn {
-            width:100%;
-            margin-top:10px;
-        }
-
-        @media (max-width:920px){
-            .login-layout {
-                grid-template-columns: 1fr;
-                max-width:760px;
-                padding: 30px 20px;
-            }
-            .profiles-panel {
-                position: relative;
-                transform: none;
-                width: auto;
-                margin-bottom: 24px;
-            }
-        }
-        @media (max-width:640px){
-            .login-layout {
-                max-width:420px;
-            }
-        }
-
-    </style>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 
 </head>
 
 <body>
-    <div class="login-card">
-        <!-- Logo -->
-        <div class="logo-container">
-            <img src="{% static 'img/logo.png' %}"
-                 alt="Logo AppMecánica Emilio"
-                 class="logo">
+    <div class="login-page">
 
-                <h1>AppMecánica Emilio</h1>
+    <!-- ==========================================
+         PANEL IZQUIERDO
+    =========================================== -->
 
-            <p class="subtitle">
-                Sistema de Gestión para Talleres Mecánicos
-            </p>
+    <div class="left-panel">
+
+        <div class="overlay">
+
+            <div class="time-box">
+
+                <h2 id="greeting">
+                    Bienvenido
+                </h2>
+
+                <div id="clock">
+                    00:00 PM
+                </div>
+
+                <div id="date">
+                    Cargando fecha...
+                </div>
+
+            </div>
+
         </div>
 
-        <form method="post" action="{% url 'login' %}" autocomplete="on">
-            {% csrf_token %}
-
-            {% if form.non_field_errors %}
-                <div class="form-error">
-                    {{ form.non_field_errors }}
-                </div>
-            {% endif %}
-
-            <div class="field">
-                <label for="id_username">Correo o usuario</label>
-                <input
-                    type="text"
-                    name="username"
-                    id="id_username"
-                    placeholder="Ingresar correo o usuario"
-                    autocomplete="username"
-                    required
-                >
-            </div>
-
-            <div class="field">
-                <label for="current-password">Contraseña</label>
-                <div class="password-wrapper">
-                    <input
-                        type="password"
-                        name="password"
-                        id="current-password"
-                        placeholder="Ingresar contraseña"
-                        autocomplete="current-password"
-                        required
-                    >
-                     <!-- Botón para mostrar/ocultar contraseña -->
-                    <button
-                        type="button"
-                        class="toggle-password"
-                        id="togglePassword"
-                        aria-label="Mostrar contraseña mientras se mantenga presionado"
-                    ><i class="fa-solid fa-eye"></i></button>
-                </div>
-            </div>
-
-            {% if next %}
-                <input type="hidden" name="next" value="{{ next }}">
-            {% endif %}
-
-            <button type="submit" class="submit-btn" id="loginButton">
-                <span id="buttonContent">
-                    <i class="fa-solid fa-right-to-bracket"></i>
-                    Iniciar sesión
-                </span>
-            </button>
-
-            <div class="links">
-                <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
-                <a href="{% url 'registro' %}">Crear o registrar nuevo usuario</a>
-            </div>
-        </form>
     </div>
 
-        <script>
 
-        const passwordInput = document.getElementById('current-password');
-        const togglePassword = document.getElementById('togglePassword');
+    <!-- ==========================================
+         PANEL DERECHO
+    =========================================== -->
 
-        function showPassword() {
-            passwordInput.type = 'text';
-        }
+    <div class="right-panel">
 
-        function hidePassword() {
-            passwordInput.type = 'password';
-        }
+        <div class="login-card">
+            <div class="login-card">
+                <!-- Logo -->
+<div class="logo-container">
 
-        togglePassword.addEventListener('mousedown', showPassword);
-        togglePassword.addEventListener('mouseup', hidePassword);
-        togglePassword.addEventListener('mouseleave', hidePassword);
-        togglePassword.addEventListener('touchstart', showPassword);
-        togglePassword.addEventListener('touchend', hidePassword);
+    <img
+        src="{% static 'img/logo.png' %}"
+        alt="Logo AppMecánica Emilio"
+        class="logo"
+    >
 
+    <h1>AppMecánica Emilio</h1>
 
-        // ----------------------
-        // BOTÓN VERIFICANDO
-        // ----------------------
+    <p class="subtitle">
+        Sistema de Gestión para Talleres Mecánicos
+    </p>
 
-        const form = document.querySelector("form");
+</div>
 
-        form.addEventListener("submit", function(){
+<form method="post"
+      action="{% url 'login' %}"
+      autocomplete="on">
 
-            const boton = document.getElementById("loginButton");
-            const contenido = document.getElementById("buttonContent");
+    {% csrf_token %}
 
-            boton.disabled = true;
+    {% if form.non_field_errors %}
+        <div class="form-error">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
 
-            contenido.innerHTML = `
-                <i class="fa-solid fa-gear fa-spin"></i>
-                Verificando...
-            `;
+    <!-- Usuario -->
 
-        });
+    <div class="field">
 
-        </script>
+        <label for="id_username">
+            Correo o usuario
+        </label>
+
+        <input
+            type="text"
+            name="username"
+            id="id_username"
+            placeholder="Ingrese su usuario"
+            autocomplete="username"
+            required
+        >
+
+    </div>
+
+    <!-- Contraseña -->
+
+    <div class="field">
+
+        <label for="current-password">
+            Contraseña
+        </label>
+
+        <div class="password-wrapper">
+
+            <input
+                type="password"
+                name="password"
+                id="current-password"
+                placeholder="Ingrese su contraseña"
+                autocomplete="current-password"
+                required
+            >
+
+            <button
+                type="button"
+                class="toggle-password"
+                id="togglePassword"
+            >
+                <i class="fa-solid fa-eye"></i>
+            </button>
+
+        </div>
+
+    </div>
+    {% if next %}
+    <input type="hidden" name="next" value="{{ next }}">
+{% endif %}
+
+<button
+    type="submit"
+    class="submit-btn"
+    id="loginButton">
+
+    <span id="buttonContent">
+
+        <i class="fa-solid fa-right-to-bracket"></i>
+
+        Iniciar sesión
+
+    </span>
+
+</button>
+
+<div class="links">
+
+    <a href="{% url 'password_reset' %}">
+        ¿Olvidaste tu contraseña?
+    </a>
+
+    <a href="{% url 'registro' %}">
+        Crear o registrar nuevo usuario
+    </a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="{% static 'js/login.js' %}"></script>
+
 </body>
+
 </html>
