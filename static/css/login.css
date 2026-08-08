@@ -88,11 +88,94 @@ body{
 
     display:flex;
 
-    align-items:flex-end;
+    flex-direction:column;
 
-    justify-content:flex-start;
+    align-items:flex-start;
+
+    justify-content:flex-end;
 
     padding:4rem;
+
+    
+
+}
+/* ===========================================================
+   ACCESOS RÁPIDOS - TARJETAS DE CRISTAL
+=========================================================== */
+
+.quick-access{
+
+    display:flex;
+
+    gap:16px;
+
+    margin-bottom:35px;
+
+}
+
+.glass-card{
+
+    width:125px;
+    height:105px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    color:white;
+
+    text-decoration:none;
+
+    background:rgba(255,255,255,.12);
+
+    border:1px solid rgba(255,255,255,.30);
+
+    border-radius:18px;
+
+    backdrop-filter:blur(12px);
+
+    -webkit-backdrop-filter:blur(12px);
+
+    box-shadow:0 8px 25px rgba(0,0,0,.15);
+
+    transition:
+        transform .3s ease,
+        background .3s ease,
+        box-shadow .3s ease;
+
+}
+
+.glass-card i{
+
+    font-size:28px;
+
+}
+
+.glass-card span{
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+.glass-card:hover{
+
+    color:white;
+
+    text-decoration:none;
+
+    transform:translateY(-5px);
+
+    background:rgba(255,255,255,.20);
+
+    box-shadow:0 12px 30px rgba(0,0,0,.25);
 
 }
 /* ===========================================================
@@ -643,4 +726,153 @@ form{
 
 }
 
+}
+
+/* ===========================================================
+   TARJETAS DE ACCESO RÁPIDO
+=========================================================== */
+
+.quick-access{
+
+    display:flex;
+    flex-direction:row;
+
+    gap:16px;
+
+    margin-bottom:35px;
+
+    position:relative;
+    z-index:10;
+
+}
+
+.quick-access .glass-card{
+
+    width:125px;
+    height:105px;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:10px;
+
+    color:#ffffff;
+    text-decoration:none;
+
+    background:rgba(255,255,255,0.12);
+
+    border:1px solid rgba(255,255,255,0.35);
+
+    border-radius:18px;
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    box-shadow:0 8px 25px rgba(0,0,0,0.18);
+
+    transition:
+        transform .3s ease,
+        background .3s ease,
+        box-shadow .3s ease;
+
+}
+
+.quick-access .glass-card i{
+
+    font-size:27px;
+
+    color:#ffffff;
+
+}
+
+.quick-access .glass-card span{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:#ffffff;
+
+}
+
+.quick-access .glass-card:hover{
+
+    color:#ffffff;
+    text-decoration:none;
+
+    transform:translateY(-5px);
+
+    background:rgba(255,255,255,0.22);
+
+    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+
+}
+
+/* ===========================================================
+   PRUEBA / TARJETAS ACCESO RÁPIDO
+=========================================================== */
+
+.overlay .quick-access{
+    display:flex !important;
+    flex-direction:row !important;
+    gap:16px !important;
+
+    position:relative !important;
+    z-index:100 !important;
+
+    margin-bottom:35px !important;
+}
+
+.overlay .quick-access .glass-card{
+    width:125px !important;
+    height:105px !important;
+
+    display:flex !important;
+    flex-direction:column !important;
+
+    align-items:center !important;
+    justify-content:center !important;
+
+    gap:10px !important;
+
+    color:#ffffff !important;
+    text-decoration:none !important;
+
+    background:rgba(255,255,255,.14) !important;
+
+    border:1px solid rgba(255,255,255,.40) !important;
+
+    border-radius:18px !important;
+
+    backdrop-filter:blur(12px) !important;
+    -webkit-backdrop-filter:blur(12px) !important;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.20) !important;
+
+    transition:all .3s ease !important;
+}
+
+.overlay .quick-access .glass-card i{
+    font-size:28px !important;
+    color:#ffffff !important;
+}
+
+.overlay .quick-access .glass-card span{
+    font-size:14px !important;
+    font-weight:600 !important;
+    color:#ffffff !important;
+}
+
+.overlay .quick-access .glass-card:hover{
+    color:#ffffff !important;
+    text-decoration:none !important;
+
+    transform:translateY(-5px) !important;
+
+    background:rgba(255,255,255,.24) !important;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.30) !important;
 }
