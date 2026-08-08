@@ -735,60 +735,62 @@ form{
 .quick-access{
 
     display:flex;
-    flex-direction:row;
 
     gap:16px;
 
     margin-bottom:35px;
 
     position:relative;
-    z-index:10;
+
+    z-index:20;
 
 }
 
-.quick-access .glass-card{
+.glass-card{
 
     width:125px;
+
     height:105px;
 
     display:flex;
+
     flex-direction:column;
 
     align-items:center;
+
     justify-content:center;
 
     gap:10px;
 
-    color:#ffffff;
-    text-decoration:none;
+    color:#ffffff !important;
 
-    background:rgba(255,255,255,0.12);
+    text-decoration:none !important;
 
-    border:1px solid rgba(255,255,255,0.35);
+    background:rgba(255,255,255,.12);
+
+    border:1px solid rgba(255,255,255,.35);
 
     border-radius:18px;
 
     backdrop-filter:blur(12px);
+
     -webkit-backdrop-filter:blur(12px);
 
-    box-shadow:0 8px 25px rgba(0,0,0,0.18);
+    box-shadow:0 8px 25px rgba(0,0,0,.20);
 
-    transition:
-        transform .3s ease,
-        background .3s ease,
-        box-shadow .3s ease;
+    transition:all .3s ease;
 
 }
 
-.quick-access .glass-card i{
+.glass-card i{
 
-    font-size:27px;
+    font-size:28px;
 
     color:#ffffff;
 
 }
 
-.quick-access .glass-card span{
+.glass-card span{
 
     font-size:14px;
 
@@ -798,81 +800,16 @@ form{
 
 }
 
-.quick-access .glass-card:hover{
+.glass-card:hover{
 
-    color:#ffffff;
-    text-decoration:none;
+    color:#ffffff !important;
+
+    text-decoration:none !important;
 
     transform:translateY(-5px);
 
-    background:rgba(255,255,255,0.22);
+    background:rgba(255,255,255,.22);
 
-    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+    box-shadow:0 12px 30px rgba(0,0,0,.30);
 
-}
-
-/* ===========================================================
-   PRUEBA / TARJETAS ACCESO RÁPIDO
-=========================================================== */
-
-.overlay .quick-access{
-    display:flex !important;
-    flex-direction:row !important;
-    gap:16px !important;
-
-    position:relative !important;
-    z-index:100 !important;
-
-    margin-bottom:35px !important;
-}
-
-.overlay .quick-access .glass-card{
-    width:125px !important;
-    height:105px !important;
-
-    display:flex !important;
-    flex-direction:column !important;
-
-    align-items:center !important;
-    justify-content:center !important;
-
-    gap:10px !important;
-
-    color:#ffffff !important;
-    text-decoration:none !important;
-
-    background:rgba(255,255,255,.14) !important;
-
-    border:1px solid rgba(255,255,255,.40) !important;
-
-    border-radius:18px !important;
-
-    backdrop-filter:blur(12px) !important;
-    -webkit-backdrop-filter:blur(12px) !important;
-
-    box-shadow:0 8px 25px rgba(0,0,0,.20) !important;
-
-    transition:all .3s ease !important;
-}
-
-.overlay .quick-access .glass-card i{
-    font-size:28px !important;
-    color:#ffffff !important;
-}
-
-.overlay .quick-access .glass-card span{
-    font-size:14px !important;
-    font-weight:600 !important;
-    color:#ffffff !important;
-}
-
-.overlay .quick-access .glass-card:hover{
-    color:#ffffff !important;
-    text-decoration:none !important;
-
-    transform:translateY(-5px) !important;
-
-    background:rgba(255,255,255,.24) !important;
-
-    box-shadow:0 12px 30px rgba(0,0,0,.30) !important;
 }
