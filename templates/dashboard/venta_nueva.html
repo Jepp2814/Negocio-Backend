@@ -1,0 +1,395 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+<div class="venta-nueva-container">
+
+    <h1 class="title">Venta Nueva</h1>
+
+    <div class="tabla-venta-contenedor">
+
+        <table class="tabla-venta">
+
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                    <th>Valor unitario</th>
+                    <th>Valor por caja</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+
+            <tbody id="detalle-venta">
+
+                <tr class="fila-buscar-producto">
+                    <td colspan="2">
+                        <input
+                            type="text"
+                            id="buscar-producto"
+                            placeholder="Seleccione o ingrese nombre o código"
+                        >
+                    </td>
+
+                    <td colspan="4">
+                        <button
+                            type="button"
+                            id="btn-agregar-producto"
+                            class="btn-agregar-producto"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                            Agregar producto
+                        </button>
+                    </td>
+                </tr>
+
+                <tr id="fila-vacia">
+                    <td colspan="6" class="sin-productos">
+                        No hay productos agregados.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div id="mensaje-producto" class="mensaje-producto"></div>
+
+    <div class="venta-acciones">
+
+        <button
+            type="button"
+            id="btn-eliminar-seleccionado"
+            class="btn-eliminar-seleccionado"
+        >
+            <i class="fa-solid fa-trash"></i>
+            Eliminar producto seleccionado
+        </button>
+
+        <div class="total-venta">
+            <span>Total de venta:</span>
+            <strong id="total-venta">$0.00</strong>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .venta-nueva-container {
+        padding: 40px;
+    }
+
+    .tabla-venta-contenedor {
+        overflow-x: auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    }
+
+    .tabla-venta {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tabla-venta th {
+        background: #0F4C81;
+        color: white;
+        text-align: left;
+    }
+
+    .tabla-venta th,
+    .tabla-venta td {
+        padding: 14px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .fila-buscar-producto td {
+        background: #f8fafc;
+    }
+
+    .fila-buscar-producto input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        font-size: 14px;
+    }
+
+    .tabla-venta .cantidad-producto {
+        width: 75px;
+        padding: 8px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+    }
+
+    .btn-agregar-producto {
+        border: none;
+        border-radius: 8px;
+        padding: 10px 15px;
+        background: #0F4C81;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .btn-agregar-producto:hover {
+        background: #0B3158;
+    }
+
+    .fila-producto {
+        cursor: pointer;
+    }
+
+    .fila-producto:hover {
+        background: #f1f5f9;
+    }
+
+    .fila-producto.seleccionada {
+        background: #dbeafe;
+        outline: 2px solid #0F4C81;
+    }
+
+    .sin-productos {
+        text-align: center;
+        color: #6b7280;
+    }
+
+    .mensaje-producto {
+        min-height: 22px;
+        margin-top: 15px;
+        color: #dc2626;
+    }
+
+    .venta-acciones {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 25px;
+    }
+
+    .btn-eliminar-seleccionado {
+        border: none;
+        border-radius: 8px;
+        padding: 11px 15px;
+        background: #dc2626;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .btn-eliminar-seleccionado:hover {
+        background: #b91c1c;
+    }
+
+    .total-venta {
+        display: flex;
+        gap: 12px;
+        font-size: 20px;
+    }
+
+    .total-venta strong {
+        color: #0F4C81;
+    }
+</style>
+
+<script>
+    const inputBuscarProducto = document.getElementById("buscar-producto");
+    const botonAgregarProducto = document.getElementById("btn-agregar-producto");
+    const botonEliminarSeleccionado = document.getElementById(
+        "btn-eliminar-seleccionado"
+    );
+    const detalleVenta = document.getElementById("detalle-venta");
+    const mensajeProducto = document.getElementById("mensaje-producto");
+    const totalVenta = document.getElementById("total-venta");
+
+    let filaSeleccionada = null;
+
+
+    function formatoMoneda(valor) {
+        return `$${Number(valor).toFixed(2)}`;
+    }
+
+
+    function calcularTotalVenta() {
+        let total = 0;
+
+        document.querySelectorAll(".fila-producto").forEach((fila) => {
+            total += Number(fila.dataset.total || 0);
+        });
+
+        totalVenta.textContent = formatoMoneda(total);
+    }
+
+
+    function actualizarFila(fila) {
+        const cantidadInput = fila.querySelector(".cantidad-producto");
+        const precioUnitario = Number(fila.dataset.precioUnitario);
+        const cantidad = Number(cantidadInput.value);
+
+        const valorCaja = precioUnitario * cantidad;
+
+        fila.querySelector(".valor-caja").textContent = formatoMoneda(valorCaja);
+        fila.querySelector(".total-producto").textContent = formatoMoneda(valorCaja);
+
+        fila.dataset.total = valorCaja;
+
+        calcularTotalVenta();
+    }
+
+
+    function seleccionarFila(fila) {
+        document.querySelectorAll(".fila-producto").forEach((filaActual) => {
+            filaActual.classList.remove("seleccionada");
+        });
+
+        fila.classList.add("seleccionada");
+        filaSeleccionada = fila;
+    }
+
+
+    function mostrarFilaVaciaSiEsNecesario() {
+        const productos = document.querySelectorAll(".fila-producto");
+
+        if (productos.length === 0) {
+            detalleVenta.insertAdjacentHTML(
+                "beforeend",
+                `
+                    <tr id="fila-vacia">
+                        <td colspan="6" class="sin-productos">
+                            No hay productos agregados.
+                        </td>
+                    </tr>
+                `
+            );
+        }
+    }
+
+
+    function agregarProductoATabla(producto) {
+        const filaVacia = document.getElementById("fila-vacia");
+
+        if (filaVacia) {
+            filaVacia.remove();
+        }
+
+        const precioUnitario = Number(producto.precio_venta || 0);
+        const codigo = producto.codigo || producto.id;
+        const descripcion = producto.nombre || "Producto sin descripción";
+
+        const fila = document.createElement("tr");
+
+        fila.classList.add("fila-producto");
+        fila.dataset.precioUnitario = precioUnitario;
+        fila.dataset.total = precioUnitario;
+
+        fila.innerHTML = `
+            <td>${codigo}</td>
+            <td>${descripcion}</td>
+            <td>
+                <input
+                    type="number"
+                    class="cantidad-producto"
+                    value="1"
+                    min="1"
+                >
+            </td>
+            <td>${formatoMoneda(precioUnitario)}</td>
+            <td class="valor-caja">${formatoMoneda(precioUnitario)}</td>
+            <td class="total-producto">${formatoMoneda(precioUnitario)}</td>
+        `;
+
+        const inputCantidad = fila.querySelector(".cantidad-producto");
+
+        fila.addEventListener("click", (evento) => {
+            if (evento.target.classList.contains("cantidad-producto")) {
+                return;
+            }
+
+            seleccionarFila(fila);
+        });
+
+        inputCantidad.addEventListener("input", () => {
+            actualizarFila(fila);
+        });
+
+        detalleVenta.appendChild(fila);
+
+        seleccionarFila(fila);
+        calcularTotalVenta();
+    }
+
+
+    async function buscarYAgregarProducto() {
+        const termino = inputBuscarProducto.value.trim();
+
+        mensajeProducto.textContent = "";
+
+        if (!termino) {
+            mensajeProducto.textContent =
+                "Ingrese el nombre o código del producto.";
+            return;
+        }
+
+        try {
+            const respuesta = await fetch(
+                `/api/productos/?search=${encodeURIComponent(termino)}`
+            );
+
+            const datos = await respuesta.json();
+
+            const productos = datos.results || datos;
+
+            if (!productos || productos.length === 0) {
+                mensajeProducto.textContent =
+                    "No se encontró ningún producto.";
+                return;
+            }
+
+            agregarProductoATabla(productos[0]);
+
+            inputBuscarProducto.value = "";
+            inputBuscarProducto.focus();
+
+        } catch (error) {
+            mensajeProducto.textContent =
+                "No fue posible buscar el producto.";
+        }
+    }
+
+
+    function eliminarProductoSeleccionado() {
+        mensajeProducto.textContent = "";
+
+        if (!filaSeleccionada) {
+            mensajeProducto.textContent =
+                "Seleccione una fila de producto para eliminarla.";
+            return;
+        }
+
+        filaSeleccionada.remove();
+        filaSeleccionada = null;
+
+        mostrarFilaVaciaSiEsNecesario();
+        calcularTotalVenta();
+    }
+
+
+    botonAgregarProducto.addEventListener("click", buscarYAgregarProducto);
+
+    botonEliminarSeleccionado.addEventListener(
+        "click",
+        eliminarProductoSeleccionado
+    );
+
+    inputBuscarProducto.addEventListener("keydown", (evento) => {
+        if (evento.key === "Enter") {
+            buscarYAgregarProducto();
+        }
+    });
+</script>
+
+{% endblock %}s

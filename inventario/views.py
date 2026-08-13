@@ -19,7 +19,6 @@ from .forms import RegistroUsuarioForm
 
 User = get_user_model()
 
-
 def get_perfiles_disponibles():
     return User.objects.filter(is_active=True).order_by(
         "first_name",
@@ -27,7 +26,6 @@ def get_perfiles_disponibles():
         "username",
         "id",
     )
-
 
 def home(request):
     if request.user.is_authenticated:
@@ -38,7 +36,7 @@ def home(request):
 class LoginConPerfilesView(LoginView):
     template_name = "registration/login.html"
     redirect_authenticated_user = True
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.setdefault("usuarios", get_perfiles_disponibles())
@@ -55,7 +53,6 @@ class LoginPerfilView(LoginConPerfilesView):
             is_active=True,
         )
 
-        # Precarga el username en el formulario de login.
         initial["username"] = usuario.username
 
         return initial
@@ -236,4 +233,11 @@ def dashboard(request):
     return render(
         request,
         "dashboard/dashboard.html",
+    )
+
+@login_required
+def venta_nueva(request):
+    return render(
+        request,
+        "dashboard/venta_nueva.html",
     )
