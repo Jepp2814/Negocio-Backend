@@ -1,10 +1,9 @@
-from django.db import models
 from decimal import Decimal
-# 1. PRODUCTO
+
+from django.db import models
+
 
 class Producto(models.Model):
-
-    
     codigo = models.CharField(
         max_length=7,
         unique=True,
@@ -15,10 +14,8 @@ class Producto(models.Model):
     nombre = models.CharField(
         max_length=200,
         verbose_name="Nombre"
-        
     )
 
-    
     marca = models.CharField(
         max_length=100,
         verbose_name="Marca"
@@ -31,14 +28,14 @@ class Producto(models.Model):
     )
 
     categoria = models.ForeignKey(
-        'Categoria',
+        "Categoria",
         on_delete=models.PROTECT,
         null=True,
         blank=True,
-        related_name='productos',
+        related_name="productos",
         verbose_name="Categoría"
     )
-    
+
     descripcion = models.TextField(
         blank=True,
         null=True,
@@ -58,22 +55,36 @@ class Producto(models.Model):
         verbose_name="Imagen Referencial"
     )
 
-    
     costo = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         blank=True,
         null=True,
-        verbose_name="Costo"
+        verbose_name="Costo por unidad"
+    )
+
+    costo_caja = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        verbose_name="Costo por caja"
     )
 
     precio_venta = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name="Precio de Venta"
+        verbose_name="Precio de venta por unidad"
     )
 
-    
+    precio_venta_caja = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        verbose_name="Precio de venta por caja"
+    )
+
     stock = models.PositiveIntegerField(
         default=0,
         verbose_name="Stock"
@@ -91,7 +102,6 @@ class Producto(models.Model):
         verbose_name="Proveedor"
     )
 
-    
     fecha_creacion = models.DateTimeField(
         auto_now_add=True
     )
@@ -109,22 +119,23 @@ class Producto(models.Model):
     def estado(self):
         if self.stock > 0:
             return "Disponible"
-        elif self.fecha_llegada:
+
+        if self.fecha_llegada:
             return "Por llegar"
+
         return "Agotado"
 
     def generar_codigo(self):
-
         prefijo = self.nombre[:3].upper()
 
         ultimo = Producto.objects.filter(
             codigo__startswith=prefijo
-        ).order_by('-codigo').first()
+        ).order_by("-codigo").first()
 
         if ultimo:
-          numero = int(ultimo.codigo.split('-')[1]) + 1
+            numero = int(ultimo.codigo.split("-")[1]) + 1
         else:
-          numero = 1
+            numero = 1
 
         return f"{prefijo}-{numero:03d}"
 
@@ -136,12 +147,13 @@ class Producto(models.Model):
 
     def __str__(self):
         return f"{self.codigo} - {self.nombre}"
-    
 
-# 2. PROVEEDOR
+
 class Proveedor(models.Model):
-
-    nombre = models.CharField(max_length=150, unique=True)
+    nombre = models.CharField(
+        max_length=150,
+        unique=True
+    )
 
     telefono = models.CharField(
         max_length=20,
@@ -161,15 +173,15 @@ class Proveedor(models.Model):
         blank=True
     )
 
-    activo = models.BooleanField(default=True)
+    activo = models.BooleanField(
+        default=True
+    )
 
     def __str__(self):
         return self.nombre
 
 
-# 3. CATEGORIA
 class Categoria(models.Model):
-
     nombre = models.CharField(
         max_length=100,
         unique=True,
@@ -194,9 +206,8 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nombre
 
-# 4. CLIENTE
-class Cliente(models.Model):
 
+class Cliente(models.Model):
     primer_nombre = models.CharField(
         max_length=100,
         verbose_name="Primer Nombre"
@@ -263,7 +274,6 @@ class Cliente(models.Model):
         ordering = ["primer_apellido", "primer_nombre"]
 
     def __str__(self):
-
         nombre = self.primer_nombre
 
         if self.segundo_nombre:
@@ -276,13 +286,14 @@ class Cliente(models.Model):
 
         return f"{self.cedula} - {apellido}, {nombre}"
 
+
 class Venta(models.Model):
     cliente = models.ForeignKey(
-        'Cliente',
+        "Cliente",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='ventas',
+        related_name="ventas",
         verbose_name="Cliente"
     )
 
@@ -323,7 +334,7 @@ class Venta(models.Model):
         max_digits=12,
         decimal_places=2,
         default=0,
-        verbose_name = "Valor Ganado"
+        verbose_name="Valor Ganado"
     )
 
     confirmada = models.BooleanField(
@@ -343,19 +354,20 @@ class Venta(models.Model):
 
     def __str__(self):
         return f"Venta #{self.id} - {self.fecha.strftime('%Y-%m-%d %H:%M:%S')}"
-    
+
+
 class DetalleVenta(models.Model):
     venta = models.ForeignKey(
-        'Venta',
+        "Venta",
         on_delete=models.CASCADE,
-        related_name='detalles',
+        related_name="detalles",
         verbose_name="Venta"
     )
 
     producto = models.ForeignKey(
-        'Producto',
+        "Producto",
         on_delete=models.PROTECT,
-        related_name='detalles_venta',
+        related_name="detalles_venta",
         verbose_name="Producto"
     )
 

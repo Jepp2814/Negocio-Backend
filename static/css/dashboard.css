@@ -5,10 +5,12 @@
     font-family: Poppins, sans-serif;
 }
 
+
 body {
     display: flex;
     background: #f4f6fb;
 }
+
 
 .sidebar {
     width: 260px;
@@ -17,23 +19,28 @@ body {
     color: white;
 }
 
+
 .logo {
     text-align: center;
     padding: 30px;
 }
+
 
 .logo img {
     width: 90px;
     margin-bottom: 10px;
 }
 
+
 .sidebar ul {
     list-style: none;
 }
 
+
 .sidebar li {
     margin: 8px 0;
 }
+
 
 .sidebar a {
     display: block;
@@ -43,13 +50,16 @@ body {
     transition: .3s;
 }
 
+
 .sidebar a:hover {
     background: #0B3158;
 }
 
+
 .main {
     flex: 1;
 }
+
 
 header {
     height: 70px;
@@ -61,6 +71,7 @@ header {
     box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
 }
 
+
 .search input {
     width: 350px;
     padding: 10px 15px;
@@ -69,6 +80,7 @@ header {
     background: #eee;
 }
 
+
 .user {
     display: flex;
     gap: 20px;
@@ -76,9 +88,11 @@ header {
     font-size: 20px;
 }
 
+
 .title {
     margin: 40px;
 }
+
 
 .cards {
     display: grid;
@@ -86,6 +100,7 @@ header {
     gap: 30px;
     padding: 0 40px 40px;
 }
+
 
 .card {
     display: block;
@@ -97,25 +112,30 @@ header {
     cursor: pointer;
 }
 
+
 .card:hover {
     transform: translateY(-8px);
 }
+
 
 .card i {
     font-size: 35px;
     color: #0F4C81;
 }
 
+
 .card h2 {
     margin-top: 15px;
     color: #000000;
 }
+
 
 .card span {
     font-size: 40px;
     color: #0F4C81;
     font-weight: bold;
 }
+
 
 a.card-venta,
 a.card-venta:link,
@@ -126,10 +146,12 @@ a.card-venta:active {
     text-decoration: none !important;
 }
 
+
 a.card-venta h2 {
     color: #000000 !important;
     text-decoration: none !important;
 }
+
 
 .notification-btn,
 .menu-btn {
@@ -140,13 +162,16 @@ a.card-venta h2 {
     font-size: 16px;
 }
 
+
 .notification-btn {
     font-size: 19px;
 }
 
+
 .user-dropdown-container {
     position: relative;
 }
+
 
 .menu-btn {
     display: flex;
@@ -156,9 +181,11 @@ a.card-venta h2 {
     border-radius: 8px;
 }
 
+
 .menu-btn:hover {
     background: #f1f3f5;
 }
+
 
 .user-dropdown-menu {
     display: none;
@@ -174,13 +201,16 @@ a.card-venta h2 {
     z-index: 1000;
 }
 
+
 .user-dropdown-menu.show {
     display: block;
 }
 
+
 .user-dropdown-menu form {
     margin: 0;
 }
+
 
 .user-dropdown-menu a,
 .change-user-button,
@@ -199,22 +229,53 @@ a.card-venta h2 {
     cursor: pointer;
 }
 
+
 .user-dropdown-menu a:hover,
 .change-user-button:hover,
 .logout-button:hover {
     background: #f3f4f6;
 }
 
+
 .change-user-button {
     color: #374151;
 }
+
 
 .logout-button {
     color: #dc2626;
 }
 
+
 .dropdown-divider {
     height: 1px;
     margin: 7px 0;
     background: #e5e7eb;
+}
+
+
+/* Menú de Productos */
+
+.productos-cards {
+    max-width: 1200px;
+}
+
+
+.producto-card {
+    display: flex;
+    min-height: 190px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.producto-card i {
+    font-size: 45px;
+}
+
+
+.producto-card h2 {
+    margin-top: 20px;
 }

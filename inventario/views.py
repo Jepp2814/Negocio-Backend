@@ -15,9 +15,11 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 
 from .models import Producto
 from .serializers import ProductoSerializer
-from .forms import RegistroUsuarioForm
+from .forms import RegistroUsuarioForm, ProductoForm
+
 
 User = get_user_model()
+
 
 def get_perfiles_disponibles():
     return User.objects.filter(is_active=True).order_by(
@@ -27,11 +29,13 @@ def get_perfiles_disponibles():
         "id",
     )
 
+
 def home(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
 
     return redirect("login")
+
 
 class LoginConPerfilesView(LoginView):
     template_name = "registration/login.html"
@@ -41,6 +45,7 @@ class LoginConPerfilesView(LoginView):
         context = super().get_context_data(**kwargs)
         context.setdefault("usuarios", get_perfiles_disponibles())
         return context
+
 
 class LoginPerfilView(LoginConPerfilesView):
 
@@ -57,11 +62,13 @@ class LoginPerfilView(LoginConPerfilesView):
 
         return initial
 
+
 def health_check(request):
     return JsonResponse({
         "status": "ok",
         "app": "negocio-backend",
     })
+
 
 def registro(request):
     if request.method == "POST":
@@ -89,11 +96,13 @@ def registro(request):
         {"form": form},
     )
 
+
 def registro_exitoso(request):
     return render(
         request,
         "registration/register_success.html",
     )
+
 
 @csrf_exempt
 @require_POST
@@ -102,6 +111,7 @@ def logout_beacon(request):
         logout(request)
 
     return JsonResponse({"ok": True})
+
 
 @staff_member_required
 def lista_usuarios(request):
@@ -113,12 +123,14 @@ def lista_usuarios(request):
         {"usuarios": usuarios},
     )
 
+
 @login_required
 @require_POST
 def cambiar_usuario(request):
     logout(request)
 
     return redirect("home")
+
 
 @staff_member_required
 @require_POST
@@ -141,13 +153,14 @@ def eliminar_usuario(request, user_id):
 
     return redirect("lista_usuarios")
 
+
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ["codigo", "nombre"]
-    ordering_fields = ["created_at", "precio_venta", "stock"]
-    ordering = ["-created_at"]
+    search_fields = ["codigo", "^nombre"]
+    ordering_fields = ["fecha_creacion", "precio_venta", "stock"]
+    ordering = ["-fecha_creacion"]
 
     @action(detail=False, methods=["get"])
     def bajo_stock(self, request):
@@ -228,6 +241,7 @@ class ProductoViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+
 @login_required
 def dashboard(request):
     return render(
@@ -235,9 +249,47 @@ def dashboard(request):
         "dashboard/dashboard.html",
     )
 
+
 @login_required
 def venta_nueva(request):
     return render(
         request,
         "dashboard/venta_nueva.html",
+    )
+
+
+@login_required
+def productos_menu(request):
+    return render(
+        request,
+        "dashboard/productos.html",
+    )
+
+
+@login_required
+def ingresar_producto(request):
+    if request.method == "POST":
+        form = ProductoForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            producto = form.save()
+
+            messages.success(
+                request,
+                (
+                    "Los cambios se guardaron exitosamente. "
+                    f"Producto creado: {producto.nombre}. "
+                    f"Código del producto: {producto.codigo}."
+                ),
+                extra_tags="producto_guardado",
+            )
+
+            return redirect("ingresar_producto")
+    else:
+        form = ProductoForm()
+
+    return render(
+        request,
+        "dashboard/ingresar_producto.html",
+        {"form": form},
     )
