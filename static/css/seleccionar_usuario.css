@@ -1,134 +1,448 @@
+/* =========================================================
+   APPMECÁNICA EMILIO
+   SELECTOR DE PERFILES
+   ========================================================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Poppins, sans-serif;
+    font-family: "Poppins", sans-serif;
 }
-
 
 body {
     min-height: 100vh;
-    padding: 30px 20px;
-    background: #f4f6fb;
+    padding: 40px 25px;
+    position: relative;
+    background-image: url("../img/login-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    color: #ffffff;
 }
 
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    background: linear-gradient(
+        rgba(15, 23, 42, 0.55),
+        rgba(30, 58, 138, 0.65)
+    );
+
+    z-index: -1;
+}
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
 
 .profile-selector {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1050px;
     margin: 0 auto;
     text-align: center;
 }
 
 
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
 .profile-header {
     margin-bottom: 35px;
 }
 
-
 .profile-logo {
-    width: 85px;
-    height: 85px;
+    width: 90px;
+    height: 90px;
     object-fit: contain;
-}
 
+    border-radius: 12px;
+
+    box-shadow:
+        0 0 18px rgba(90, 190, 255, 0.25);
+}
 
 .profile-header h1 {
-    margin: 14px 0 8px;
-    color: #1f2937;
-}
+    margin-top: 18px;
+    margin-bottom: 8px;
 
+    font-size: 32px;
+    font-weight: 700;
+
+    color: #ffffff;
+}
 
 .profile-header p {
-    color: #6b7280;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.72);
 }
 
+
+/* =========================================================
+   CUADRÍCULA DE PERFILES
+   ========================================================= */
 
 .profiles-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(190px, 1fr));
+
+    justify-content: center;
+
+    gap: 22px;
+
+    max-width: 1000px;
+
+    margin: 0 auto 35px;
 }
 
+
+/* =========================================================
+   TARJETA TRANSLÚCIDA
+   ========================================================= */
 
 .profile-card {
+    position: relative;
+
+    min-height: 205px;
+
     display: flex;
     flex-direction: column;
+
     align-items: center;
-    min-height: 220px;
-    padding: 28px 18px;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    background: #ffffff;
-    color: #374151;
+    justify-content: center;
+
+    padding: 25px 15px;
+
     text-decoration: none;
-    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    color: #ffffff;
+
+    /* Efecto vidrio */
+    background: rgba(255, 255, 255, 0.09);
+
+    border: 1px solid rgba(255, 255, 255, 0.28);
+
+    border-radius: 20px;
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.25);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
+
+/* =========================================================
+   BRILLO INTERNO DE LA TARJETA
+   ========================================================= */
+
+.profile-card::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.12),
+            transparent 45%,
+            rgba(70, 190, 255, 0.06)
+        );
+
+    opacity: 0.7;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   EFECTO AL PASAR EL MOUSE
+   ========================================================= */
 
 .profile-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(37, 99, 235, 0.20);
+    transform: translateY(-7px) scale(1.02);
+
+    background: rgba(90, 190, 255, 0.14);
+
+    border-color: rgba(100, 210, 255, 0.75);
+
+    box-shadow:
+        0 0 12px rgba(90, 200, 255, 0.35),
+        0 0 28px rgba(70, 170, 255, 0.22),
+        0 15px 35px rgba(0, 0, 0, 0.35);
 }
 
+
+/* =========================================================
+   ICONO DEL PERFIL
+   ========================================================= */
 
 .profile-icon {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 70px;
+    height: 70px;
+
     margin-bottom: 14px;
-    color: #2563eb;
-    font-size: 60px;
+
+    font-size: 38px;
+
+    color: #dff7ff;
+
+    background: rgba(255, 255, 255, 0.10);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    border-radius: 50%;
+
+    transition:
+        color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
 }
 
+.profile-card:hover .profile-icon {
+    color: #ffffff;
+
+    transform: scale(1.08);
+
+    box-shadow:
+        0 0 12px rgba(90, 210, 255, 0.55),
+        0 0 25px rgba(90, 190, 255, 0.25);
+}
+
+
+/* =========================================================
+   NOMBRE
+   ========================================================= */
 
 .profile-card h2 {
-    margin: 0 0 8px;
-    font-size: 18px;
+    position: relative;
+    z-index: 2;
+
+    margin-bottom: 5px;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    color: #ffffff;
 }
 
+
+/* =========================================================
+   USERNAME
+   ========================================================= */
 
 .profile-card span {
-    color: #6b7280;
-    font-size: 14px;
+    position: relative;
+    z-index: 2;
+
+    font-size: 13px;
+
+    color: rgba(255, 255, 255, 0.62);
 }
 
+
+/* =========================================================
+   ETIQUETA ADMIN / USUARIO
+   ========================================================= */
 
 .profile-card small {
-    margin-top: 14px;
-    padding: 5px 10px;
+    position: relative;
+    z-index: 2;
+
+    margin-top: 12px;
+
+    padding: 5px 12px;
+
     border-radius: 20px;
-    background: #dbeafe;
-    color: #1d4ed8;
-    font-size: 12px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    color: #dff8ff;
+
+    background: rgba(80, 190, 255, 0.14);
+
+    border: 1px solid rgba(100, 210, 255, 0.30);
 }
 
 
-.create-user-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 12px 18px;
-    border-radius: 8px;
-    background: #2563eb;
-    color: #ffffff;
-    text-decoration: none;
-    transition: background 0.2s ease;
+/* =========================================================
+   EFECTO ESPECIAL ADMINISTRADOR
+   ========================================================= */
+
+.profile-card:has(small:first-of-type) {
+    /* Se mantiene sutil para no saturar */
 }
 
 
-.create-user-button:hover {
-    background: #1d4ed8;
+/* =========================================================
+   CUANDO EL PERFIL ES SELECCIONADO
+   ========================================================= */
+
+.profile-card:active {
+    transform: scale(0.96);
+
+    border-color: #8ee8ff;
+
+    background: rgba(75, 190, 255, 0.20);
+
+    box-shadow:
+        0 0 8px #7de4ff,
+        0 0 20px rgba(70, 200, 255, 0.8),
+        0 0 40px rgba(50, 170, 255, 0.45);
 }
 
+
+/* =========================================================
+   SIN USUARIOS
+   ========================================================= */
 
 .empty-users {
     grid-column: 1 / -1;
-    padding: 40px;
-    color: #6b7280;
+
+    padding: 45px;
+
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.empty-users i {
+    display: block;
+
+    margin-bottom: 15px;
+
+    font-size: 45px;
 }
 
 
-.empty-users i {
-    margin-bottom: 12px;
-    font-size: 42px;
+/* =========================================================
+   BOTÓN CREAR USUARIO
+   ========================================================= */
+
+.create-user-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    background: rgba(50, 130, 230, 0.75);
+
+    border: 1px solid rgba(130, 220, 255, 0.35);
+
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.25);
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.create-user-button {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    padding: 12px 22px;
+
+    border-radius: 12px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    background: rgba(20, 100, 180, 0.55);
+
+    border: 1px solid rgba(90, 210, 255, 0.65);
+
+    box-shadow:
+        0 0 6px rgba(70, 190, 255, 0.45),
+        0 0 16px rgba(40, 150, 255, 0.25);
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.create-user-button:hover {
+    transform: translateY(-3px);
+
+    background: rgba(35, 140, 220, 0.72);
+
+    border-color: #8eeaff;
+
+    box-shadow:
+        0 0 8px #6edfff,
+        0 0 18px rgba(70, 200, 255, 0.75),
+        0 0 35px rgba(50, 160, 255, 0.45);
+}
+
+.create-user-button:active {
+    transform: scale(0.96);
+
+    box-shadow:
+        0 0 10px #8eeaff,
+        0 0 25px rgba(70, 200, 255, 0.9),
+        0 0 45px rgba(50, 160, 255, 0.55);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    body {
+        padding: 25px 15px;
+    }
+
+    .profile-header h1 {
+        font-size: 25px;
+    }
+
+    .profiles-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .profile-card {
+        min-height: 190px;
+    }
 }
