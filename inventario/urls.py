@@ -15,6 +15,7 @@ urlpatterns = [path("", views.home, name="home"),
                path("api/", include(router.urls)),
                path("logout-beacon/", views.logout_beacon, name="logout_beacon"),
                path("cambiar-usuario/", views.cambiar_usuario, name="cambiar_usuario"),
+               path("seleccionar-usuarios/",views.seleccionar_usuarios,name="seleccionar_usuarios",),
                path("dashboard/", views.dashboard, name="dashboard"),
                path("ventas/nueva/", views.venta_nueva, name="venta_nueva"),
 ]

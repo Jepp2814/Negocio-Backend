@@ -27,6 +27,16 @@ def get_perfiles_disponibles():
         "id",
     )
 
+
+def seleccionar_usuarios(request):
+    usuarios = get_perfiles_disponibles()
+
+    return render(
+        request,
+        "usuarios/seleccionar_usuario.html",
+        {"usuarios": usuarios},
+    ) 
+
 def home(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
