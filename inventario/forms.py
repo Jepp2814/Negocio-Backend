@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.utils.text import slugify
 
+from .models import Producto
+
 
 solo_letras = RegexValidator(
     regex=r'^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$',
@@ -46,7 +48,9 @@ def generar_sugerencias_username(nombres, apellidos, fecha_nacimiento=None):
         sugerencias.append(base_iniciales.capitalize())
 
     if primer_nombre and primer_apellido:
-        sugerencias.append(f"{primer_nombre[0]}{primer_apellido}{segundo_apellido[:1]}".lower())
+        sugerencias.append(
+            f"{primer_nombre[0]}{primer_apellido}{segundo_apellido[:1]}".lower()
+        )
 
     if fecha_nacimiento:
         dia = f"{fecha_nacimiento.day:02d}"
@@ -64,18 +68,24 @@ def generar_sugerencias_username(nombres, apellidos, fecha_nacimiento=None):
             sugerencias.append(f"{base_nombre}{dia}{anio_corto}")
 
     sugerencias_unicas = []
+
     for sugerencia in sugerencias:
         if sugerencia and sugerencia not in sugerencias_unicas:
             sugerencias_unicas.append(sugerencia)
 
     disponibles = []
+
     for sugerencia in sugerencias_unicas:
         if not User.objects.filter(username=sugerencia).exists():
             disponibles.append(sugerencia)
         else:
             contador = 1
-            while User.objects.filter(username=f"{sugerencia}{contador}").exists():
+
+            while User.objects.filter(
+                username=f"{sugerencia}{contador}"
+            ).exists():
                 contador += 1
+
             disponibles.append(f"{sugerencia}{contador}")
 
     return disponibles[:8]
@@ -186,30 +196,44 @@ class RegistroUsuarioForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.sugerencias_username = []
-        self.fields['username'].help_text = 'Ingrese un usuario que no haya sido utilizado.'
+        self.fields['username'].help_text = (
+            'Ingrese un usuario que no haya sido utilizado.'
+        )
         self.fields['password1'].help_text = ''
         self.fields['password2'].help_text = ''
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
+
         if not email:
             raise forms.ValidationError('Este campo es obligatorio.')
+
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError('Ese correo electrónico ya está registrado. Intente con otro.')
+            raise forms.ValidationError(
+                'Ese correo electrónico ya está registrado. Intente con otro.'
+            )
+
         return email
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
+
         if not username:
             raise forms.ValidationError('Este campo es obligatorio.')
+
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('Ese nombre de usuario ya está en uso. Intente con otro.')
+            raise forms.ValidationError(
+                'Ese nombre de usuario ya está en uso. Intente con otro.'
+            )
+
         return username
 
     def clean_celular(self):
         celular = self.cleaned_data.get('celular')
+
         if not celular:
             raise forms.ValidationError('Este campo es obligatorio.')
+
         return celular
 
     def clean(self):
@@ -233,3 +257,63 @@ class RegistroUsuarioForm(UserCreationForm):
             )
 
         return cleaned_data
+
+
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = [
+            'nombre',
+            'marca',
+            'modelo',
+            'especificaciones',
+            'imagen',
+            'costo',
+            'costo_caja',
+            'precio_venta',
+            'precio_venta_caja',
+            'stock',
+            'proveedor',
+        ]
+        widgets = {
+            'nombre': forms.TextInput(attrs={
+                'placeholder': 'Ingrese el nombre del producto'
+            }),
+            'marca': forms.TextInput(attrs={
+                'placeholder': 'Ingrese la marca'
+            }),
+            'modelo': forms.TextInput(attrs={
+                'placeholder': 'Ingrese el modelo'
+            }),
+            'especificaciones': forms.Textarea(attrs={
+                'placeholder': 'Ingrese las especificaciones',
+                'rows': 3,
+            }),
+            'costo': forms.NumberInput(attrs={
+                'placeholder': '0.00',
+                'min': '0',
+                'step': '0.01',
+            }),
+            'costo_caja': forms.NumberInput(attrs={
+                'placeholder': '0.00',
+                'min': '0',
+                'step': '0.01',
+            }),
+            'precio_venta': forms.NumberInput(attrs={
+                'placeholder': '0.00',
+                'min': '0',
+                'step': '0.01',
+            }),
+            'precio_venta_caja': forms.NumberInput(attrs={
+                'placeholder': '0.00',
+                'min': '0',
+                'step': '0.01',
+            }),
+            'stock': forms.NumberInput(attrs={
+                'placeholder': '0',
+                'min': '0',
+            }),
+            'proveedor': forms.TextInput(attrs={
+                'placeholder': 'Ingrese el proveedor'
+            }),
+        }

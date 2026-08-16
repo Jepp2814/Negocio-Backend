@@ -12,6 +12,7 @@
 
             <thead>
                 <tr>
+                    <th class="columna-seleccion">Seleccionar</th>
                     <th>Código</th>
                     <th>Descripción</th>
                     <th>Cantidad</th>
@@ -24,12 +25,20 @@
             <tbody id="detalle-venta">
 
                 <tr class="fila-buscar-producto">
-                    <td colspan="2">
-                        <input
-                            type="text"
-                            id="buscar-producto"
-                            placeholder="Seleccione o ingrese nombre o código"
-                        >
+                    <td colspan="3" class="celda-buscador">
+                        <div class="buscador-producto-contenedor">
+                            <input
+                                type="text"
+                                id="buscar-producto"
+                                placeholder="Escriba nombre o código del producto"
+                                autocomplete="off"
+                            >
+
+                            <div
+                                id="sugerencias-productos"
+                                class="sugerencias-productos"
+                            ></div>
+                        </div>
                     </td>
 
                     <td colspan="4">
@@ -45,7 +54,7 @@
                 </tr>
 
                 <tr id="fila-vacia">
-                    <td colspan="6" class="sin-productos">
+                    <td colspan="7" class="sin-productos">
                         No hay productos agregados.
                     </td>
                 </tr>
@@ -62,11 +71,11 @@
 
         <button
             type="button"
-            id="btn-eliminar-seleccionado"
+            id="btn-eliminar-seleccionados"
             class="btn-eliminar-seleccionado"
         >
             <i class="fa-solid fa-trash"></i>
-            Eliminar producto seleccionado
+            Eliminar productos seleccionados
         </button>
 
         <div class="total-venta">
@@ -107,8 +116,22 @@
         border-bottom: 1px solid #e5e7eb;
     }
 
+    .columna-seleccion {
+        width: 105px;
+        text-align: center;
+    }
+
     .fila-buscar-producto td {
         background: #f8fafc;
+    }
+
+    .celda-buscador {
+        position: relative;
+    }
+
+    .buscador-producto-contenedor {
+        position: relative;
+        width: 100%;
     }
 
     .fila-buscar-producto input {
@@ -119,11 +142,67 @@
         font-size: 14px;
     }
 
+    .sugerencias-productos {
+        display: none;
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        z-index: 20;
+        width: 100%;
+        max-height: 230px;
+        overflow-y: auto;
+        background: white;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+    }
+
+    .sugerencias-productos.mostrar {
+        display: block;
+    }
+
+    .sugerencia-producto {
+        width: 100%;
+        padding: 11px 12px;
+        border: none;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+        color: #1f2937;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .sugerencia-producto:last-child {
+        border-bottom: none;
+    }
+
+    .sugerencia-producto:hover {
+        background: #dbeafe;
+    }
+
+    .sugerencia-codigo {
+        display: block;
+        margin-bottom: 3px;
+        color: #0F4C81;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .sugerencia-nombre {
+        font-size: 14px;
+    }
+
     .tabla-venta .cantidad-producto {
         width: 75px;
         padding: 8px;
         border: 1px solid #d1d5db;
         border-radius: 6px;
+    }
+
+    .checkbox-producto {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
     }
 
     .btn-agregar-producto {
@@ -140,17 +219,12 @@
         background: #0B3158;
     }
 
-    .fila-producto {
-        cursor: pointer;
-    }
-
     .fila-producto:hover {
         background: #f1f5f9;
     }
 
     .fila-producto.seleccionada {
         background: #dbeafe;
-        outline: 2px solid #0F4C81;
     }
 
     .sin-productos {
@@ -199,20 +273,23 @@
 <script>
     const inputBuscarProducto = document.getElementById("buscar-producto");
     const botonAgregarProducto = document.getElementById("btn-agregar-producto");
-    const botonEliminarSeleccionado = document.getElementById(
-        "btn-eliminar-seleccionado"
+    const botonEliminarSeleccionados = document.getElementById(
+        "btn-eliminar-seleccionados"
     );
     const detalleVenta = document.getElementById("detalle-venta");
     const mensajeProducto = document.getElementById("mensaje-producto");
     const totalVenta = document.getElementById("total-venta");
+    const sugerenciasProductos = document.getElementById(
+        "sugerencias-productos"
+    );
 
-    let filaSeleccionada = null;
+    let productoSeleccionadoParaAgregar = null;
+    let tiempoBusqueda = null;
 
 
     function formatoMoneda(valor) {
-        return `$${Number(valor).toFixed(2)}`;
+        return `$${Number(valor || 0).toFixed(2)}`;
     }
-
 
     function calcularTotalVenta() {
         let total = 0;
@@ -224,11 +301,12 @@
         totalVenta.textContent = formatoMoneda(total);
     }
 
-
     function actualizarFila(fila) {
         const cantidadInput = fila.querySelector(".cantidad-producto");
-        const precioUnitario = Number(fila.dataset.precioUnitario);
-        const cantidad = Number(cantidadInput.value);
+        const precioUnitario = Number(fila.dataset.precioUnitario || 0);
+        const cantidad = Math.max(Number(cantidadInput.value) || 1, 1);
+
+        cantidadInput.value = cantidad;
 
         const valorCaja = precioUnitario * cantidad;
 
@@ -240,26 +318,25 @@
         calcularTotalVenta();
     }
 
+    function actualizarSeleccionFila(fila) {
+        const checkbox = fila.querySelector(".checkbox-producto");
 
-    function seleccionarFila(fila) {
-        document.querySelectorAll(".fila-producto").forEach((filaActual) => {
-            filaActual.classList.remove("seleccionada");
-        });
-
-        fila.classList.add("seleccionada");
-        filaSeleccionada = fila;
+        if (checkbox.checked) {
+            fila.classList.add("seleccionada");
+        } else {
+            fila.classList.remove("seleccionada");
+        }
     }
-
 
     function mostrarFilaVaciaSiEsNecesario() {
         const productos = document.querySelectorAll(".fila-producto");
 
-        if (productos.length === 0) {
+        if (productos.length === 0 && !document.getElementById("fila-vacia")) {
             detalleVenta.insertAdjacentHTML(
                 "beforeend",
                 `
                     <tr id="fila-vacia">
-                        <td colspan="6" class="sin-productos">
+                        <td colspan="7" class="sin-productos">
                             No hay productos agregados.
                         </td>
                     </tr>
@@ -268,6 +345,76 @@
         }
     }
 
+    function cerrarSugerencias() {
+        sugerenciasProductos.innerHTML = "";
+        sugerenciasProductos.classList.remove("mostrar");
+    }
+
+    function mostrarSugerencias(productos) {
+        sugerenciasProductos.innerHTML = "";
+
+        if (!productos || productos.length === 0) {
+            cerrarSugerencias();
+            return;
+        }
+
+        productos.forEach((producto) => {
+            const boton = document.createElement("button");
+
+            boton.type = "button";
+            boton.className = "sugerencia-producto";
+
+            const codigo = producto.codigo || producto.id;
+            const nombre = producto.nombre || "Producto sin nombre";
+            const marca = producto.marca ? ` - ${producto.marca}` : "";
+
+            boton.innerHTML = `
+                <span class="sugerencia-codigo">${codigo}</span>
+                <span class="sugerencia-nombre">${nombre}${marca}</span>
+            `;
+
+            boton.addEventListener("click", () => {
+                productoSeleccionadoParaAgregar = producto;
+                inputBuscarProducto.value = `${codigo} - ${nombre}`;
+                cerrarSugerencias();
+                agregarProductoATabla(producto);
+                inputBuscarProducto.value = "";
+                inputBuscarProducto.focus();
+            });
+
+            sugerenciasProductos.appendChild(boton);
+        });
+
+        sugerenciasProductos.classList.add("mostrar");
+    }
+
+    async function buscarSugerencias() {
+        const termino = inputBuscarProducto.value.trim();
+
+        productoSeleccionadoParaAgregar = null;
+
+        if (!termino) {
+            cerrarSugerencias();
+            return;
+        }
+
+        try {
+            const respuesta = await fetch(
+                `/api/productos/?search=${encodeURIComponent(termino)}`
+            );
+
+            if (!respuesta.ok) {
+                throw new Error("Error en la búsqueda");
+            }
+
+            const datos = await respuesta.json();
+            const productos = datos.results || datos;
+
+            mostrarSugerencias(productos);
+        } catch (error) {
+            cerrarSugerencias();
+        }
+    }
 
     function agregarProductoATabla(producto) {
         const filaVacia = document.getElementById("fila-vacia");
@@ -277,6 +424,9 @@
         }
 
         const precioUnitario = Number(producto.precio_venta || 0);
+        const precioCaja = Number(
+            producto.precio_venta_caja || producto.precio_venta || 0
+        );
         const codigo = producto.codigo || producto.id;
         const descripcion = producto.nombre || "Producto sin descripción";
 
@@ -284,9 +434,17 @@
 
         fila.classList.add("fila-producto");
         fila.dataset.precioUnitario = precioUnitario;
+        fila.dataset.precioCaja = precioCaja;
         fila.dataset.total = precioUnitario;
 
         fila.innerHTML = `
+            <td class="columna-seleccion">
+                <input
+                    type="checkbox"
+                    class="checkbox-producto"
+                    aria-label="Seleccionar ${descripcion}"
+                >
+            </td>
             <td>${codigo}</td>
             <td>${descripcion}</td>
             <td>
@@ -298,18 +456,27 @@
                 >
             </td>
             <td>${formatoMoneda(precioUnitario)}</td>
-            <td class="valor-caja">${formatoMoneda(precioUnitario)}</td>
+            <td class="valor-caja">${formatoMoneda(precioCaja)}</td>
             <td class="total-producto">${formatoMoneda(precioUnitario)}</td>
         `;
 
         const inputCantidad = fila.querySelector(".cantidad-producto");
+        const checkbox = fila.querySelector(".checkbox-producto");
+
+        checkbox.addEventListener("change", () => {
+            actualizarSeleccionFila(fila);
+        });
 
         fila.addEventListener("click", (evento) => {
-            if (evento.target.classList.contains("cantidad-producto")) {
+            if (
+                evento.target.classList.contains("cantidad-producto") ||
+                evento.target.classList.contains("checkbox-producto")
+            ) {
                 return;
             }
 
-            seleccionarFila(fila);
+            checkbox.checked = !checkbox.checked;
+            actualizarSeleccionFila(fila);
         });
 
         inputCantidad.addEventListener("input", () => {
@@ -317,20 +484,24 @@
         });
 
         detalleVenta.appendChild(fila);
-
-        seleccionarFila(fila);
         calcularTotalVenta();
     }
 
-
     async function buscarYAgregarProducto() {
+        mensajeProducto.textContent = "";
+
         const termino = inputBuscarProducto.value.trim();
 
-        mensajeProducto.textContent = "";
+        if (productoSeleccionadoParaAgregar) {
+            agregarProductoATabla(productoSeleccionadoParaAgregar);
+            inputBuscarProducto.value = "";
+            cerrarSugerencias();
+            return;
+        }
 
         if (!termino) {
             mensajeProducto.textContent =
-                "Ingrese el nombre o código del producto.";
+                "Escriba un nombre o código para buscar el producto.";
             return;
         }
 
@@ -339,8 +510,11 @@
                 `/api/productos/?search=${encodeURIComponent(termino)}`
             );
 
-            const datos = await respuesta.json();
+            if (!respuesta.ok) {
+                throw new Error("Error en la búsqueda");
+            }
 
+            const datos = await respuesta.json();
             const productos = datos.results || datos;
 
             if (!productos || productos.length === 0) {
@@ -349,47 +523,75 @@
                 return;
             }
 
-            agregarProductoATabla(productos[0]);
+            if (productos.length === 1) {
+                agregarProductoATabla(productos[0]);
+                inputBuscarProducto.value = "";
+                cerrarSugerencias();
+                inputBuscarProducto.focus();
+                return;
+            }
 
-            inputBuscarProducto.value = "";
-            inputBuscarProducto.focus();
-
+            mensajeProducto.textContent =
+                "Seleccione uno de los productos sugeridos.";
+            mostrarSugerencias(productos);
         } catch (error) {
             mensajeProducto.textContent =
                 "No fue posible buscar el producto.";
         }
     }
 
-
-    function eliminarProductoSeleccionado() {
+    function eliminarProductosSeleccionados() {
         mensajeProducto.textContent = "";
 
-        if (!filaSeleccionada) {
+        const filasSeleccionadas = document.querySelectorAll(
+            ".fila-producto .checkbox-producto:checked"
+        );
+
+        if (filasSeleccionadas.length === 0) {
             mensajeProducto.textContent =
-                "Seleccione una fila de producto para eliminarla.";
+                "Seleccione uno o varios productos para eliminarlos.";
             return;
         }
 
-        filaSeleccionada.remove();
-        filaSeleccionada = null;
+        filasSeleccionadas.forEach((checkbox) => {
+            checkbox.closest(".fila-producto").remove();
+        });
 
         mostrarFilaVaciaSiEsNecesario();
         calcularTotalVenta();
     }
 
-
     botonAgregarProducto.addEventListener("click", buscarYAgregarProducto);
 
-    botonEliminarSeleccionado.addEventListener(
+    botonEliminarSeleccionados.addEventListener(
         "click",
-        eliminarProductoSeleccionado
+        eliminarProductosSeleccionados
     );
+
+    inputBuscarProducto.addEventListener("input", () => {
+        clearTimeout(tiempoBusqueda);
+
+        tiempoBusqueda = setTimeout(() => {
+            buscarSugerencias();
+        }, 300);
+    });
 
     inputBuscarProducto.addEventListener("keydown", (evento) => {
         if (evento.key === "Enter") {
+            evento.preventDefault();
             buscarYAgregarProducto();
+        }
+
+        if (evento.key === "Escape") {
+            cerrarSugerencias();
+        }
+    });
+
+    document.addEventListener("click", (evento) => {
+        if (!evento.target.closest(".buscador-producto-contenedor")) {
+            cerrarSugerencias();
         }
     });
 </script>
 
-{% endblock %}s
+{% endblock %}
