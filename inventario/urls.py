@@ -18,7 +18,9 @@ urlpatterns = [path("", views.home, name="home"),
                path("seleccionar-usuarios/",views.seleccionar_usuarios,name="seleccionar_usuarios",),
                path("dashboard/", views.dashboard, name="dashboard"),
                path("ventas/nueva/", views.venta_nueva, name="venta_nueva"),
+               path("finanzas/", views.finanzas, name="finanzas"),
                path("productos/", views.productos_menu, name="productos_menu"),
                path("productos/ingresar/", views.ingresar_producto, name="ingresar_producto",
                ),
+               
 ]

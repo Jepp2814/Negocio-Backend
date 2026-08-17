@@ -28,6 +28,13 @@
         <h2>Productos</h2>
     </div>
 
+    {% if user.is_staff %}
+        <div class="card" onclick="window.location.href='/finanzas/'">
+            <i class="fa-solid fa-chart-line"></i>
+            <h2>Finanzas</h2>
+        </div>
+    {% endif %}
+
 </div>
 
 {% endblock %}

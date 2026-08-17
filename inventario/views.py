@@ -302,3 +302,10 @@ def ingresar_producto(request):
         "dashboard/ingresar_producto.html",
         {"form": form},
     )
+
+@staff_member_required
+def finanzas(request):
+    return render(
+        request,
+        "dashboard/finanzas.html",
+    )
