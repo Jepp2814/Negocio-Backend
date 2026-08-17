@@ -1,0 +1,826 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+<div class="consultar-productos-container">
+
+    <h1 class="title">Consultar Productos:</h1>
+
+    <section class="consulta-buscador-card">
+        <label for="buscar-producto" class="consulta-buscador-label">
+            Buscar producto.
+        </label>
+
+        <div class="buscador-producto-contenedor">
+            <input
+                type="text"
+                id="buscar-producto"
+                placeholder="Escriba nombre o código del producto."
+                autocomplete="off"
+            >
+
+            <div
+                id="sugerencias-productos"
+                class="sugerencias-productos"
+            ></div>
+        </div>
+
+        <p id="mensaje-producto" class="mensaje-producto"></p>
+    </section>
+
+    <section class="inventario-productos">
+        <div class="inventario-productos-encabezado">
+            <h2>Inventario de productos:</h2>
+            <span id="contador-inventario">Cargando productos...</span>
+        </div>
+
+        <div class="tabla-inventario-contenedor">
+            <table class="tabla-inventario">
+                <thead>
+                    <tr>
+                        <th>Código.</th>
+                        <th>Nombre.</th>
+                        <th>Stock.</th>
+                        <th>Precio por U.</th>
+                        <th>Precio por caja.</th>
+                        <th>Consultar.</th>
+                    </tr>
+                </thead>
+
+                <tbody id="lista-inventario">
+                    <tr>
+                        <td colspan="6" class="inventario-vacio">
+                            Cargando inventario...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section
+        id="detalle-producto"
+        class="detalle-producto"
+        hidden
+    >
+        <div class="detalle-producto-imagen-contenedor">
+            <img
+                id="producto-imagen"
+                class="detalle-producto-imagen"
+                src=""
+                alt="Imagen referencial del producto."
+            >
+
+            <div
+                id="producto-sin-imagen"
+                class="detalle-producto-sin-imagen"
+                hidden
+            >
+                <i class="fa-solid fa-image"></i>
+                <span>Sin imagen referencial:</span>
+            </div>
+        </div>
+
+        <div class="detalle-producto-informacion">
+            <div class="detalle-producto-encabezado">
+                <div>
+                    <span class="detalle-producto-etiqueta">Código.</span>
+                    <h2 id="producto-codigo">-</h2>
+                </div>
+
+                <div class="detalle-producto-stock">
+                    <span>Stock disponible:</span>
+                    <strong id="producto-stock">0</strong>
+                </div>
+            </div>
+
+            <h3 id="producto-nombre" class="detalle-producto-nombre">
+                Producto:
+            </h3>
+
+            <div class="detalle-producto-datos">
+                <div class="detalle-producto-dato">
+                    <span>Marca:</span>
+                    <strong id="producto-marca">No registrada.</strong>
+                </div>
+
+                <div class="detalle-producto-dato">
+                    <span>Modelo.</span>
+                    <strong id="producto-modelo">No registrado.</strong>
+                </div>
+            </div>
+
+            <div class="detalle-producto-precios">
+                <div class="detalle-producto-precio">
+                    <span>Precio de venta por unidad.</span>
+                    <strong id="producto-precio-unidad">$0.00</strong>
+                </div>
+
+                <div class="detalle-producto-precio">
+                    <span>Precio de venta por caja.</span>
+                    <strong id="producto-precio-caja">$0.00</strong>
+                </div>
+            </div>
+
+            <div class="detalle-producto-especificaciones">
+                <span>Especificaciones:</span>
+                <p id="producto-especificaciones">
+                    No se registraron especificaciones.
+                </p>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<style>
+    .consultar-productos-container {
+        padding: 40px;
+    }
+
+    .consulta-buscador-card,
+    .inventario-productos,
+    .detalle-producto {
+        max-width: 1050px;
+        margin-right: auto;
+        margin-left: auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    }
+
+    .consulta-buscador-card {
+        padding: 24px;
+    }
+
+    .consulta-buscador-label {
+        display: block;
+        margin-bottom: 9px;
+        color: #1f2937;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .buscador-producto-contenedor {
+        position: relative;
+        width: 100%;
+    }
+
+    #buscar-producto {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        font-size: 15px;
+    }
+
+    #buscar-producto:focus {
+        border-color: #0F4C81;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(15, 76, 129, .12);
+    }
+
+    .sugerencias-productos {
+        display: none;
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        z-index: 20;
+        width: 100%;
+        max-height: 260px;
+        overflow-y: auto;
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+    }
+
+    .sugerencias-productos.mostrar {
+        display: block;
+    }
+
+    .sugerencia-producto {
+        width: 100%;
+        padding: 11px 12px;
+        border: none;
+        border-bottom: 1px solid #e5e7eb;
+        background: #ffffff;
+        color: #1f2937;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .sugerencia-producto:last-child {
+        border-bottom: none;
+    }
+
+    .sugerencia-producto:hover {
+        background: #dbeafe;
+    }
+
+    .sugerencia-codigo {
+        display: block;
+        margin-bottom: 3px;
+        color: #0F4C81;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .sugerencia-nombre {
+        font-size: 14px;
+    }
+
+    .mensaje-producto {
+        min-height: 20px;
+        margin: 12px 0 0;
+        color: #dc2626;
+        font-size: 14px;
+    }
+
+    .inventario-productos {
+        margin-top: 28px;
+        padding: 24px;
+    }
+
+    .inventario-productos-encabezado {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+
+    .inventario-productos-encabezado h2 {
+        margin: 0;
+        color: #1f2937;
+        font-size: 21px;
+    }
+
+    #contador-inventario {
+        color: #0F4C81;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .tabla-inventario-contenedor {
+        overflow-x: auto;
+        border: 1px solid #e5e7eb;
+        border-radius: 9px;
+    }
+
+    .tabla-inventario {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tabla-inventario th {
+        background: #0F4C81;
+        color: #ffffff;
+        text-align: left;
+    }
+
+    .tabla-inventario th,
+    .tabla-inventario td {
+        padding: 13px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .tabla-inventario tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .fila-inventario {
+        cursor: pointer;
+    }
+
+    .fila-inventario:hover {
+        background: #f1f5f9;
+    }
+
+    .inventario-vacio {
+        color: #6b7280;
+        text-align: center;
+    }
+
+    .stock-inventario {
+        color: #0F4C81;
+        font-weight: bold;
+    }
+
+    .boton-consultar-inventario {
+        border: none;
+        border-radius: 7px;
+        padding: 8px 11px;
+        background: #0F4C81;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .boton-consultar-inventario:hover {
+        background: #0B3158;
+    }
+
+    .detalle-producto {
+        display: grid;
+        grid-template-columns: minmax(250px, 340px) 1fr;
+        gap: 28px;
+        margin-top: 28px;
+        padding: 28px;
+    }
+
+    .detalle-producto[hidden] {
+        display: none;
+    }
+
+    .detalle-producto-imagen-contenedor {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 290px;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #f8fafc;
+    }
+
+    .detalle-producto-imagen {
+        display: block;
+        width: 100%;
+        height: 290px;
+        object-fit: contain;
+    }
+
+    .detalle-producto-sin-imagen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        color: #6b7280;
+        text-align: center;
+    }
+
+    .detalle-producto-sin-imagen[hidden] {
+        display: none;
+    }
+
+    .detalle-producto-sin-imagen i {
+        font-size: 45px;
+    }
+
+    .detalle-producto-informacion {
+        min-width: 0;
+    }
+
+    .detalle-producto-encabezado {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .detalle-producto-etiqueta,
+    .detalle-producto-dato span,
+    .detalle-producto-precio span,
+    .detalle-producto-especificaciones > span {
+        display: block;
+        margin-bottom: 5px;
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    #producto-codigo {
+        margin: 0;
+        color: #0F4C81;
+        font-size: 24px;
+    }
+
+    .detalle-producto-stock {
+        min-width: 125px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: #dbeafe;
+        color: #0F4C81;
+        text-align: center;
+    }
+
+    .detalle-producto-stock span {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 12px;
+    }
+
+    .detalle-producto-stock strong {
+        font-size: 24px;
+    }
+
+    .detalle-producto-nombre {
+        margin: 18px 0;
+        color: #1f2937;
+        font-size: 26px;
+    }
+
+    .detalle-producto-datos,
+    .detalle-producto-precios {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .detalle-producto-dato,
+    .detalle-producto-precio {
+        padding: 14px;
+        border-radius: 8px;
+        background: #f8fafc;
+    }
+
+    .detalle-producto-dato strong {
+        color: #1f2937;
+        font-size: 16px;
+    }
+
+    .detalle-producto-precios {
+        margin-top: 14px;
+    }
+
+    .detalle-producto-precio {
+        background: #eaf3fb;
+    }
+
+    .detalle-producto-precio strong {
+        color: #0F4C81;
+        font-size: 19px;
+    }
+
+    .detalle-producto-especificaciones {
+        margin-top: 18px;
+        padding: 14px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    .detalle-producto-especificaciones p {
+        margin: 0;
+        color: #374151;
+        line-height: 1.6;
+        white-space: pre-line;
+    }
+
+    @media (max-width: 760px) {
+        .consultar-productos-container {
+            padding: 20px;
+        }
+
+        .inventario-productos,
+        .consulta-buscador-card,
+        .detalle-producto {
+            padding: 20px;
+        }
+
+        .inventario-productos-encabezado {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .detalle-producto {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .detalle-producto-imagen-contenedor,
+        .detalle-producto-imagen {
+            min-height: 0;
+            height: 240px;
+        }
+
+        .detalle-producto-encabezado {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .detalle-producto-stock {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .detalle-producto-datos,
+        .detalle-producto-precios {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    const inputBuscarProducto = document.getElementById("buscar-producto");
+    const sugerenciasProductos = document.getElementById(
+        "sugerencias-productos"
+    );
+    const mensajeProducto = document.getElementById("mensaje-producto");
+    const detalleProducto = document.getElementById("detalle-producto");
+    const productoImagen = document.getElementById("producto-imagen");
+    const productoSinImagen = document.getElementById(
+        "producto-sin-imagen"
+    );
+    const productoCodigo = document.getElementById("producto-codigo");
+    const productoNombre = document.getElementById("producto-nombre");
+    const productoMarca = document.getElementById("producto-marca");
+    const productoModelo = document.getElementById("producto-modelo");
+    const productoStock = document.getElementById("producto-stock");
+    const productoPrecioUnidad = document.getElementById(
+        "producto-precio-unidad"
+    );
+    const productoPrecioCaja = document.getElementById(
+        "producto-precio-caja"
+    );
+    const productoEspecificaciones = document.getElementById(
+        "producto-especificaciones"
+    );
+    const listaInventario = document.getElementById("lista-inventario");
+    const contadorInventario = document.getElementById(
+        "contador-inventario"
+    );
+
+    let tiempoBusqueda = null;
+
+    function formatoMoneda(valor) {
+        return `$${Number(valor || 0).toFixed(2)}`;
+    }
+
+    function cerrarSugerencias() {
+        sugerenciasProductos.innerHTML = "";
+        sugerenciasProductos.classList.remove("mostrar");
+    }
+
+    function mostrarMensaje(mensaje = "") {
+        mensajeProducto.textContent = mensaje;
+    }
+
+    function obtenerUrlImagen(producto) {
+        if (!producto.imagen) {
+            return "";
+        }
+
+        if (
+            producto.imagen.startsWith("http://") ||
+            producto.imagen.startsWith("https://") ||
+            producto.imagen.startsWith("/")
+        ) {
+            return producto.imagen;
+        }
+
+        return `/media/${producto.imagen}`;
+    }
+
+    function mostrarProducto(producto) {
+        const codigo = producto.codigo || producto.id || "-";
+        const nombre = producto.nombre || "Producto sin nombre.";
+        const imagen = obtenerUrlImagen(producto);
+
+        productoCodigo.textContent = codigo;
+        productoNombre.textContent = nombre;
+        productoMarca.textContent = producto.marca || "No registrada.";
+        productoModelo.textContent = producto.modelo || "No registrado.";
+        productoStock.textContent = producto.stock ?? 0;
+        productoPrecioUnidad.textContent = formatoMoneda(
+            producto.precio_venta
+        );
+        productoPrecioCaja.textContent = formatoMoneda(
+            producto.precio_venta_caja
+        );
+        productoEspecificaciones.textContent =
+            producto.especificaciones ||
+            "No se registraron especificaciones.";
+
+        if (imagen) {
+            productoImagen.src = imagen;
+            productoImagen.alt = `Imagen referencial de ${nombre}.`;
+            productoImagen.hidden = false;
+            productoSinImagen.hidden = true;
+        } else {
+            productoImagen.removeAttribute("src");
+            productoImagen.hidden = true;
+            productoSinImagen.hidden = false;
+        }
+
+        detalleProducto.hidden = false;
+
+        setTimeout(() => {
+            detalleProducto.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }, 0);
+
+        mostrarMensaje("");
+        cerrarSugerencias();
+    }
+
+    function mostrarSugerencias(productos) {
+        sugerenciasProductos.innerHTML = "";
+
+        if (!productos || productos.length === 0) {
+            cerrarSugerencias();
+            return;
+        }
+
+        productos.forEach((producto) => {
+            const boton = document.createElement("button");
+            const codigo = producto.codigo || producto.id;
+            const nombre = producto.nombre || "Producto sin nombre.";
+            const marca = producto.marca ? ` - ${producto.marca}` : "";
+
+            boton.type = "button";
+            boton.className = "sugerencia-producto";
+            boton.innerHTML = `
+                <span class="sugerencia-codigo">${codigo}</span>
+                <span class="sugerencia-nombre">${nombre}${marca}</span>
+            `;
+
+            boton.addEventListener("click", () => {
+                inputBuscarProducto.value = `${codigo} - ${nombre}`;
+                mostrarProducto(producto);
+            });
+
+            sugerenciasProductos.appendChild(boton);
+        });
+
+        sugerenciasProductos.classList.add("mostrar");
+    }
+
+    function crearFilaInventario(producto) {
+        const fila = document.createElement("tr");
+        const codigo = producto.codigo || producto.id || "-";
+        const nombre = producto.nombre || "Producto sin nombre.";
+
+        fila.className = "fila-inventario";
+        fila.innerHTML = `
+            <td>${codigo}</td>
+            <td>${nombre}</td>
+            <td class="stock-inventario">${producto.stock ?? 0}</td>
+            <td>${formatoMoneda(producto.precio_venta)}</td>
+            <td>${formatoMoneda(producto.precio_venta_caja)}</td>
+            <td>
+                <button
+                    type="button"
+                    class="boton-consultar-inventario"
+                    aria-label="Consultar ${nombre}."
+                >
+                    <i class="fa-solid fa-eye"></i>
+                    Ver.
+                </button>
+            </td>
+        `;
+
+        fila.addEventListener("click", (evento) => {
+            if (evento.target.closest(".boton-consultar-inventario")) {
+                return;
+            }
+
+            mostrarProducto(producto);
+        });
+
+        fila.querySelector(".boton-consultar-inventario").addEventListener(
+            "click",
+            () => {
+                mostrarProducto(producto);
+            }
+        );
+
+        return fila;
+    }
+
+    function mostrarInventario(productos) {
+        listaInventario.innerHTML = "";
+
+        if (!productos || productos.length === 0) {
+            listaInventario.innerHTML = `
+                <tr>
+                    <td colspan="6" class="inventario-vacio">
+                        No hay productos registrados en el inventario.
+                    </td>
+                </tr>
+            `;
+            contadorInventario.textContent = "0 productos registrados.";
+            return;
+        }
+
+        productos.forEach((producto) => {
+            listaInventario.appendChild(crearFilaInventario(producto));
+        });
+
+        const cantidad = productos.length;
+
+        contadorInventario.textContent = cantidad === 1
+            ? "1 producto registrado."
+            : `${cantidad} productos registrados.`;
+    }
+
+    async function cargarInventarioCompleto() {
+        let url = "/api/productos/";
+        const productos = [];
+
+        try {
+            while (url) {
+                const respuesta = await fetch(url);
+
+                if (!respuesta.ok) {
+                    throw new Error("Error al cargar inventario.");
+                }
+
+                const datos = await respuesta.json();
+
+                if (Array.isArray(datos)) {
+                    productos.push(...datos);
+                    url = null;
+                } else {
+                    productos.push(...(datos.results || []));
+                    url = datos.next || null;
+                }
+            }
+
+            productos.sort((productoA, productoB) => {
+                const codigoA = productoA.codigo || "";
+                const codigoB = productoB.codigo || "";
+
+                return codigoA.localeCompare(codigoB, "es");
+            });
+
+            mostrarInventario(productos);
+        } catch (error) {
+            listaInventario.innerHTML = `
+                <tr>
+                    <td colspan="6" class="inventario-vacio">
+                        No fue posible cargar el inventario.
+                    </td>
+                </tr>
+            `;
+            contadorInventario.textContent = "Error al cargar.";
+        }
+    }
+
+    async function buscarSugerencias() {
+        const termino = inputBuscarProducto.value.trim();
+
+        mostrarMensaje("");
+
+        if (!termino) {
+            cerrarSugerencias();
+            return;
+        }
+
+        try {
+            const respuesta = await fetch(
+                `/api/productos/?search=${encodeURIComponent(termino)}`
+            );
+
+            if (!respuesta.ok) {
+                throw new Error("Error en la búsqueda.");
+            }
+
+            const datos = await respuesta.json();
+            const productos = datos.results || datos;
+
+            if (!productos || productos.length === 0) {
+                cerrarSugerencias();
+                mostrarMensaje("No se encontró ningún producto.");
+                return;
+            }
+
+            mostrarSugerencias(productos);
+        } catch (error) {
+            cerrarSugerencias();
+            mostrarMensaje("No fue posible buscar el producto.");
+        }
+    }
+
+    inputBuscarProducto.addEventListener("input", () => {
+        clearTimeout(tiempoBusqueda);
+
+        tiempoBusqueda = setTimeout(() => {
+            buscarSugerencias();
+        }, 300);
+    });
+
+    inputBuscarProducto.addEventListener("keydown", (evento) => {
+        if (evento.key === "Escape") {
+            cerrarSugerencias();
+        }
+    });
+
+    productoImagen.addEventListener("error", () => {
+        productoImagen.hidden = true;
+        productoSinImagen.hidden = false;
+    });
+
+    document.addEventListener("click", (evento) => {
+        if (!evento.target.closest(".buscador-producto-contenedor")) {
+            cerrarSugerencias();
+        }
+    });
+
+    cargarInventarioCompleto();
+</script>
+
+{% endblock %}

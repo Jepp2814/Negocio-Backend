@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AppMecánica</title>
+    <title>AppMecánica.</title>
 
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 
@@ -21,18 +21,18 @@
 <div class="sidebar">
 
     <div class="logo">
-        <img src="{% static 'img/logo.png' %}" alt="Logo">
-        <h2>AppMecánica</h2>
+        <img src="{% static 'img/logo.png' %}" alt="Logo.">
+        <h2>AppMecánica.</h2>
     </div>
 
     <ul>
-        <li><a href="#"><i class="fa-solid fa-house"></i> Dashboard</a></li>
-        <li><a href="#"><i class="fa-solid fa-users"></i> Clientes</a></li>
-        <li><a href="#"><i class="fa-solid fa-car"></i> Vehículos</a></li>
-        <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> Servicios</a></li>
-        <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventario</a></li>
-        <li><a href="#"><i class="fa-solid fa-money-bill-wave"></i> Finanzas</a></li>
-        <li><a href="#"><i class="fa-solid fa-gear"></i> Configuración</a></li>
+        <li><a href="#"><i class="fa-solid fa-house"></i> Dashboard:</a></li>
+        <li><a href="#"><i class="fa-solid fa-users"></i> Clientes:</a></li>
+        <li><a href="#"><i class="fa-solid fa-car"></i> Vehículos:</a></li>
+        <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> Servicios:</a></li>
+        <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventario:</a></li>
+        <li><a href="#"><i class="fa-solid fa-money-bill-wave"></i> Finanzas:</a></li>
+        <li><a href="#"><i class="fa-solid fa-gear"></i> Configuración:</a></li>
     </ul>
 
 </div>
@@ -42,7 +42,7 @@
     <header>
 
         <div class="search">
-            <input type="text" placeholder="Buscar...">
+            <input type="text" placeholder="Buscar.">
         </div>
 
         {% if user.is_authenticated %}
@@ -51,7 +51,7 @@
                 <button
                     class="notification-btn"
                     type="button"
-                    aria-label="Notificaciones"
+                    aria-label="Notificaciones."
                 >
                     <i class="fa-solid fa-bell"></i>
                 </button>
@@ -62,7 +62,7 @@
                         class="menu-btn"
                         type="button"
                         id="userMenuButton"
-                        aria-label="Abrir menú de usuario"
+                        aria-label="Abrir Menú De Usuario."
                         aria-expanded="false"
                     >
                         <i class="fa-solid fa-bars"></i>
@@ -80,7 +80,7 @@
                                     {{ user.get_full_name|default:user.username }}
                                 </strong>
 
-                                <span>Usuario activo</span>
+                                <span>Usuario Activo.</span>
                             </div>
                         </div>
 
@@ -88,12 +88,12 @@
 
                         <a href="#">
                             <i class="fa-solid fa-gear"></i>
-                            Configuraciones
+                            Configuraciones.
                         </a>
 
                         <a href="#">
                             <i class="fa-solid fa-user-pen"></i>
-                            Editar cuenta
+                            Editar Cuenta.
                         </a>
 
                         <form
@@ -107,7 +107,7 @@
                                 class="change-user-button"
                             >
                                 <i class="fa-solid fa-right-left"></i>
-                                Cambiar usuario
+                                Cambiar Usuario.
                             </button>
                         </form>
 
@@ -121,7 +121,7 @@
                                 class="logout-button"
                             >
                                 <i class="fa-solid fa-right-from-bracket"></i>
-                                Cerrar sesión
+                                Cerrar Sesión.
                             </button>
                         </form>
 

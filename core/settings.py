@@ -2,13 +2,18 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+
 load_dotenv()
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-change-in-production')
 
+
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -20,6 +25,7 @@ ALLOWED_HOSTS = [
     '.ngrok.io',
 ]
 
+
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
@@ -30,8 +36,10 @@ CSRF_TRUSTED_ORIGINS = [
     'https://yanking-wrench-counting.ngrok-free.dev',
 ]
 
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,6 +54,7 @@ INSTALLED_APPS = [
     'finance',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -57,7 +66,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'core.urls'
+
 
 TEMPLATES = [
     {
@@ -74,7 +85,9 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'core.wsgi.application'
+
 
 DATABASES = {
     'default': {
@@ -86,6 +99,7 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -102,20 +116,31 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 LANGUAGE_CODE = 'es-ec'
+
 
 TIME_ZONE = 'America/Guayaquil'
 
+
 USE_I18N = True
 
+
 USE_TZ = True
+
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 CORS_ALLOWED_ORIGINS = os.getenv(
     'CORS_ALLOWED_ORIGINS',
@@ -123,35 +148,46 @@ CORS_ALLOWED_ORIGINS = os.getenv(
 ).split(',')
 CORS_ALLOW_CREDENTIALS = True
 
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }
 
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/login/'
 
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 3600
+
 
 # ==========================
 # CONFIGURACIÓN DE CORREO
 # ==========================
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 
 EMAIL_HOST = 'smtp.gmail.com'
 
+
 EMAIL_PORT = 587
+
 
 EMAIL_USE_TLS = True
 
+
 EMAIL_HOST_USER = 'tu_correo@gmail.com'
+
 
 EMAIL_HOST_PASSWORD = 'TU_CONTRASEÑA_DE_APLICACION'
 
-DEFAULT_FROM_EMAIL = f'AppMecaniza <{EMAIL_HOST_USER}>'
 
+DEFAULT_FROM_EMAIL = f'AppMecaniza <{EMAIL_HOST_USER}>'

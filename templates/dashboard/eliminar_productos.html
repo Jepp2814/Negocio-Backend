@@ -1,0 +1,543 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+<div class="venta-nueva-container">
+    <h1 class="title">Eliminar Productos:</h1>
+
+    <div class="tabla-venta-contenedor">
+        <table class="tabla-venta">
+            <thead>
+                <tr>
+                    <th>Código.</th>
+                    <th>Descripción.</th>
+                    <th>Stock.</th>
+                    <th>Precio Unitario.</th>
+                    <th>Acción.</th>
+                </tr>
+            </thead>
+
+            <tbody id="detalle-eliminar-productos">
+                <tr class="fila-buscar-producto">
+                    <td colspan="3" class="celda-buscador">
+                        <div class="buscador-producto-contenedor">
+                            <input
+                                type="text"
+                                id="buscar-producto-eliminar"
+                                placeholder="Escriba nombre o código del producto."
+                                autocomplete="off"
+                            >
+
+                            <div
+                                id="sugerencias-eliminar-productos"
+                                class="sugerencias-productos"
+                            ></div>
+                        </div>
+                    </td>
+
+                    <td colspan="2">
+                        <span class="texto-busqueda-eliminar">
+                            Seleccione uno o varios productos.
+                        </span>
+                    </td>
+                </tr>
+
+                <tr id="fila-vacia-eliminar">
+                    <td colspan="5" class="sin-productos">
+                        No hay productos seleccionados para eliminar.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="mensaje-eliminar-productos" class="mensaje-producto"></div>
+
+    <form
+        id="formulario-eliminar-productos"
+        method="post"
+        action="{% url 'confirmar_eliminacion_productos' %}"
+    >
+        {% csrf_token %}
+
+        <div id="productos-ids-eliminar"></div>
+
+        <div class="venta-acciones">
+            <button
+                type="submit"
+                id="btn-eliminar-productos"
+                class="btn-eliminar-seleccionado"
+                disabled
+            >
+                <i class="fa-solid fa-trash"></i>
+                Eliminar productos seleccionados.
+            </button>
+
+            <span
+                id="contador-productos-eliminar"
+                class="contador-productos-eliminar"
+            >
+                0 Productos seleccionados.
+            </span>
+        </div>
+    </form>
+</div>
+
+<style>
+    .venta-nueva-container {
+        padding: 40px;
+    }
+
+    .tabla-venta-contenedor {
+        overflow-x: auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    }
+
+    .tabla-venta {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tabla-venta th {
+        background: #0F4C81;
+        color: white;
+        text-align: left;
+    }
+
+    .tabla-venta th,
+    .tabla-venta td {
+        padding: 14px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .fila-buscar-producto td {
+        background: #f8fafc;
+    }
+
+    .celda-buscador {
+        position: relative;
+    }
+
+    .buscador-producto-contenedor {
+        position: relative;
+        width: 100%;
+    }
+
+    .fila-buscar-producto input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        font-size: 14px;
+    }
+
+    .sugerencias-productos {
+        display: none;
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        z-index: 20;
+        width: 100%;
+        max-height: 230px;
+        overflow-y: auto;
+        background: white;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+    }
+
+    .sugerencias-productos.mostrar {
+        display: block;
+    }
+
+    .sugerencia-producto {
+        width: 100%;
+        padding: 11px 12px;
+        border: none;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+        color: #1f2937;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .sugerencia-producto:last-child {
+        border-bottom: none;
+    }
+
+    .sugerencia-producto:hover {
+        background: #dbeafe;
+    }
+
+    .sugerencia-codigo {
+        display: block;
+        margin-bottom: 3px;
+        color: #0F4C81;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .sugerencia-nombre {
+        font-size: 14px;
+    }
+
+    .fila-producto-eliminar:hover {
+        background: #fff1f2;
+    }
+
+    .sin-productos {
+        text-align: center;
+        color: #6b7280;
+    }
+
+    .mensaje-producto {
+        min-height: 22px;
+        margin-top: 15px;
+        color: #dc2626;
+    }
+
+    .venta-acciones {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 25px;
+    }
+
+    .btn-eliminar-seleccionado {
+        border: none;
+        border-radius: 8px;
+        padding: 11px 15px;
+        background: #dc2626;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .btn-eliminar-seleccionado:hover {
+        background: #b91c1c;
+    }
+
+    .btn-eliminar-seleccionado:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+    }
+
+    .boton-quitar-producto-eliminar {
+        border: none;
+        border-radius: 7px;
+        padding: 8px 12px;
+        background: #e5e7eb;
+        color: #374151;
+        cursor: pointer;
+    }
+
+    .boton-quitar-producto-eliminar:hover {
+        background: #cbd5e1;
+    }
+
+    .texto-busqueda-eliminar,
+    .contador-productos-eliminar {
+        color: #64748b;
+        font-size: 14px;
+    }
+</style>
+
+<script>
+    const inputBuscarProductoEliminar = document.getElementById(
+        "buscar-producto-eliminar"
+    );
+    const detalleEliminarProductos = document.getElementById(
+        "detalle-eliminar-productos"
+    );
+    const sugerenciasEliminarProductos = document.getElementById(
+        "sugerencias-eliminar-productos"
+    );
+    const mensajeEliminarProductos = document.getElementById(
+        "mensaje-eliminar-productos"
+    );
+    const formularioEliminarProductos = document.getElementById(
+        "formulario-eliminar-productos"
+    );
+    const productosIdsEliminar = document.getElementById(
+        "productos-ids-eliminar"
+    );
+    const botonEliminarProductos = document.getElementById(
+        "btn-eliminar-productos"
+    );
+    const contadorProductosEliminar = document.getElementById(
+        "contador-productos-eliminar"
+    );
+
+    const productosSeleccionadosEliminar = new Map();
+    let tiempoBusquedaEliminar = null;
+
+    function formatoMoneda(valor) {
+        return `$${Number(valor || 0).toFixed(2)}`;
+    }
+
+    function cerrarSugerenciasEliminar() {
+        sugerenciasEliminarProductos.innerHTML = "";
+        sugerenciasEliminarProductos.classList.remove("mostrar");
+    }
+
+    function actualizarSeleccionEliminar() {
+        const cantidad = productosSeleccionadosEliminar.size;
+
+        botonEliminarProductos.disabled = cantidad === 0;
+
+        if (cantidad === 0) {
+            botonEliminarProductos.innerHTML = `
+                <i class="fa-solid fa-trash"></i>
+                Eliminar productos seleccionados.
+            `;
+
+            contadorProductosEliminar.textContent =
+                "0 Productos seleccionados.";
+        } else if (cantidad === 1) {
+            botonEliminarProductos.innerHTML = `
+                <i class="fa-solid fa-trash"></i>
+                Eliminar producto seleccionado.
+            `;
+
+            contadorProductosEliminar.textContent =
+                "1 Producto seleccionado.";
+        } else {
+            botonEliminarProductos.innerHTML = `
+                <i class="fa-solid fa-trash"></i>
+                Eliminar productos seleccionados.
+            `;
+
+            contadorProductosEliminar.textContent =
+                `${cantidad} Productos seleccionados.`;
+        }
+
+        productosIdsEliminar.innerHTML = "";
+
+        productosSeleccionadosEliminar.forEach((producto) => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "productos_ids";
+            input.value = producto.id;
+            productosIdsEliminar.appendChild(input);
+        });
+    }
+
+    function mostrarFilaVaciaEliminarSiEsNecesario() {
+        const productos = document.querySelectorAll(
+            ".fila-producto-eliminar"
+        );
+
+        if (
+            productos.length === 0
+            && !document.getElementById("fila-vacia-eliminar")
+        ) {
+            detalleEliminarProductos.insertAdjacentHTML(
+                "beforeend",
+                `
+                    <tr id="fila-vacia-eliminar">
+                        <td colspan="5" class="sin-productos">
+                            No hay productos seleccionados para eliminar.
+                        </td>
+                    </tr>
+                `
+            );
+        }
+    }
+
+    function mostrarSugerenciasEliminar(productos) {
+        sugerenciasEliminarProductos.innerHTML = "";
+
+        if (!productos || productos.length === 0) {
+            cerrarSugerenciasEliminar();
+            return;
+        }
+
+        productos.forEach((producto) => {
+            const boton = document.createElement("button");
+
+            boton.type = "button";
+            boton.className = "sugerencia-producto";
+
+            const codigo = producto.codigo || producto.id;
+            const nombre = producto.nombre || "Producto sin nombre.";
+            const marca = producto.marca ? ` - ${producto.marca}` : "";
+
+            boton.innerHTML = `
+                <span class="sugerencia-codigo">${codigo}</span>
+                <span class="sugerencia-nombre">${nombre}${marca}</span>
+            `;
+
+            boton.addEventListener("click", () => {
+                agregarProductoParaEliminar(producto);
+                inputBuscarProductoEliminar.value = "";
+                cerrarSugerenciasEliminar();
+                inputBuscarProductoEliminar.focus();
+            });
+
+            sugerenciasEliminarProductos.appendChild(boton);
+        });
+
+        sugerenciasEliminarProductos.classList.add("mostrar");
+    }
+
+    async function buscarSugerenciasEliminar() {
+        const termino = inputBuscarProductoEliminar.value.trim();
+
+        if (!termino) {
+            cerrarSugerenciasEliminar();
+            return;
+        }
+
+        try {
+            const respuesta = await fetch(
+                `/api/productos/?search=${encodeURIComponent(termino)}`
+            );
+
+            if (!respuesta.ok) {
+                throw new Error("Error en la búsqueda.");
+            }
+
+            const datos = await respuesta.json();
+            const productos = datos.results || datos;
+
+            mostrarSugerenciasEliminar(productos);
+        } catch (error) {
+            cerrarSugerenciasEliminar();
+        }
+    }
+
+    function agregarProductoParaEliminar(producto) {
+        if (productosSeleccionadosEliminar.has(producto.id)) {
+            const filaExistente = document.querySelector(
+                `[data-producto-id="${producto.id}"]`
+            );
+
+            if (filaExistente) {
+                filaExistente.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            }
+
+            return;
+        }
+
+        const filaVacia = document.getElementById("fila-vacia-eliminar");
+
+        if (filaVacia) {
+            filaVacia.remove();
+        }
+
+        productosSeleccionadosEliminar.set(producto.id, producto);
+
+        const codigo = producto.codigo || producto.id;
+        const nombre = producto.nombre || "Producto sin descripción.";
+        const stock = producto.stock ?? 0;
+        const precioVenta = producto.precio_venta || 0;
+
+        const fila = document.createElement("tr");
+        fila.className = "fila-producto-eliminar";
+        fila.dataset.productoId = producto.id;
+
+        fila.innerHTML = `
+            <td>${codigo}</td>
+            <td>${nombre}</td>
+            <td>${stock}</td>
+            <td>${formatoMoneda(precioVenta)}</td>
+            <td>
+                <button
+                    type="button"
+                    class="boton-quitar-producto-eliminar"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                    Quitar.
+                </button>
+            </td>
+        `;
+
+        fila.querySelector(".boton-quitar-producto-eliminar")
+            .addEventListener("click", () => {
+                productosSeleccionadosEliminar.delete(producto.id);
+                fila.remove();
+                mostrarFilaVaciaEliminarSiEsNecesario();
+                actualizarSeleccionEliminar();
+            });
+
+        detalleEliminarProductos.appendChild(fila);
+        actualizarSeleccionEliminar();
+    }
+
+    formularioEliminarProductos.addEventListener("submit", (evento) => {
+        mensajeEliminarProductos.textContent = "";
+
+        if (!productosSeleccionadosEliminar.size) {
+            evento.preventDefault();
+            mensajeEliminarProductos.textContent =
+                "Seleccione uno o varios productos para eliminarlos.";
+            return;
+        }
+
+        const productos = Array.from(
+            productosSeleccionadosEliminar.values()
+        );
+
+        const detalle = productos.map((producto) => {
+            return `• ${producto.codigo} - ${producto.nombre}`;
+        }).join("\n");
+
+        const primeraConfirmacion = window.confirm(
+            productos.length === 1
+                ? (
+                    "Se eliminará el siguiente producto:\n\n"
+                    + `${detalle}\n\n`
+                    + "¿Desea Continuar?"
+                )
+                : (
+                    "Se eliminarán los siguientes productos:\n\n"
+                    + `${detalle}\n\n`
+                    + "¿Desea Continuar?"
+                )
+        );
+
+        if (!primeraConfirmacion) {
+            evento.preventDefault();
+            return;
+        }
+
+        const segundaConfirmacion = window.confirm(
+            productos.length === 1
+                ? "¿Estás seguro de confirmar la eliminación del producto?"
+                : "¿Estás seguro de confirmar la eliminación de los productos?"
+        );
+
+        if (!segundaConfirmacion) {
+            evento.preventDefault();
+        }
+    });
+
+    inputBuscarProductoEliminar.addEventListener("input", () => {
+        clearTimeout(tiempoBusquedaEliminar);
+
+        tiempoBusquedaEliminar = setTimeout(() => {
+            buscarSugerenciasEliminar();
+        }, 300);
+    });
+
+    inputBuscarProductoEliminar.addEventListener("keydown", (evento) => {
+        if (evento.key === "Escape") {
+            cerrarSugerenciasEliminar();
+        }
+    });
+
+    document.addEventListener("click", (evento) => {
+        if (!evento.target.closest(".buscador-producto-contenedor")) {
+            cerrarSugerenciasEliminar();
+        }
+    });
+
+    actualizarSeleccionEliminar();
+</script>
+
+{% endblock %}

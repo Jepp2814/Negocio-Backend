@@ -2,7 +2,6 @@ from decimal import Decimal
 
 from django.db import models
 
-
 class Producto(models.Model):
     codigo = models.CharField(
         max_length=7,
@@ -136,7 +135,6 @@ class Producto(models.Model):
             numero = int(ultimo.codigo.split("-")[1]) + 1
         else:
             numero = 1
-
         return f"{prefijo}-{numero:03d}"
 
     def save(self, *args, **kwargs):
@@ -147,7 +145,6 @@ class Producto(models.Model):
 
     def __str__(self):
         return f"{self.codigo} - {self.nombre}"
-
 
 class Proveedor(models.Model):
     nombre = models.CharField(
@@ -180,7 +177,6 @@ class Proveedor(models.Model):
     def __str__(self):
         return self.nombre
 
-
 class Categoria(models.Model):
     nombre = models.CharField(
         max_length=100,
@@ -205,7 +201,6 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.nombre
-
 
 class Cliente(models.Model):
     primer_nombre = models.CharField(
@@ -275,17 +270,12 @@ class Cliente(models.Model):
 
     def __str__(self):
         nombre = self.primer_nombre
-
         if self.segundo_nombre:
             nombre += f" {self.segundo_nombre}"
-
         apellido = self.primer_apellido
-
         if self.segundo_apellido:
             apellido += f" {self.segundo_apellido}"
-
         return f"{self.cedula} - {apellido}, {nombre}"
-
 
 class Venta(models.Model):
     cliente = models.ForeignKey(
@@ -355,7 +345,6 @@ class Venta(models.Model):
     def __str__(self):
         return f"Venta #{self.id} - {self.fecha.strftime('%Y-%m-%d %H:%M:%S')}"
 
-
 class DetalleVenta(models.Model):
     venta = models.ForeignKey(
         "Venta",
@@ -408,7 +397,6 @@ class DetalleVenta(models.Model):
         default=0,
         verbose_name="Valor ganado"
     )
-
     class Meta:
         verbose_name = "Detalle de venta"
         verbose_name_plural = "Detalles de venta"

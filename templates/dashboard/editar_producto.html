@@ -1,0 +1,570 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1 class="title">Editar Producto:</h1>
+
+<section class="editar-producto-contenedor">
+    <div class="editar-producto-buscador">
+        <label for="buscador-producto">
+            Buscar por nombre o código.
+        </label>
+
+        <div class="buscador-producto-grupo">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+                type="search"
+                id="buscador-producto."
+                placeholder="Ejemplo: ACE-001 o Aceite."
+                autocomplete="off"
+            >
+        </div>
+
+        <div
+            id="sugerencias-productos"
+            class="sugerencias-productos"
+            aria-live="polite"
+        ></div>
+
+        <p class="ayuda-buscador">
+            Escriba el código o el nombre y seleccione uno o varios productos.
+        </p>
+    </div>
+
+    <div
+        id="productos-seleccionados"
+        class="productos-seleccionados"
+    ></div>
+
+    <p
+        id="sin-productos-seleccionados"
+        class="mensaje-sin-productos"
+    >
+        Aún no ha seleccionado productos para editar.
+    </p>
+</section>
+
+<script>
+    const buscadorProducto = document.getElementById("buscador-producto");
+    const sugerenciasProductos = document.getElementById(
+        "sugerencias-productos"
+    );
+    const productosSeleccionados = document.getElementById(
+        "productos-seleccionados"
+    );
+    const mensajeSinProductos = document.getElementById(
+        "sin-productos-seleccionados"
+    );
+
+    const productosAgregados = new Set();
+    let temporizadorBusqueda = null;
+
+    function escaparHtml(valor) {
+        return String(valor ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function convertirNumero(valor) {
+        if (valor === null || valor === undefined || valor === "") {
+            return "";
+        }
+        return Number(valor).toFixed(2);
+    }
+
+    function obtenerCookie(nombre) {
+        const cookies = document.cookie ? document.cookie.split(";") : [];
+
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+
+            if (cookie.startsWith(`${nombre}=`)) {
+                return decodeURIComponent(
+                    cookie.substring(nombre.length + 1)
+                );
+            }
+        }
+        return "";
+    }
+
+    function actualizarMensajeVacio() {
+        mensajeSinProductos.style.display = productosSeleccionados.children.length
+            ? "none"
+            : "block";
+    }
+
+    function limpiarSugerencias() {
+        sugerenciasProductos.innerHTML = "";
+        sugerenciasProductos.style.display = "none";
+    }
+
+    function mostrarSugerencias(productos) {
+        if (!productos.length) {
+            sugerenciasProductos.innerHTML = `
+                <p class="sugerencia-vacia">
+                    No se encontraron productos relacionados.
+                </p>
+            `;
+            sugerenciasProductos.style.display = "block";
+            return;
+        }
+
+        sugerenciasProductos.innerHTML = productos.map((producto) => {
+            const imagen = producto.imagen
+                ? `<img src="${escaparHtml(producto.imagen)}" alt="">`
+                : `
+                    <div class="sugerencia-imagen-vacia">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+                `;
+            return `
+                <button
+                    type="button"
+                    class="sugerencia-producto"
+                    data-producto-id="${producto.id}"
+                    data-producto='${escaparHtml(JSON.stringify(producto))}'
+                >
+                    ${imagen}
+                    <span>
+                        <strong>${escaparHtml(producto.codigo)}</strong>
+                        ${escaparHtml(producto.nombre)}
+                        <small>Stock: ${escaparHtml(producto.stock)}</small>
+                    </span>
+                </button>
+            `;
+        }).join("");
+
+        sugerenciasProductos.style.display = "block";
+
+        document.querySelectorAll(".sugerencia-producto").forEach((boton) => {
+            boton.addEventListener("click", () => {
+                const producto = JSON.parse(
+                    boton.dataset.producto
+                        .replace(/&quot;/g, '"')
+                        .replace(/&#039;/g, "'")
+                        .replace(/&amp;/g, "&")
+                );
+
+                agregarProductoEdicion(producto);
+                buscadorProducto.value = "";
+                limpiarSugerencias();
+            });
+        });
+    }
+
+    function buscarProductos(termino) {
+        fetch(`/api/productos/?search=${encodeURIComponent(termino)}`)
+            .then((respuesta) => {
+                if (!respuesta.ok) {
+                    throw new Error("No se pudo consultar la API.");
+                }
+                return respuesta.json();
+            })
+            .then((datos) => {
+                const productos = Array.isArray(datos)
+                    ? datos
+                    : (datos.results || []);
+
+                mostrarSugerencias(productos);
+            })
+            .catch(() => {
+                sugerenciasProductos.innerHTML = `
+                    <p class="sugerencia-vacia">
+                        No fue posible realizar la búsqueda.
+                    </p>
+                `;
+                sugerenciasProductos.style.display = "block";
+            });
+    }
+
+    function agregarProductoEdicion(producto) {
+        if (productosAgregados.has(producto.id)) {
+            const tarjetaExistente = document.querySelector(
+                `[data-producto-edicion-id="${producto.id}"]`
+            );
+
+            if (tarjetaExistente) {
+                tarjetaExistente.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            }
+            return;
+        }
+
+        productosAgregados.add(producto.id);
+
+        const imagenActual = producto.imagen
+            ? `
+                <a
+                    class="imagen-producto-actual"
+                    href="${escaparHtml(producto.imagen)}"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    <img
+                        src="${escaparHtml(producto.imagen)}"
+                        alt="Imagen actual de ${escaparHtml(producto.nombre)}"
+                    >
+                </a>
+            `
+            : `
+                <div class="sin-imagen-producto">
+                    <i class="fa-solid fa-image"></i>
+                    <span>Sin imagen referencial</span>
+                </div>
+            `;
+
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "producto-edicion-tarjeta";
+        tarjeta.dataset.productoEdicionId = producto.id;
+
+        tarjeta.innerHTML = `
+            <div class="producto-edicion-encabezado">
+                <div>
+                    <p class="producto-edicion-codigo">
+                        ${escaparHtml(producto.codigo)}
+                    </p>
+                    <h2>${escaparHtml(producto.nombre)}</h2>
+                </div>
+
+                <button
+                    type="button"
+                    class="boton-quitar-producto"
+                    title="Quitar de la edición actual"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                    Quitar
+                </button>
+            </div>
+
+            <form
+                class="formulario-editar-producto"
+                method="post"
+                action="/productos/editar/${producto.id}/guardar/"
+                enctype="multipart/form-data"
+                data-codigo-original="${escaparHtml(producto.codigo)}"
+                data-nombre-original="${escaparHtml(producto.nombre)}"
+                data-marca-original="${escaparHtml(producto.marca || "")}"
+                data-modelo-original="${escaparHtml(producto.modelo || "")}"
+                data-proveedor-original="${escaparHtml(producto.proveedor || "")}"
+                data-costo-original="${convertirNumero(producto.costo)}"
+                data-costo-caja-original="${convertirNumero(producto.costo_caja)}"
+                data-precio-venta-original="${convertirNumero(producto.precio_venta)}"
+                data-precio-venta-caja-original="${convertirNumero(producto.precio_venta_caja)}"
+                data-stock-original="${escaparHtml(producto.stock)}"
+                data-especificaciones-original="${escaparHtml(producto.especificaciones || "")}"
+            >
+                <input
+                    type="hidden"
+                    name="csrfmiddlewaretoken"
+                    value="${obtenerCookie("csrftoken")}"
+                >
+
+                <div class="producto-edicion-contenido">
+                    <div class="producto-edicion-imagen">
+                        <p>Imagen actual</p>
+                        ${imagenActual}
+
+                        <label for="imagen-${producto.id}">
+                            Reemplazar imagen referencial
+                        </label>
+
+                        <input
+                            type="file"
+                            id="imagen-${producto.id}"
+                            name="imagen"
+                            accept="image/*"
+                        >
+
+                        <small class="nombre-nueva-imagen"></small>
+                    </div>
+
+                    <div class="producto-edicion-campos">
+                        <div class="campo-edicion">
+                            <label for="codigo-${producto.id}">Código</label>
+                            <input
+                                type="text"
+                                id="codigo-${producto.id}"
+                                name="codigo"
+                                value="${escaparHtml(producto.codigo)}"
+                                maxlength="7"
+                                required
+                            >
+                        </div>
+
+                        <div class="campo-edicion">
+                            <label for="nombre-${producto.id}">Nombre</label>
+                            <input
+                                type="text"
+                                id="nombre-${producto.id}"
+                                name="nombre"
+                                value="${escaparHtml(producto.nombre)}"
+                                required
+                            >
+                        </div>
+
+                        <div class="campo-edicion">
+                            <label for="marca-${producto.id}">Marca</label>
+                            <input
+                                type="text"
+                                id="marca-${producto.id}"
+                                name="marca"
+                                value="${escaparHtml(producto.marca || "")}"
+                                placeholder="Ingrese la marca"
+                            >
+                        </div>
+
+                        <div class="campo-edicion">
+                            <label for="modelo-${producto.id}">Modelo</label>
+                            <input
+                                type="text"
+                                id="modelo-${producto.id}"
+                                name="modelo"
+                                value="${escaparHtml(producto.modelo || "")}"
+                                placeholder="Ingrese el modelo"
+                            >
+                        </div>
+
+                        <div class="campo-edicion">
+                            <label for="proveedor-${producto.id}">
+                                Proveedor
+                            </label>
+                            <input
+                                type="text"
+                                id="proveedor-${producto.id}"
+                                name="proveedor"
+                                value="${escaparHtml(producto.proveedor || "")}"
+                                placeholder="Ingrese el proveedor"
+                            >
+                        </div>
+
+                        <div class="campo-edicion">
+                            <label for="costo-${producto.id}">
+                                Costo por unidad
+                            </label>
+                            <input
+                                type="number"
+                                id="costo-${producto.id}"
+                                name="costo"
+                                value="${convertirNumero(producto.costo)}"
+                                min="0"
+                                step="0.01"
+                            >
+                        </div>
+
+                        <div class="campo-edicion">
+                            <label for="costo-caja-${producto.id}">
+                                Costo por caja
+                            </label>
+                            <input
+                                type="number"
+                                id="costo-caja-${producto.id}"
+                                name="costo_caja"
+                                value="${convertirNumero(producto.costo_caja)}"
+                                min="0"
+                                step="0.01"
+                            >
+                        </div>
+
+                        <div class="campo-edicion">
+                            <label for="precio-venta-${producto.id}">
+                                Precio de venta por unidad
+                            </label>
+                            <input
+                                type="number"
+                                id="precio-venta-${producto.id}"
+                                name="precio_venta"
+                                value="${convertirNumero(producto.precio_venta)}"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+                        </div>
+
+                        <div class="campo-edicion">
+                            <label for="precio-venta-caja-${producto.id}">
+                                Precio de venta por caja
+                            </label>
+                            <input
+                                type="number"
+                                id="precio-venta-caja-${producto.id}"
+                                name="precio_venta_caja"
+                                value="${convertirNumero(producto.precio_venta_caja)}"
+                                min="0"
+                                step="0.01"
+                            >
+                        </div>
+
+                        <div class="campo-edicion">
+                            <label for="stock-${producto.id}">Stock</label>
+                            <input
+                                type="number"
+                                id="stock-${producto.id}"
+                                name="stock"
+                                value="${escaparHtml(producto.stock)}"
+                                min="0"
+                                required
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="campo-edicion campo-especificaciones-edicion">
+                    <label for="especificaciones-${producto.id}">
+                        Especificaciones
+                    </label>
+
+                    <textarea
+                        id="especificaciones-${producto.id}"
+                        name="especificaciones"
+                        rows="5"
+                        placeholder="Ejemplo: Viscosidad: 20W-50&#10;Presentación: 1 litro&#10;Marca: Castrol"
+                    >${escaparHtml(producto.especificaciones || "")}</textarea>
+                </div>
+
+                <div class="acciones-editar-producto">
+                    <button
+                        type="submit"
+                        class="boton-guardar-producto"
+                    >
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        `;
+
+        productosSeleccionados.appendChild(tarjeta);
+        actualizarMensajeVacio();
+        prepararEventosTarjeta(tarjeta);
+    }
+
+    function prepararEventosTarjeta(tarjeta) {
+        const botonQuitar = tarjeta.querySelector(".boton-quitar-producto");
+        const formularioEdicion = tarjeta.querySelector(
+            ".formulario-editar-producto"
+        );
+        const inputImagen = tarjeta.querySelector('input[name="imagen"]');
+        const textoNuevaImagen = tarjeta.querySelector(
+            ".nombre-nueva-imagen"
+        );
+
+        botonQuitar.addEventListener("click", () => {
+            const productoId = Number(tarjeta.dataset.productoEdicionId);
+
+            productosAgregados.delete(productoId);
+            tarjeta.remove();
+            actualizarMensajeVacio();
+        });
+
+        inputImagen.addEventListener("change", () => {
+            const archivo = inputImagen.files[0];
+
+            textoNuevaImagen.textContent = archivo
+                ? `Nueva imagen seleccionada: ${archivo.name}`
+                : "";
+        });
+
+        formularioEdicion.addEventListener("submit", (evento) => {
+            const cambios = obtenerCambiosFormulario(formularioEdicion);
+
+            let mensaje = "¿Desea guardar los siguientes cambios?\n\n";
+
+            if (!cambios.length) {
+                mensaje += "No se detectaron cambios en los campos.";
+            } else {
+                mensaje += cambios.join("\n");
+            }
+
+            const confirmar = window.confirm(mensaje);
+
+            if (!confirmar) {
+                evento.preventDefault();
+            }
+        });
+    }
+
+    function obtenerCambiosFormulario(formulario) {
+        const cambios = [];
+
+        const definiciones = [
+            ["codigo", "Código", "codigoOriginal"],
+            ["nombre", "Nombre", "nombreOriginal"],
+            ["marca", "Marca", "marcaOriginal"],
+            ["modelo", "Modelo", "modeloOriginal"],
+            ["proveedor", "Proveedor", "proveedorOriginal"],
+            ["costo", "Costo por unidad", "costoOriginal"],
+            ["costo_caja", "Costo por caja", "costoCajaOriginal"],
+            [
+                "precio_venta",
+                "Precio de venta por unidad",
+                "precioVentaOriginal",
+            ],
+            [
+                "precio_venta_caja",
+                "Precio de venta por caja",
+                "precioVentaCajaOriginal",
+            ],
+            ["stock", "Stock", "stockOriginal"],
+            [
+                "especificaciones",
+                "Especificaciones",
+                "especificacionesOriginal",
+            ],
+        ];
+
+        definiciones.forEach(([campo, etiqueta, atributo]) => {
+            const input = formulario.querySelector(`[name="${campo}"]`);
+            const anterior = formulario.dataset[atributo] ?? "";
+            const nuevo = input.value.trim();
+
+            if (anterior !== nuevo) {
+                cambios.push(
+                    `${etiqueta}:\nAntes: ${anterior || "Sin valor"}\n`
+                    + `Después: ${nuevo || "Sin valor"}\n`
+                );
+            }
+        });
+
+        const inputImagen = formulario.querySelector('[name="imagen"]');
+
+        if (inputImagen.files.length) {
+            cambios.push(
+                `Imagen referencial:\n`
+                + `Después: ${inputImagen.files[0].name}\n`
+            );
+        }
+        return cambios;
+    }
+
+    buscadorProducto.addEventListener("input", () => {
+        const termino = buscadorProducto.value.trim();
+
+        clearTimeout(temporizadorBusqueda);
+
+        if (!termino) {
+            limpiarSugerencias();
+            return;
+        }
+
+        temporizadorBusqueda = setTimeout(() => {
+            buscarProductos(termino);
+        }, 250);
+    });
+
+    document.addEventListener("click", (evento) => {
+        if (
+            !evento.target.closest(".editar-producto-buscador")
+            && !evento.target.closest(".sugerencias-productos")
+        ) {
+            limpiarSugerencias();
+        }
+    });
+</script>
+
+{% endblock %}

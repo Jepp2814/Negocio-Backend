@@ -6,7 +6,9 @@
 
 <div class="producto-formulario-contenedor">
 
-    <h1 class="title">Ingresar producto</h1>
+
+    <h1 class="title">Ingresar Producto:</h1>
+
 
     {% if messages %}
         {% for message in messages %}
@@ -18,6 +20,7 @@
         {% endfor %}
     {% endif %}
 
+
     <form
         method="post"
         enctype="multipart/form-data"
@@ -26,116 +29,140 @@
     >
         {% csrf_token %}
 
+
         <div class="formulario-grid">
+
 
             <div class="campo-formulario">
                 <label for="{{ form.nombre.id_for_label }}">
-                    Nombre
+                    Nombre:
                 </label>
                 {{ form.nombre }}
                 {{ form.nombre.errors }}
             </div>
 
+
             <div class="campo-formulario">
                 <label for="{{ form.marca.id_for_label }}">
-                    Marca
+                    Marca:
                 </label>
                 {{ form.marca }}
                 {{ form.marca.errors }}
             </div>
 
+
             <div class="campo-formulario">
                 <label for="{{ form.modelo.id_for_label }}">
-                    Modelo
+                    Modelo:
                 </label>
                 {{ form.modelo }}
                 {{ form.modelo.errors }}
             </div>
 
+
             <div class="campo-formulario">
                 <label for="{{ form.costo.id_for_label }}">
-                    Costo por unidad
+                    Costo Por U:
                 </label>
                 {{ form.costo }}
                 {{ form.costo.errors }}
             </div>
 
+
             <div class="campo-formulario">
                 <label for="{{ form.costo_caja.id_for_label }}">
-                    Costo por caja
+                    Costo Por Caja:
                 </label>
                 {{ form.costo_caja }}
                 {{ form.costo_caja.errors }}
             </div>
 
+
             <div class="campo-formulario">
                 <label for="{{ form.precio_venta.id_for_label }}">
-                    Precio de venta por unidad
+                    Precio De Venta Por U:
                 </label>
                 {{ form.precio_venta }}
                 {{ form.precio_venta.errors }}
             </div>
 
+
             <div class="campo-formulario">
                 <label for="{{ form.precio_venta_caja.id_for_label }}">
-                    Precio de venta por caja
+                    Precio De Venta Por Caja:
                 </label>
                 {{ form.precio_venta_caja }}
                 {{ form.precio_venta_caja.errors }}
             </div>
 
+
             <div class="campo-formulario">
                 <label for="{{ form.stock.id_for_label }}">
-                    Stock
+                    Stock:
                 </label>
                 {{ form.stock }}
                 {{ form.stock.errors }}
             </div>
 
+
             <div class="campo-formulario">
                 <label for="{{ form.proveedor.id_for_label }}">
-                    Proveedor
+                    Proveedor:
                 </label>
                 {{ form.proveedor }}
                 {{ form.proveedor.errors }}
             </div>
 
+
             <div class="campo-formulario">
                 <label for="{{ form.imagen.id_for_label }}">
-                    Imagen referencial
+                    Imagen Referencial:
                 </label>
                 {{ form.imagen }}
                 {{ form.imagen.errors }}
             </div>
 
+
         </div>
+
 
         <div class="campo-formulario campo-formulario-completo">
             <label for="{{ form.especificaciones.id_for_label }}">
-                Especificaciones
+                Especificaciones:
             </label>
             {{ form.especificaciones }}
             {{ form.especificaciones.errors }}
         </div>
 
+
         <div class="botones-formulario">
             <a href="{% url 'productos_menu' %}" class="boton-cancelar">
-                Cancelar
+                Cancelar.
             </a>
+
 
             <button type="submit" class="boton-guardar">
                 <i class="fa-solid fa-floppy-disk"></i>
-                Guardar cambios
+                Guardar cambios.
             </button>
         </div>
 
+
     </form>
+
 
 </div>
 
 
 <script>
     const formularioProducto = document.getElementById("formulario-producto");
+    const campoImagen = document.getElementById("id_imagen");
+
+
+    if (campoImagen) {
+        campoImagen.setAttribute("accept", "image/*");
+    }
+
 
     formularioProducto.addEventListener("submit", function(event) {
         const nombre = document.getElementById("id_nombre").value;
@@ -145,6 +172,7 @@
         const precioUnidad = document.getElementById("id_precio_venta").value;
         const precioCaja = document.getElementById("id_precio_venta_caja").value;
         const stock = document.getElementById("id_stock").value;
+
 
         const confirmarGuardado = confirm(
             "Se guardará el siguiente producto:\n\n" +
@@ -163,6 +191,5 @@
         }
     });
 </script>
-
 
 {% endblock %}
