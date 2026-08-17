@@ -1,0 +1,98 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Seleccionar usuario | AppMecánica</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/seleccionar_usuario.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    >
+</head>
+
+<body>
+
+    <main class="profile-selector">
+
+        <section class="profile-header">
+
+            <img
+                src="{% static 'img/logo.png' %}"
+                alt="Logo de AppMecánica"
+                class="profile-logo"
+            >
+
+            <h1>Bienvenido a AppMecánica</h1>
+
+            <p>
+                Selecciona el perfil con el que deseas iniciar sesión.
+            </p>
+
+        </section>
+
+        <section class="profiles-grid">
+
+            {% for usuario in usuarios %}
+
+                <a
+                    href="{% url 'login_perfil' usuario.id %}"
+                    class="profile-card"
+                >
+
+                    <i class="fa-solid fa-circle-user profile-icon"></i>
+
+                    <h2>
+                        {{ usuario.get_full_name|default:usuario.username }}
+                    </h2>
+
+                    <span>
+                        @{{ usuario.username }}
+                    </span>
+
+                    {% if usuario.is_staff %}
+                        <small>Administrador</small>
+                    {% else %}
+                        <small>Usuario</small>
+                    {% endif %}
+
+                </a>
+
+            {% empty %}
+
+                <div class="empty-users">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <p>
+                        No existen usuarios registrados todavía.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+        <a
+            href="{% url 'registro' %}"
+            class="create-user-button"
+        >
+            <i class="fa-solid fa-user-plus"></i>
+            Crear nuevo usuario
+        </a>
+
+    </main>
+
+</body>
+
+</html>

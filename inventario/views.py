@@ -31,6 +31,16 @@ def get_perfiles_disponibles():
     )
 
 
+def seleccionar_usuarios(request):
+    usuarios = get_perfiles_disponibles()
+
+    return render(
+        request,
+        "usuarios/seleccionar_usuario.html",
+        {"usuarios": usuarios},
+    )
+
+
 def home(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
@@ -570,3 +580,11 @@ def confirmar_eliminacion_productos(request):
             )
 
     return redirect("eliminar_productos")
+
+
+@staff_member_required
+def finanzas(request):
+    return render(
+        request,
+        "dashboard/finanzas.html",
+    )

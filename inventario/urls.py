@@ -1,7 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-
 from . import views
 
 
@@ -40,8 +39,14 @@ urlpatterns = [
         views.cambiar_usuario,
         name="cambiar_usuario",
     ),
+    path(
+        "seleccionar-usuarios/",
+        views.seleccionar_usuarios,
+        name="seleccionar_usuarios",
+    ),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("ventas/nueva/", views.venta_nueva, name="venta_nueva"),
+    path("finanzas/", views.finanzas, name="finanzas"),
     path("productos/", views.productos_menu, name="productos_menu"),
     path(
         "productos/ingresar/",
