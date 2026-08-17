@@ -1,14 +1,10 @@
 {% extends 'dashboard/base.html' %}
 
-
 {% block content %}
-
 
 <div class="producto-formulario-contenedor">
 
-
     <h1 class="title">Ingresar Producto:</h1>
-
 
     {% if messages %}
         {% for message in messages %}
@@ -20,7 +16,6 @@
         {% endfor %}
     {% endif %}
 
-
     <form
         method="post"
         enctype="multipart/form-data"
@@ -29,117 +24,119 @@
     >
         {% csrf_token %}
 
-
         <div class="formulario-grid">
-
 
             <div class="campo-formulario">
                 <label for="{{ form.nombre.id_for_label }}">
-                    Nombre:
+                    Nombre.
                 </label>
                 {{ form.nombre }}
                 {{ form.nombre.errors }}
             </div>
 
-
             <div class="campo-formulario">
                 <label for="{{ form.marca.id_for_label }}">
-                    Marca:
+                    Marca.
                 </label>
                 {{ form.marca }}
                 {{ form.marca.errors }}
             </div>
 
-
             <div class="campo-formulario">
                 <label for="{{ form.modelo.id_for_label }}">
-                    Modelo:
+                    Modelo.
                 </label>
                 {{ form.modelo }}
                 {{ form.modelo.errors }}
             </div>
 
-
             <div class="campo-formulario">
                 <label for="{{ form.costo.id_for_label }}">
-                    Costo Por U:
+                    Costo Por U.
                 </label>
                 {{ form.costo }}
                 {{ form.costo.errors }}
             </div>
 
-
             <div class="campo-formulario">
                 <label for="{{ form.costo_caja.id_for_label }}">
-                    Costo Por Caja:
+                    Costo Por Caja.
                 </label>
                 {{ form.costo_caja }}
                 {{ form.costo_caja.errors }}
             </div>
 
-
             <div class="campo-formulario">
                 <label for="{{ form.precio_venta.id_for_label }}">
-                    Precio De Venta Por U:
+                    Precio De Venta Por U.
                 </label>
                 {{ form.precio_venta }}
                 {{ form.precio_venta.errors }}
             </div>
 
-
             <div class="campo-formulario">
                 <label for="{{ form.precio_venta_caja.id_for_label }}">
-                    Precio De Venta Por Caja:
+                    Precio De Venta Por Caja.
                 </label>
                 {{ form.precio_venta_caja }}
                 {{ form.precio_venta_caja.errors }}
             </div>
 
-
             <div class="campo-formulario">
                 <label for="{{ form.stock.id_for_label }}">
-                    Stock:
+                    Stock.
                 </label>
                 {{ form.stock }}
                 {{ form.stock.errors }}
             </div>
 
-
             <div class="campo-formulario">
                 <label for="{{ form.proveedor.id_for_label }}">
-                    Proveedor:
+                    Proveedor.
                 </label>
                 {{ form.proveedor }}
                 {{ form.proveedor.errors }}
             </div>
 
-
             <div class="campo-formulario">
                 <label for="{{ form.imagen.id_for_label }}">
-                    Imagen Referencial:
+                    Imagen Referencial.
                 </label>
-                {{ form.imagen }}
+
+                <div class="selector-imagen">
+                    {{ form.imagen }}
+
+                    <label
+                        for="{{ form.imagen.id_for_label }}"
+                        class="boton-seleccionar-imagen"
+                    >
+                        <i class="fa-solid fa-image"></i>
+                        Seleccionar Imagen.
+                    </label>
+
+                    <span
+                        id="nombre-imagen-seleccionada"
+                        class="nombre-imagen-seleccionada"
+                    ></span>
+                </div>
+
                 {{ form.imagen.errors }}
             </div>
 
-
         </div>
-
 
         <div class="campo-formulario campo-formulario-completo">
             <label for="{{ form.especificaciones.id_for_label }}">
-                Especificaciones:
+                Especificaciones.
             </label>
             {{ form.especificaciones }}
             {{ form.especificaciones.errors }}
         </div>
 
-
         <div class="botones-formulario">
             <a href="{% url 'productos_menu' %}" class="boton-cancelar">
                 Cancelar.
             </a>
-
 
             <button type="submit" class="boton-guardar">
                 <i class="fa-solid fa-floppy-disk"></i>
@@ -147,22 +144,67 @@
             </button>
         </div>
 
-
     </form>
-
 
 </div>
 
+<style>
+    #id_imagen {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        clip-path: inset(50%);
+    }
+
+    .selector-imagen {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .boton-seleccionar-imagen {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 7px;
+        padding: 10px 14px;
+        background: #0F4C81;
+        color: white;
+        cursor: pointer;
+    }
+
+    .boton-seleccionar-imagen:hover {
+        background: #0B3158;
+    }
+
+    .nombre-imagen-seleccionada {
+        color: #64748b;
+        font-size: 14px;
+    }
+</style>
 
 <script>
     const formularioProducto = document.getElementById("formulario-producto");
     const campoImagen = document.getElementById("id_imagen");
-
+    const nombreImagenSeleccionada = document.getElementById(
+        "nombre-imagen-seleccionada"
+    );
 
     if (campoImagen) {
         campoImagen.setAttribute("accept", "image/*");
-    }
 
+        campoImagen.addEventListener("change", function() {
+            const archivo = campoImagen.files[0];
+
+            nombreImagenSeleccionada.textContent = archivo
+                ? archivo.name
+                : "";
+        });
+    }
 
     formularioProducto.addEventListener("submit", function(event) {
         const nombre = document.getElementById("id_nombre").value;
@@ -172,7 +214,6 @@
         const precioUnidad = document.getElementById("id_precio_venta").value;
         const precioCaja = document.getElementById("id_precio_venta_caja").value;
         const stock = document.getElementById("id_stock").value;
-
 
         const confirmarGuardado = confirm(
             "Se guardará el siguiente producto:\n\n" +
