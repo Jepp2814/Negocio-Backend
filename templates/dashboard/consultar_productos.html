@@ -318,7 +318,15 @@
     }
 
     .boton-consultar-inventario:hover {
-        background: #0B3158;
+        background: #16a34a;
+    }
+
+    .boton-consultar-inventario.ocultar-producto {
+        background: #dc2626;
+    }
+
+    .boton-consultar-inventario.ocultar-producto:hover {
+        background: #b91c1c;
     }
 
     .detalle-producto {
@@ -543,6 +551,8 @@
     );
 
     let tiempoBusqueda = null;
+    let botonProductoVisible = null;
+    let productoVisibleId = null;
 
     function formatoMoneda(valor) {
         return `$${Number(valor || 0).toFixed(2)}`;
@@ -573,10 +583,56 @@
         return `/media/${producto.imagen}`;
     }
 
-    function mostrarProducto(producto) {
+    function actualizarBotonConsultar(boton, estaVisible) {
+        if (!boton) {
+            return;
+        }
+
+        boton.classList.toggle("ocultar-producto", estaVisible);
+        boton.setAttribute("aria-expanded", String(estaVisible));
+        boton.setAttribute(
+            "aria-label",
+            estaVisible
+                ? "Ocultar atributos del producto."
+                : "Ver atributos del producto."
+        );
+
+        boton.innerHTML = estaVisible
+            ? `
+                <i class="fa-solid fa-eye-slash"></i>
+                Ocultar.
+            `
+            : `
+                <i class="fa-solid fa-eye"></i>
+                Ver.
+            `;
+    }
+
+    function ocultarProducto() {
+        detalleProducto.hidden = true;
+
+        actualizarBotonConsultar(botonProductoVisible, false);
+
+        botonProductoVisible = null;
+        productoVisibleId = null;
+    }
+
+    function mostrarProducto(producto, boton = null) {
         const codigo = producto.codigo || producto.id || "-";
         const nombre = producto.nombre || "Producto sin nombre.";
         const imagen = obtenerUrlImagen(producto);
+
+        if (
+            productoVisibleId === producto.id &&
+            !detalleProducto.hidden
+        ) {
+            ocultarProducto();
+            return;
+        }
+
+        if (botonProductoVisible && botonProductoVisible !== boton) {
+            actualizarBotonConsultar(botonProductoVisible, false);
+        }
 
         productoCodigo.textContent = codigo;
         productoNombre.textContent = nombre;
@@ -605,6 +661,12 @@
         }
 
         detalleProducto.hidden = false;
+        productoVisibleId = producto.id;
+
+        if (boton) {
+            botonProductoVisible = boton;
+            actualizarBotonConsultar(botonProductoVisible, true);
+        }
 
         setTimeout(() => {
             detalleProducto.scrollIntoView({
@@ -665,7 +727,9 @@
                 <button
                     type="button"
                     class="boton-consultar-inventario"
-                    aria-label="Consultar ${nombre}."
+                    aria-label="Ver atributos de ${nombre}."
+                    aria-controls="detalle-producto"
+                    aria-expanded="false"
                 >
                     <i class="fa-solid fa-eye"></i>
                     Ver.
@@ -673,26 +737,28 @@
             </td>
         `;
 
+        const botonConsultar = fila.querySelector(
+            ".boton-consultar-inventario"
+        );
+
         fila.addEventListener("click", (evento) => {
             if (evento.target.closest(".boton-consultar-inventario")) {
                 return;
             }
 
-            mostrarProducto(producto);
+            mostrarProducto(producto, botonConsultar);
         });
 
-        fila.querySelector(".boton-consultar-inventario").addEventListener(
-            "click",
-            () => {
-                mostrarProducto(producto);
-            }
-        );
+        botonConsultar.addEventListener("click", () => {
+            mostrarProducto(producto, botonConsultar);
+        });
 
         return fila;
     }
 
     function mostrarInventario(productos) {
         listaInventario.innerHTML = "";
+        ocultarProducto();
 
         if (!productos || productos.length === 0) {
             listaInventario.innerHTML = `

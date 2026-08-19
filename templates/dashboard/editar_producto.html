@@ -15,7 +15,7 @@
             <i class="fa-solid fa-magnifying-glass"></i>
             <input
                 type="search"
-                id="buscador-producto."
+                id="buscador-producto"
                 placeholder="Ejemplo: ACE-001 o Aceite."
                 autocomplete="off"
             >
@@ -73,6 +73,7 @@
         if (valor === null || valor === undefined || valor === "") {
             return "";
         }
+
         return Number(valor).toFixed(2);
     }
 
@@ -88,7 +89,24 @@
                 );
             }
         }
+
         return "";
+    }
+
+    function obtenerUrlImagen(imagen) {
+        if (!imagen) {
+            return "";
+        }
+
+        if (
+            imagen.startsWith("http://") ||
+            imagen.startsWith("https://") ||
+            imagen.startsWith("/")
+        ) {
+            return imagen;
+        }
+
+        return `/media/${imagen}`;
     }
 
     function actualizarMensajeVacio() {
@@ -114,13 +132,16 @@
         }
 
         sugerenciasProductos.innerHTML = productos.map((producto) => {
-            const imagen = producto.imagen
-                ? `<img src="${escaparHtml(producto.imagen)}" alt="">`
+            const urlImagen = obtenerUrlImagen(producto.imagen);
+
+            const imagen = urlImagen
+                ? `<img src="${escaparHtml(urlImagen)}" alt="">`
                 : `
                     <div class="sugerencia-imagen-vacia">
                         <i class="fa-solid fa-box"></i>
                     </div>
                 `;
+
             return `
                 <button
                     type="button"
@@ -152,6 +173,7 @@
                 agregarProductoEdicion(producto);
                 buscadorProducto.value = "";
                 limpiarSugerencias();
+                buscadorProducto.focus();
             });
         });
     }
@@ -162,6 +184,7 @@
                 if (!respuesta.ok) {
                     throw new Error("No se pudo consultar la API.");
                 }
+
                 return respuesta.json();
             })
             .then((datos) => {
@@ -193,29 +216,32 @@
                     block: "center",
                 });
             }
+
             return;
         }
 
         productosAgregados.add(producto.id);
 
-        const imagenActual = producto.imagen
+        const urlImagen = obtenerUrlImagen(producto.imagen);
+
+        const imagenActual = urlImagen
             ? `
                 <a
                     class="imagen-producto-actual"
-                    href="${escaparHtml(producto.imagen)}"
+                    href="${escaparHtml(urlImagen)}"
                     target="_blank"
                     rel="noopener"
                 >
                     <img
-                        src="${escaparHtml(producto.imagen)}"
-                        alt="Imagen actual de ${escaparHtml(producto.nombre)}"
+                        src="${escaparHtml(urlImagen)}"
+                        alt="Imagen actual de ${escaparHtml(producto.nombre)}."
                     >
                 </a>
             `
             : `
                 <div class="sin-imagen-producto">
                     <i class="fa-solid fa-image"></i>
-                    <span>Sin imagen referencial</span>
+                    <span>Sin imagen referencial.</span>
                 </div>
             `;
 
@@ -235,10 +261,10 @@
                 <button
                     type="button"
                     class="boton-quitar-producto"
-                    title="Quitar de la edición actual"
+                    title="Quitar de la edición actual."
                 >
                     <i class="fa-solid fa-xmark"></i>
-                    Quitar
+                    Quitar.
                 </button>
             </div>
 
@@ -267,11 +293,11 @@
 
                 <div class="producto-edicion-contenido">
                     <div class="producto-edicion-imagen">
-                        <p>Imagen actual</p>
+                        <p>Imagen actual.</p>
                         ${imagenActual}
 
                         <label for="imagen-${producto.id}">
-                            Reemplazar imagen referencial
+                            Reemplazar imagen referencial.
                         </label>
 
                         <input
@@ -286,7 +312,7 @@
 
                     <div class="producto-edicion-campos">
                         <div class="campo-edicion">
-                            <label for="codigo-${producto.id}">Código</label>
+                            <label for="codigo-${producto.id}">Código.</label>
                             <input
                                 type="text"
                                 id="codigo-${producto.id}"
@@ -298,7 +324,7 @@
                         </div>
 
                         <div class="campo-edicion">
-                            <label for="nombre-${producto.id}">Nombre</label>
+                            <label for="nombre-${producto.id}">Nombre.</label>
                             <input
                                 type="text"
                                 id="nombre-${producto.id}"
@@ -309,43 +335,43 @@
                         </div>
 
                         <div class="campo-edicion">
-                            <label for="marca-${producto.id}">Marca</label>
+                            <label for="marca-${producto.id}">Marca.</label>
                             <input
                                 type="text"
                                 id="marca-${producto.id}"
                                 name="marca"
                                 value="${escaparHtml(producto.marca || "")}"
-                                placeholder="Ingrese la marca"
+                                placeholder="Ingrese la marca."
                             >
                         </div>
 
                         <div class="campo-edicion">
-                            <label for="modelo-${producto.id}">Modelo</label>
+                            <label for="modelo-${producto.id}">Modelo.</label>
                             <input
                                 type="text"
                                 id="modelo-${producto.id}"
                                 name="modelo"
                                 value="${escaparHtml(producto.modelo || "")}"
-                                placeholder="Ingrese el modelo"
+                                placeholder="Ingrese el modelo."
                             >
                         </div>
 
                         <div class="campo-edicion">
                             <label for="proveedor-${producto.id}">
-                                Proveedor
+                                Proveedor.
                             </label>
                             <input
                                 type="text"
                                 id="proveedor-${producto.id}"
                                 name="proveedor"
                                 value="${escaparHtml(producto.proveedor || "")}"
-                                placeholder="Ingrese el proveedor"
+                                placeholder="Ingrese el proveedor."
                             >
                         </div>
 
                         <div class="campo-edicion">
                             <label for="costo-${producto.id}">
-                                Costo por unidad
+                                Costo por unidad.
                             </label>
                             <input
                                 type="number"
@@ -359,7 +385,7 @@
 
                         <div class="campo-edicion">
                             <label for="costo-caja-${producto.id}">
-                                Costo por caja
+                                Costo por caja.
                             </label>
                             <input
                                 type="number"
@@ -373,7 +399,7 @@
 
                         <div class="campo-edicion">
                             <label for="precio-venta-${producto.id}">
-                                Precio de venta por unidad
+                                Precio de venta por unidad.
                             </label>
                             <input
                                 type="number"
@@ -388,7 +414,7 @@
 
                         <div class="campo-edicion">
                             <label for="precio-venta-caja-${producto.id}">
-                                Precio de venta por caja
+                                Precio de venta por caja.
                             </label>
                             <input
                                 type="number"
@@ -401,7 +427,7 @@
                         </div>
 
                         <div class="campo-edicion">
-                            <label for="stock-${producto.id}">Stock</label>
+                            <label for="stock-${producto.id}">Stock.</label>
                             <input
                                 type="number"
                                 id="stock-${producto.id}"
@@ -416,14 +442,14 @@
 
                 <div class="campo-edicion campo-especificaciones-edicion">
                     <label for="especificaciones-${producto.id}">
-                        Especificaciones
+                        Especificaciones.
                     </label>
 
                     <textarea
                         id="especificaciones-${producto.id}"
                         name="especificaciones"
                         rows="5"
-                        placeholder="Ejemplo: Viscosidad: 20W-50&#10;Presentación: 1 litro&#10;Marca: Castrol"
+                        placeholder="Ejemplo: Viscosidad: 20W-50&#10;Presentación: 1 litro&#10;Marca: Castrol."
                     >${escaparHtml(producto.especificaciones || "")}</textarea>
                 </div>
 
@@ -433,7 +459,7 @@
                         class="boton-guardar-producto"
                     >
                         <i class="fa-solid fa-floppy-disk"></i>
-                        Guardar cambios
+                        Guardar cambios.
                     </button>
                 </div>
             </form>
@@ -466,7 +492,7 @@
             const archivo = inputImagen.files[0];
 
             textoNuevaImagen.textContent = archivo
-                ? `Nueva imagen seleccionada: ${archivo.name}`
+                ? `Nueva imagen seleccionada: ${archivo.name}.`
                 : "";
         });
 
@@ -539,6 +565,7 @@
                 + `Después: ${inputImagen.files[0].name}\n`
             );
         }
+
         return cambios;
     }
 
@@ -557,6 +584,12 @@
         }, 250);
     });
 
+    buscadorProducto.addEventListener("keydown", (evento) => {
+        if (evento.key === "Escape") {
+            limpiarSugerencias();
+        }
+    });
+
     document.addEventListener("click", (evento) => {
         if (
             !evento.target.closest(".editar-producto-buscador")
@@ -565,6 +598,8 @@
             limpiarSugerencias();
         }
     });
+
+    actualizarMensajeVacio();
 </script>
 
 {% endblock %}
