@@ -1,10 +1,22 @@
 {% extends 'dashboard/base.html' %}
-
+{% load static %}
 {% block content %}
+        <link rel="stylesheet" href="{% static 'css/ingresar_producto.css' %}">
 
-<div class="producto-formulario-contenedor">
+        <div class="producto-formulario-contenedor">
 
-    <h1 class="title">Ingresar Producto:</h1>
+            <div class="producto-form-header">
+
+                <div class="header-icon">
+                    <i class="fa-solid fa-box"></i>
+                </div>
+
+                <div>
+                    <h1>Ingresar Producto</h1>
+                    <p>Completa la información para agregarlo al inventario</p>
+                </div>
+            </div>
+        </div>
 
     {% if messages %}
         {% for message in messages %}
@@ -24,86 +36,156 @@
     >
         {% csrf_token %}
 
-        <div class="formulario-grid">
+        <!-- INFORMACIÓN GENERAL -->
+<div class="formulario-seccion">
 
-            <div class="campo-formulario">
-                <label for="{{ form.nombre.id_for_label }}">
-                    Nombre.
-                </label>
-                {{ form.nombre }}
-                {{ form.nombre.errors }}
+            <h2 class="formulario-seccion-titulo">
+                Información general
+            </h2>
+
+            <div class="formulario-grid">
+
+                <div class="campo-formulario">
+                    <label for="{{ form.nombre.id_for_label }}">
+                        Nombre
+                    </label>
+                    {{ form.nombre }}
+                    {{ form.nombre.errors }}
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="{{ form.marca.id_for_label }}">
+                        Marca
+                    </label>
+                    {{ form.marca }}
+                    {{ form.marca.errors }}
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="{{ form.modelo.id_for_label }}">
+                        Modelo
+                    </label>
+                    {{ form.modelo }}
+                    {{ form.modelo.errors }}
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="{{ form.proveedor.id_for_label }}">
+                        Proveedor
+                    </label>
+                    {{ form.proveedor }}
+                    {{ form.proveedor.errors }}
+                </div>
+
             </div>
 
-            <div class="campo-formulario">
-                <label for="{{ form.marca.id_for_label }}">
-                    Marca.
-                </label>
-                {{ form.marca }}
-                {{ form.marca.errors }}
+        </div>
+
+
+        <!-- PRECIOS Y STOCK -->
+        <div class="formulario-seccion">
+
+            <h2 class="formulario-seccion-titulo">
+                Precios y stock
+            </h2>
+
+            <div class="formulario-grid">
+
+                <div class="campo-formulario">
+                    <label for="{{ form.costo.id_for_label }}">
+                        Costo por unidad
+                    </label>
+
+                    <div class="precio-wrapper">
+                        <span class="simbolo-moneda">$</span>
+                        {{ form.costo }}
+                    </div>
+
+                    {{ form.costo.errors }}
+                </div>
+
+
+                <div class="campo-formulario">
+                    <label for="{{ form.costo_caja.id_for_label }}">
+                        Costo por caja
+                    </label>
+
+                    <div class="precio-wrapper">
+                        <span class="simbolo-moneda">$</span>
+                        {{ form.costo_caja }}
+                    </div>
+
+                    {{ form.costo_caja.errors }}
+                </div>
+
+
+                <div class="campo-formulario">
+                    <label for="{{ form.precio_venta.id_for_label }}">
+                        Precio de venta por unidad
+                    </label>
+
+                    <div class="precio-wrapper">
+                        <span class="simbolo-moneda">$</span>
+                        {{ form.precio_venta }}
+                    </div>
+
+                    {{ form.precio_venta.errors }}
+                </div>
+
+
+                <div class="campo-formulario">
+                    <label for="{{ form.precio_venta_caja.id_for_label }}">
+                        Precio de venta por caja
+                    </label>
+
+                    <div class="precio-wrapper">
+                        <span class="simbolo-moneda">$</span>
+                        {{ form.precio_venta_caja }}
+                    </div>
+
+                    {{ form.precio_venta_caja.errors }}
+                </div>
+
+
+                <div class="campo-formulario campo-stock">
+                    <label for="{{ form.stock.id_for_label }}">
+                        Stock
+                    </label>
+
+                    {{ form.stock }}
+                    {{ form.stock.errors }}
+                </div>
+
             </div>
 
-            <div class="campo-formulario">
-                <label for="{{ form.modelo.id_for_label }}">
-                    Modelo.
-                </label>
-                {{ form.modelo }}
-                {{ form.modelo.errors }}
-            </div>
+        </div>
 
-            <div class="campo-formulario">
-                <label for="{{ form.costo.id_for_label }}">
-                    Costo Por U.
-                </label>
-                {{ form.costo }}
-                {{ form.costo.errors }}
-            </div>
 
-            <div class="campo-formulario">
-                <label for="{{ form.costo_caja.id_for_label }}">
-                    Costo Por Caja.
-                </label>
-                {{ form.costo_caja }}
-                {{ form.costo_caja.errors }}
-            </div>
+        <!-- IMAGEN Y ESPECIFICACIONES -->
+        <div class="formulario-seccion">
 
-            <div class="campo-formulario">
-                <label for="{{ form.precio_venta.id_for_label }}">
-                    Precio De Venta Por U.
-                </label>
-                {{ form.precio_venta }}
-                {{ form.precio_venta.errors }}
-            </div>
+            <h2 class="formulario-seccion-titulo">
+                Imagen y especificaciones
+            </h2>
 
-            <div class="campo-formulario">
-                <label for="{{ form.precio_venta_caja.id_for_label }}">
-                    Precio De Venta Por Caja.
-                </label>
-                {{ form.precio_venta_caja }}
-                {{ form.precio_venta_caja.errors }}
-            </div>
 
+            <!-- IMAGEN -->
             <div class="campo-formulario">
-                <label for="{{ form.stock.id_for_label }}">
-                    Stock.
-                </label>
-                {{ form.stock }}
-                {{ form.stock.errors }}
-            </div>
 
-            <div class="campo-formulario">
-                <label for="{{ form.proveedor.id_for_label }}">
-                    Proveedor.
-                </label>
-                {{ form.proveedor }}
-                {{ form.proveedor.errors }}
-            </div>
-
-            <div class="campo-formulario">
                 <label for="{{ form.imagen.id_for_label }}">
-                    Imagen Referencial.
+                    Imagen referencial
                 </label>
 
                 <div class="selector-imagen">
+
+                    <div class="selector-imagen-icon">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+
+                    <div class="selector-imagen-texto">
+                        PNG o JPG, máx. 5MB
+                    </div>
+
                     {{ form.imagen }}
 
                     <label
@@ -111,28 +193,34 @@
                         class="boton-seleccionar-imagen"
                     >
                         <i class="fa-solid fa-image"></i>
-                        Seleccionar Imagen.
+                        Seleccionar Imagen
                     </label>
 
                     <span
                         id="nombre-imagen-seleccionada"
                         class="nombre-imagen-seleccionada"
                     ></span>
+
                 </div>
 
                 {{ form.imagen.errors }}
+
+            </div>
+
+
+            <!-- ESPECIFICACIONES -->
+            <div class="campo-formulario campo-especificaciones">
+
+                <label for="{{ form.especificaciones.id_for_label }}">
+                    Especificaciones
+                </label>
+
+                {{ form.especificaciones }}
+                {{ form.especificaciones.errors }}
+
             </div>
 
         </div>
-
-        <div class="campo-formulario campo-formulario-completo">
-            <label for="{{ form.especificaciones.id_for_label }}">
-                Especificaciones.
-            </label>
-            {{ form.especificaciones }}
-            {{ form.especificaciones.errors }}
-        </div>
-
         <div class="botones-formulario">
             <a href="{% url 'productos_menu' %}" class="boton-cancelar">
                 Cancelar.

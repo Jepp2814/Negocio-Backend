@@ -666,3 +666,195 @@ a.card-venta h2 {
         width: 100%;
     }
 }
+
+
+.producto-formulario {
+    background: red !important;
+    padding: 30px !important;
+}
+
+/* =========================================================
+   PRUEBA FORMULARIO PRODUCTO
+========================================================= */
+
+.producto-formulario-contenedor {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 25px 30px;
+}
+
+.producto-formulario {
+    background: #ffffff !important;
+    border: 1px solid #dfe4ea !important;
+    border-radius: 12px !important;
+    padding: 25px !important;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.08) !important;
+}
+
+.formulario-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18px 20px !important;
+}
+
+.campo-formulario {
+    min-width: 0;
+}
+
+.campo-formulario label {
+    display: block !important;
+    margin-bottom: 6px !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: #374151 !important;
+}
+
+.campo-formulario input,
+.campo-formulario select,
+.campo-formulario textarea {
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    border: 1px solid #d9e0e7 !important;
+    border-radius: 7px !important;
+
+    background: #fbfcfd !important;
+
+    padding: 10px 12px !important;
+
+    font-family: Poppins, sans-serif !important;
+    font-size: 12px !important;
+
+    color: #1f2a37 !important;
+
+    outline: none !important;
+}
+
+.campo-formulario input,
+.campo-formulario select {
+    min-height: 40px !important;
+}
+
+.campo-formulario textarea {
+    min-height: 80px !important;
+    resize: vertical;
+}
+
+.formulario-seccion {
+    margin-bottom: 25px !important;
+}
+
+.formulario-seccion-titulo {
+    margin: 0 0 14px !important;
+
+    padding-bottom: 8px !important;
+
+    border-bottom: 1px solid #dfe4ea !important;
+
+    font-size: 10px !important;
+    font-weight: 700 !important;
+
+    text-transform: uppercase !important;
+
+    color: #5d87a8 !important;
+}
+
+.producto-form-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-bottom: 18px !important;
+}
+
+.producto-form-header .header-icon {
+    width: 42px !important;
+    height: 42px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 8px !important;
+
+    background: #e8f1fb !important;
+    color: #1c6dbf !important;
+}
+
+.producto-form-header h1 {
+    margin: 0 !important;
+
+    font-size: 22px !important;
+    font-weight: 600 !important;
+
+    color: #1f2a37 !important;
+}
+
+.producto-form-header p {
+    margin: 3px 0 0 !important;
+
+    font-size: 11px !important;
+
+    color: #64748b !important;
+}
+
+.campo-stock {
+    max-width: 50%;
+}
+
+.botones-formulario {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 10px !important;
+
+    margin-top: 25px !important;
+    padding-top: 18px !important;
+
+    border-top: 1px solid #edf0f3 !important;
+}
+
+.boton-cancelar,
+.boton-guardar {
+    min-height: 38px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 7px !important;
+
+    padding: 8px 15px !important;
+
+    border-radius: 7px !important;
+
+    font-size: 11px !important;
+    font-weight: 600 !important;
+
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+.boton-cancelar {
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    color: #475569 !important;
+}
+
+.boton-guardar {
+    border: 1px solid #1c6dbf !important;
+    background: #1c6dbf !important;
+    color: #ffffff !important;
+}
+
+@media (max-width: 800px) {
+
+    .formulario-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .campo-stock {
+        max-width: 100%;
+    }
+
+}

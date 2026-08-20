@@ -1,0 +1,784 @@
+/* =========================================================
+   CONTENEDOR
+========================================================= */
+
+.producto-formulario-contenedor {
+    width: min(100%, 1120px);
+    margin: 0 auto;
+    padding: 10px 0 30px;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.producto-form-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.producto-form-header .header-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #e8f1fb;
+    color: #1c6dbf;
+
+    font-size: 17px;
+}
+
+.producto-form-header h1 {
+    margin: 0;
+
+    font-family: "Poppins", sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+
+    color: #1f2a37;
+}
+
+.producto-form-header p {
+    margin: 2px 0 0;
+
+    font-family: "Inter", sans-serif;
+    font-size: 11px;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   MENSAJE DE ÉXITO
+========================================================= */
+
+.mensaje-exito {
+    margin-bottom: 18px;
+    padding: 12px 15px;
+
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+
+    background: #f0fdf4;
+    color: #166534;
+
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   CARD PRINCIPAL
+========================================================= */
+
+.producto-formulario {
+    background: #ffffff;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 10px;
+
+    padding: 22px 24px;
+
+    box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   SECCIONES
+========================================================= */
+
+.formulario-seccion {
+    margin-bottom: 24px;
+}
+
+.formulario-seccion:last-of-type {
+    margin-bottom: 0;
+}
+
+.formulario-seccion-titulo {
+    margin: 0 0 13px;
+
+    padding-bottom: 7px;
+
+    border-bottom: 1px solid #dfe4ea;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+
+    color: #5d87a8;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.formulario-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 13px 18px;
+}
+
+
+/* =========================================================
+   CAMPOS
+========================================================= */
+
+.campo-formulario {
+    min-width: 0;
+}
+
+.campo-formulario label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    color: #374151;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.campo-formulario input,
+.campo-formulario select,
+.campo-formulario textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    border: 1px solid #d9e0e7;
+    border-radius: 6px;
+
+    background: #fbfcfd;
+
+    padding: 8px 10px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+
+    color: #1f2a37;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.campo-formulario input,
+.campo-formulario select {
+    min-height: 34px;
+}
+
+.campo-formulario textarea {
+    min-height: 70px;
+    resize: vertical;
+}
+
+.campo-formulario input:hover,
+.campo-formulario select:hover,
+.campo-formulario textarea:hover {
+    border-color: #b8c5d1;
+}
+
+.campo-formulario input:focus,
+.campo-formulario select:focus,
+.campo-formulario textarea:focus {
+    border-color: #1c6dbf;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 2px rgba(28, 109, 191, 0.10);
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+.campo-formulario input::placeholder,
+.campo-formulario textarea::placeholder {
+    color: #9ca3af;
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   ERRORES DJANGO
+========================================================= */
+
+.campo-formulario ul.errorlist {
+    margin: 4px 0 0;
+    padding: 0;
+
+    list-style: none;
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+
+    color: #dc2626;
+}
+
+/* =========================================================
+   CAMPOS DE PRECIO
+========================================================= */
+
+.precio-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+
+/* Símbolo $ */
+
+.precio-wrapper .simbolo-moneda {
+
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #64748b;
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    pointer-events: none;
+
+    z-index: 3;
+}
+
+
+/* Campo numérico */
+
+.precio-wrapper input[type="number"] {
+
+    width: 100%;
+    box-sizing: border-box;
+
+    /*
+       Espacio para el $
+       y espacio para las flechas.
+    */
+    padding-left: 42px;
+    padding-right: 52px;
+
+    min-height: 48px;
+
+    font-size: 14px;
+}
+
+/* =========================================================
+   STOCK
+========================================================= */
+
+.campo-stock {
+    max-width: 50%;
+}
+
+
+/* =========================================================
+   IMAGEN
+========================================================= */
+
+.selector-imagen {
+    min-height: 72px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px;
+
+    border: 1px dashed #cbd5e1;
+    border-radius: 7px;
+
+    background: #f8fafc;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease;
+}
+
+.selector-imagen:hover {
+    border-color: #1c6dbf;
+    background: #f3f8fd;
+}
+
+
+/* ICONO */
+
+.selector-imagen-icon {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 5px;
+
+    background: #ffffff;
+
+    color: #718096;
+
+    font-size: 14px;
+}
+
+
+/* TEXTO */
+
+.selector-imagen-texto {
+    flex: 1;
+
+    font-family: "Inter", sans-serif;
+    font-size: 9px;
+
+    color: #64748b;
+}
+
+
+/* INPUT FILE OCULTO */
+
+.selector-imagen > #id_imagen {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    clip-path: inset(50%);
+
+    white-space: nowrap;
+}
+
+
+/* BOTÓN */
+
+.boton-seleccionar-imagen {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 7px 10px;
+
+    border: 0;
+    border-radius: 6px;
+
+    background: #0f4c81;
+    color: #ffffff;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+.boton-seleccionar-imagen:hover {
+    background: #0b3158;
+
+    transform: translateY(-1px);
+}
+
+
+/* NOMBRE DE IMAGEN */
+
+.nombre-imagen-seleccionada {
+    max-width: 180px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    color: #475569;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   ESPECIFICACIONES
+========================================================= */
+
+.campo-especificaciones {
+    margin-top: 12px;
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.botones-formulario {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    margin-top: 20px;
+    padding-top: 15px;
+
+    border-top: 1px solid #edf0f3;
+}
+
+.boton-cancelar,
+.boton-guardar {
+    min-height: 34px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 7px 13px;
+
+    border-radius: 6px;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+
+/* CANCELAR */
+
+.boton-cancelar {
+    border: 1px solid #cbd5e1;
+
+    background: #ffffff;
+
+    color: #475569;
+}
+
+.boton-cancelar:hover {
+    background: #f8fafc;
+
+    border-color: #94a3b8;
+
+    transform: translateY(-1px);
+}
+
+
+/* GUARDAR */
+
+.boton-guardar {
+    border: 1px solid #1c6dbf;
+
+    background: #1c6dbf;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 3px 8px rgba(28, 109, 191, 0.20);
+}
+
+.boton-guardar:hover {
+    background: #155b9f;
+
+    box-shadow:
+        0 5px 12px rgba(28, 109, 191, 0.28);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .producto-formulario {
+        padding: 18px;
+    }
+
+    .formulario-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-stock {
+        max-width: 100%;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .producto-formulario-contenedor {
+        padding: 0 5px 20px;
+    }
+
+    .producto-formulario {
+        padding: 15px;
+        border-radius: 9px;
+    }
+
+    .producto-form-header h1 {
+        font-size: 19px;
+    }
+
+    .selector-imagen {
+        flex-wrap: wrap;
+    }
+
+    .selector-imagen-texto {
+        min-width: 120px;
+    }
+
+    .botones-formulario {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .boton-cancelar,
+    .boton-guardar {
+        width: 100%;
+    }
+
+}
+/* =========================================================
+   CAMPOS NUMÉRICOS
+   Precios, costos y stock
+========================================================= */
+
+.campo-formulario input[type="number"] {
+
+    min-height: 48px;
+
+    box-sizing: border-box;
+
+    /*
+       Dejamos espacio a la derecha
+       para las flechas del navegador.
+    */
+    padding-right: 48px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    color: #1f2a37;
+
+    background: #fbfcfd;
+
+    border: 1.5px solid #dfe4ea;
+    border-radius: 9px;
+
+    /*
+       IMPORTANTE:
+       no usamos appearance:textfield
+       porque queremos conservar las flechas.
+    */
+    appearance: auto;
+    -moz-appearance: auto;
+
+}
+
+
+/* =========================================================
+   CHROME / EDGE / SAFARI
+   Controles de incremento/decremento
+========================================================= */
+
+.campo-formulario input[type="number"]::-webkit-inner-spin-button,
+.campo-formulario input[type="number"]::-webkit-outer-spin-button {
+
+    opacity: 1;
+
+    /*
+       Espacio interno para que no se vean
+       pegadas al borde.
+    */
+    margin-right: 4px;
+
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.campo-formulario input[type="number"]:hover {
+
+    border-color: #b8c5d1;
+
+}
+
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.campo-formulario input[type="number"]:focus {
+
+    border-color: #1c6dbf;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(28, 109, 191, 0.12);
+
+}
+
+
+/* =========================================================
+   PANTALLAS GRANDES
+========================================================= */
+
+@media (min-width: 801px) {
+
+    .campo-formulario input[type="number"] {
+
+        min-height: 48px;
+
+        font-size: 14px;
+
+        padding-right: 50px;
+
+    }
+
+}
+
+
+/* =========================================================
+   TABLETS
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .campo-formulario input[type="number"] {
+
+        min-height: 48px;
+
+        font-size: 14px;
+
+        padding-right: 48px;
+
+    }
+
+}
+
+
+/* =========================================================
+   CELULARES
+========================================================= */
+
+@media (max-width: 520px) {
+
+    .campo-formulario input[type="number"] {
+
+        min-height: 50px;
+
+        padding-right: 50px;
+
+        font-size: 15px;
+
+    }
+
+}
+/* =========================================================
+   AJUSTE FINAL: DÓLAR + VALOR + FLECHAS
+========================================================= */
+
+.precio-wrapper {
+    position: relative !important;
+    width: 100%;
+}
+
+.precio-wrapper .simbolo-moneda {
+    position: absolute !important;
+
+    left: 14px !important;
+    top: 50% !important;
+
+    transform: translateY(-50%) !important;
+
+    z-index: 5 !important;
+
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    color: #64748b !important;
+
+    pointer-events: none !important;
+}
+
+.precio-wrapper input[type="number"] {
+
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    /* distancia entre $ y número */
+    padding-left: 42px !important;
+
+    /* espacio para las flechas */
+    padding-right: 52px !important;
+
+    min-height: 48px !important;
+
+    font-size: 14px !important;
+}
